@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "109321411513",
+    "project_id": "budgeting-app-81c05",
+    "storage_bucket": "budgeting-app-81c05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109321411513:android:e2eb2b272166d9d3aeb468",
+        "android_client_info": {
+          "package_name": "com.amar.budgetingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP4If1aKWXUwdlwicE9ikjykEie0ghtNk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
