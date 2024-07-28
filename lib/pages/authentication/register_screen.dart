@@ -5,14 +5,14 @@ import '../../core/routes/routes.dart';
 import '../../core/utils/validators.dart';
 import '../../services/auth_service.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        "Login",
+                        "Sign Up",
                         style: TextStyle(
                           color: Color(0xFF6D77FB),
                           fontWeight: FontWeight.bold,
@@ -121,10 +121,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 TextStyle(color: Colors.white)),
                           ),
                           onPressed: () {
-                            login(authService);
+                            Register(authService);
                           },
                           child: Text(
-                            "Login",
+                            "Sign Up",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -144,10 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
               right: 20,
               child: GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.register);
+                    Navigator.pushNamed(context, AppRoutes.login);
                   },
                   child: Text(
-                    "Not yet Registered? SignUp Now",
+                    "Already have an account? Login Now",
                     style: TextStyle(color: Color(0xFF6D77FB), fontSize: 14),
                   )))
         ],
@@ -155,9 +155,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> login(AuthService service) async {
+  Future<void> Register(AuthService service) async {
+    await service.signUp(emailController.text.toString().trim(),
+        passwordController.text.toString().trim());
     await service.login(emailController.text.toString().trim(),
         passwordController.text.toString().trim());
+
     if (Validators.validateEmail(emailController.text.toString().trim()) &&
         Validators.validatePassword(
             passwordController.text.toString().trim())) {}

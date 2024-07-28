@@ -1,32 +1,65 @@
+import 'package:budgetingapp/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'config/firebase_options.dart';
-import 'models/user_model.dart';
+import 'core/routes/routes.dart';
 
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => UserModel(),),
-
-    ],
-    child: MyApp()
-  ));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: ,
+    return FutureBuilder(
+      future: Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Text('Error initializing Firebase'),
+              ),
+            ),
+            debugShowCheckedModeBanner: false,
+          );
+        }
 
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider<AuthService>(
+                create: (context) => AuthService(auth: FirebaseAuth.instance),
+              ),
+            ],
+            child: Consumer<AuthService>(
+              builder: (context, authService, child) {
+                return MaterialApp(
+                  routes: AppRoutes.getRoutes(),
+                  debugShowCheckedModeBanner: false,
+                );
+              },
+            ),
+          );
+        }
 
+        return const MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }

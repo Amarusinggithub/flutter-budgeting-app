@@ -45,7 +45,15 @@ dependencies:
   syncfusion_flutter_charts: ^26.1.41+1
   google_fonts: ^6.2.1
   fl_chart: ^0.68.0
+  cloud_firestore: ^5.1.0
+  photo_view: ^0.15.0
+  carousel_slider: ^4.2.1
   font_awesome_flutter: ^10.7.0
+  persistent_bottom_nav_bar: ^6.2.1
+  flutter_native_splash: ^2.4.1
+  gap: ^3.0.1
+  cached_network_image: ^3.3.1
+  flutter_slidable: ^3.1.1
 
 dev_dependencies:
   flutter_test:

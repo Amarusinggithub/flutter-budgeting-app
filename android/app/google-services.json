@@ -12,7 +12,20 @@
           "package_name": "com.amar.budgetingapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "109321411513-i2pot79me5ao2s3m1aojdr9pc7qmu8nb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amar.budgetingapp",
+            "certificate_hash": "ccc12d8d5fbfa157cbdc5e454e2f36183c256bf8"
+          }
+        },
+        {
+          "client_id": "109321411513-4bqnsvkkbbrji218840ldrr02c19amvm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDP4If1aKWXUwdlwicE9ikjykEie0ghtNk"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "109321411513-4bqnsvkkbbrji218840ldrr02c19amvm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "109321411513-jec6lknskc120qa9qtlnkndetbj5h531.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.amar.budgetingapp"
+              }
+            }
+          ]
         }
       }
     }
