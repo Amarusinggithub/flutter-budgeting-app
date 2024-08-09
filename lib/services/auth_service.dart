@@ -21,7 +21,7 @@ class AuthService extends ChangeNotifier {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      await FirebaseFirestore.instance
+      FirebaseFirestore.instance
           .collection('users')
           .doc(auth.currentUser!.uid);
 

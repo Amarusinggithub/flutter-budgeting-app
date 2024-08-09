@@ -8,14 +8,14 @@ class AccountInfoContainer extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        padding: EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
+        padding: const EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
         height: 60,
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadiusDirectional.circular(15),
           color: Colors.white,
         ),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(

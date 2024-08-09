@@ -23,7 +23,7 @@ class CreditCard extends StatelessWidget {
                         left: 16,
                         child: Image.asset(
                           "assets/images/credit-card.png",
-                          height: 40,
+                          height: 30,
                           color: Colors.white,
                         ),
                       ),
@@ -32,11 +32,11 @@ class CreditCard extends StatelessWidget {
                         left: 70,
                         child: Image.asset(
                           "assets/images/wifi.png",
-                          height: 50,
+                          height: 30,
                           color: Colors.white,
                         ),
                       ),
-                      Positioned(
+                      const Positioned(
                         bottom: 16,
                         left: 16,
                         child: Text(
@@ -68,22 +68,10 @@ class CreditCard extends StatelessWidget {
                               color: Colors.white,
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                radius: 15,
-                                backgroundColor: Colors.white.withOpacity(0.8),
-                              ),
-                              Transform.translate(
-                                offset: Offset(10, 0),
-                                child: CircleAvatar(
-                                  radius: 15,
-                                  backgroundColor:
-                                      Colors.white.withOpacity(0.8),
-                                ),
-                              )
-                            ],
+                          Image.asset(
+                            "assets/images/mastercard-logo.png",
+                            height: 50,
+                            width: 50,
                           )
                         ],
                       ),

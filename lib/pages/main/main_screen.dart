@@ -70,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     return authService.auth.currentUser == null
-        ? LoginScreen()
+        ? const LoginScreen()
         : PersistentTabView(
             context,
             controller: _controller,
@@ -104,9 +104,9 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> _buildScreens() {
     return [
-      HomeScreen(),
-      TransactionScreen(),
-      ProfileScreen(),
+      const HomeScreen(),
+      const TransactionScreen(),
+      const ProfileScreen(),
     ];
   }
 
@@ -116,24 +116,24 @@ class _MainScreenState extends State<MainScreen> {
         onPressed: MainScreen.popUntil(
           context,
         ),
-        icon: Icon(CupertinoIcons.house_fill),
+        icon: const Icon(CupertinoIcons.house_fill),
         title: ("Home"),
-        activeColorPrimary: Color(0xFF660FFF),
+        activeColorPrimary: const Color(0xFF660FFF),
         inactiveColorPrimary: Colors.purple.withOpacity(0.3),
       ),
       PersistentBottomNavBarItem(
         onPressed: MainScreen.popUntil(
           context,
         ),
-        icon: Icon(CupertinoIcons.creditcard_fill),
+        icon: const Icon(CupertinoIcons.creditcard_fill),
         title: ("Transactions"),
-        activeColorPrimary: Color(0xFF660FFF),
+        activeColorPrimary: const Color(0xFF660FFF),
         inactiveColorPrimary: Colors.purple.withOpacity(0.3),
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.person_fill),
+        icon: const Icon(CupertinoIcons.person_fill),
         title: ("Profile"),
-        activeColorPrimary: Color(0xFF660FFF),
+        activeColorPrimary: const Color(0xFF660FFF),
         inactiveColorPrimary: Colors.purple.withOpacity(0.3),
       ),
     ];

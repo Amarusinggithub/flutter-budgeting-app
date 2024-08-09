@@ -1,5 +1,9 @@
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
+
+import 'components/expense_container.dart';
+import 'components/income_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,58 +16,68 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple.withOpacity(0.9),
+      backgroundColor: Colors.white,
       body: SafeArea(
         bottom: false,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Welcome Back!",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        "Amar Campbell",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                  const Spacer(),
-                  IconButton.outlined(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.notifications,
-                        color: Colors.white,
-                      )),
-                ],
-              ),
-            ),
-            Expanded(
-                child: Stack(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 167),
-                  color: Colors.white,
+                Row(
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Welcome Back!",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Text(
+                          "Amar Campbell",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                    const Spacer(),
+                    IconButton.outlined(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.notifications,
+                          color: Colors.black,
+                        )),
+                  ],
                 ),
-                const Positioned(
-                  top: 20,
-                  right: 25,
-                  left: 25,
-                  child: CreditCard(),
-                )
+                const CreditCard(),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [ExpenseContainer(), IncomeContainer()],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                new LinearPercentIndicator(
+                  width: 170.0,
+                  animation: true,
+                  animationDuration: 1000,
+                  lineHeight: 20.0,
+                  leading: const Text("left content"),
+                  trailing: const Text("right content"),
+                  percent: 0.2,
+                  center: Text("20.0%"),
+                  progressColor: Colors.red,
+                  animateFromLastPercent: true,
+                ),
               ],
-            ))
-          ],
+            ),
+          ),
         ),
       ),
     );

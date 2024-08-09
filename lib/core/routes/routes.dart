@@ -17,11 +17,11 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-      home: (context) => MainScreen(),
-      login: (context) => LoginScreen(),
-      register: (context) => RegisterScreen(),
-      notification: (context) => NotificationScreen(),
-      account: (context) => ProfileScreen(),
+      home: (context) => const MainScreen(),
+      login: (context) => const LoginScreen(),
+      register: (context) => const RegisterScreen(),
+      notification: (context) => const NotificationScreen(),
+      account: (context) => const ProfileScreen(),
     };
   }
 }

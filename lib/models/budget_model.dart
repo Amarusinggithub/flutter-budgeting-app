@@ -1,5 +1,6 @@
 import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class Budget {
   String id;
@@ -58,13 +59,19 @@ void getBudgetsFromFirestore() async {
     return Budget.fromMap(doc.data() as Map<String, dynamic>);
   }).toList();
 
-  budgets.forEach((budget) {
-    print('Budget Name: ${budget.name}');
-    print('Total Amount: \$${budget.totalAmount}');
-    print('Spent Amount: \$${budget.spentAmount}');
-    budget.transactions.forEach((transaction) {
+  for (var budget in budgets) {
+    if (kDebugMode) {
+      print('Budget Name: ${budget.name}');
+    }
+    if (kDebugMode) {
+      print('Total Amount: \$${budget.totalAmount}');
+    }
+    if (kDebugMode) {
+      print('Spent Amount: \$${budget.spentAmount}');
+    }
+    for (var transaction in budget.transactions) {
       print(
           'Transaction - Title: ${transaction.title}, Amount: \$${transaction.amount}, Date: ${DateTime.fromMillisecondsSinceEpoch(transaction.date * 1000)}, Category: ${transaction.category}');
-    });
-  });
+    }
+  }
 }

@@ -50,11 +50,11 @@ void getTransactionHistoriesFromFirestore() async {
     return TransactionHistory.fromMap(doc.data() as Map<String, dynamic>);
   }).toList();
 
-  transactionHistories.forEach((transactionHistory) {
+  for (var transactionHistory in transactionHistories) {
     print('Transaction History Name: ${transactionHistory.name}');
-    transactionHistory.transactions.forEach((transaction) {
+    for (var transaction in transactionHistory.transactions) {
       print(
           'Transaction - Title: ${transaction.title}, Amount: \$${transaction.amount}, Date: ${DateTime.fromMillisecondsSinceEpoch(transaction.date * 1000)}, Category: ${transaction.category}');
-    });
-  });
+    }
+  }
 }

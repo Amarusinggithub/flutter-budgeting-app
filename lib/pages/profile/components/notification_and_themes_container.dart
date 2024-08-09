@@ -6,7 +6,7 @@ class NotificationAndThemesContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
+      padding: const EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
       height: 150,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -18,7 +18,7 @@ class NotificationAndThemesContainer extends StatelessWidget {
           GestureDetector(
             onTap: () {},
             child: Container(
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
@@ -35,13 +35,13 @@ class NotificationAndThemesContainer extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           GestureDetector(
             onTap: () {},
             child: Container(
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
@@ -64,7 +64,7 @@ class NotificationAndThemesContainer extends StatelessWidget {
           GestureDetector(
             onTap: () {},
             child: Container(
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(

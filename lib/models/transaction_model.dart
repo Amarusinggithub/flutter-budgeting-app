@@ -2,7 +2,7 @@ class TransactionModel {
   String id;
   String title;
   double amount;
-  int date; // epoch time in seconds
+  int date;
   String category;
 
   TransactionModel({

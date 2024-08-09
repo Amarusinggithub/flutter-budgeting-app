@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Container(
               padding: const EdgeInsetsDirectional.symmetric(
                   vertical: 15, horizontal: 15),
-              child: Column(
+              child: const Column(
                 children: [
                   AccountInfoContainer(),
                   SizedBox(

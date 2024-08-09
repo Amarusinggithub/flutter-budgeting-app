@@ -23,7 +23,7 @@ class LogoutContainer extends StatelessWidget {
           authService.logout();
         },
         child: Container(
-          child: Row(
+          child: const Row(
             children: [
               Icon(Icons.logout),
               SizedBox(
