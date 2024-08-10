@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../core/routes/routes.dart';
 import '../../services/auth_service.dart';
 import '../authentication/login_screen.dart';
+import '../budget/budget_screen.dart';
 import '../home/home_screen.dart';
 import '../profile/profile_screen.dart';
 
@@ -106,6 +107,7 @@ class _MainScreenState extends State<MainScreen> {
     return [
       const HomeScreen(),
       const TransactionScreen(),
+      const BudgetScreen(),
       const ProfileScreen(),
     ];
   }
@@ -127,6 +129,15 @@ class _MainScreenState extends State<MainScreen> {
         ),
         icon: const Icon(CupertinoIcons.creditcard_fill),
         title: ("Transactions"),
+        activeColorPrimary: const Color(0xFF660FFF),
+        inactiveColorPrimary: Colors.purple.withOpacity(0.3),
+      ),
+      PersistentBottomNavBarItem(
+        onPressed: MainScreen.popUntil(
+          context,
+        ),
+        icon: const Icon(CupertinoIcons.money_dollar_circle_fill),
+        title: ("Budget"),
         activeColorPrimary: const Color(0xFF660FFF),
         inactiveColorPrimary: Colors.purple.withOpacity(0.3),
       ),

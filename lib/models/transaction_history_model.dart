@@ -12,21 +12,21 @@ class TransactionHistory {
     required this.transactions,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
       'transactions':
-          transactions.map((transaction) => transaction.toMap()).toList(),
+          transactions.map((transaction) => transaction.toJson()).toList(),
     };
   }
 
-  static TransactionHistory fromMap(Map<String, dynamic> map) {
+  factory TransactionHistory.fromJson(Map<String, dynamic> json) {
     return TransactionHistory(
-      id: map['id'],
-      name: map['name'],
-      transactions: List<TransactionModel>.from(map['transactions']
-          .map((transaction) => TransactionModel.fromMap(transaction))),
+      id: json['id'],
+      name: json['name'],
+      transactions: List<TransactionModel>.from(json['transactions']
+          .map((transaction) => TransactionModel.fromJson(transaction))),
     );
   }
 }
@@ -37,7 +37,7 @@ void addTransactionHistoryToFirestore(
 
   await firestore
       .collection('transactionHistories')
-      .add(transactionHistory.toMap());
+      .add(transactionHistory.toJson());
 }
 
 void getTransactionHistoriesFromFirestore() async {
@@ -47,7 +47,7 @@ void getTransactionHistoriesFromFirestore() async {
       await firestore.collection('transactionHistories').get();
 
   List<TransactionHistory> transactionHistories = querySnapshot.docs.map((doc) {
-    return TransactionHistory.fromMap(doc.data() as Map<String, dynamic>);
+    return TransactionHistory.fromJson(doc.data() as Map<String, dynamic>);
   }).toList();
 
   for (var transactionHistory in transactionHistories) {

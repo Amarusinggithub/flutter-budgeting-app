@@ -4,6 +4,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'components/expense_container.dart';
 import 'components/income_container.dart';
+import 'components/transaction_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                new LinearPercentIndicator(
+                LinearPercentIndicator(
                   width: 170.0,
                   animation: true,
                   animationDuration: 1000,
@@ -71,9 +72,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: const Text("left content"),
                   trailing: const Text("right content"),
                   percent: 0.2,
-                  center: Text("20.0%"),
+                  center: const Text("20.0%"),
                   progressColor: Colors.red,
                   animateFromLastPercent: true,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Recent Transaction"),
+                    GestureDetector(onTap: () {}, child: const Text("See All"))
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Column(
+                  children: List.generate(10, (index) {
+                    return const TransactionContainer(); // Adding each transaction item
+                  }),
                 ),
               ],
             ),

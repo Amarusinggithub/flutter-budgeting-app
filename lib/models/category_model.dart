@@ -1,31 +1,22 @@
-class Category {
-  String id;
-  String name;
-  String description;
-  String icon;
+class CategoryModel {
+  String? id;
+  String? name;
 
-  Category({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.icon,
-  });
+  String? icon;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'icon': icon,
-    };
+  int? totalSpent;
+
+  CategoryModel({this.id, this.name, this.icon, this.totalSpent});
+
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'name': name, 'icon': icon, 'Total Spent': totalSpent};
   }
 
-  static Category fromMap(Map<String, dynamic> map) {
-    return Category(
-      id: map['id'],
-      name: map['name'],
-      description: map['description'],
-      icon: map['icon'],
-    );
+  factory CategoryModel.fromJson(Map<String, dynamic> map) {
+    return CategoryModel(
+        id: map['id'],
+        name: map['name'],
+        icon: map['icon'],
+        totalSpent: map['Total Spent']);
   }
 }

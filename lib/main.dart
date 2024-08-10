@@ -1,4 +1,6 @@
 import 'package:budgetingapp/services/auth_service.dart';
+import 'package:budgetingapp/services/budget_service.dart';
+import 'package:budgetingapp/services/tansaction_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +40,13 @@ class MyApp extends StatelessWidget {
             providers: [
               ChangeNotifierProvider<AuthService>(
                 create: (context) => AuthService(auth: FirebaseAuth.instance),
+              ),
+              ChangeNotifierProvider<BudgetService>(
+                create: (context) => BudgetService(auth: FirebaseAuth.instance),
+              ),
+              ChangeNotifierProvider<TransactionService>(
+                create: (context) =>
+                    TransactionService(auth: FirebaseAuth.instance),
               ),
             ],
             child: Consumer<AuthService>(

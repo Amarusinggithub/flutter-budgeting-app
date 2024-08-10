@@ -1,77 +1,31 @@
-import 'package:budgetingapp/models/transaction_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+import 'category_model.dart';
 
-class Budget {
-  String id;
-  String name;
+class BudgetModel {
   double totalAmount;
   double spentAmount;
-  List<TransactionModel> transactions;
+  List<CategoryModel> categories;
 
-  Budget({
-    required this.id,
-    required this.name,
+  BudgetModel({
     required this.totalAmount,
     required this.spentAmount,
-    required this.transactions,
+    required this.categories,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'name': name,
       'totalAmount': totalAmount,
       'spentAmount': spentAmount,
       'transactions':
-          transactions.map((transaction) => transaction.toMap()).toList(),
+          categories.map((category) => CategoryModel().toJson()).toList(),
     };
   }
 
-  static Budget fromMap(Map<String, dynamic> map) {
-    return Budget(
-      id: map['id'],
-      name: map['name'],
-      totalAmount: map['totalAmount'],
-      spentAmount: map['spentAmount'],
-      transactions: List<TransactionModel>.from(map['transactions']
-          .map((transaction) => TransactionModel.fromMap(transaction))),
+  factory BudgetModel.fromJson(Map<String, dynamic> json) {
+    return BudgetModel(
+      totalAmount: json['totalAmount'],
+      spentAmount: json['spentAmount'],
+      categories: List<CategoryModel>.from(json['categories']
+          .map((category) => CategoryModel.fromJson(category))),
     );
-  }
-}
-
-/*
-budget.spentAmount = budget.transactions.fold(0, (sum, transaction) => sum + transaction.amount);
-*/
-
-void addBudgetToFirestore(Budget budget) async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  await firestore.collection('budgets').add(budget.toMap());
-}
-
-void getBudgetsFromFirestore() async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  QuerySnapshot querySnapshot = await firestore.collection('budgets').get();
-
-  List<Budget> budgets = querySnapshot.docs.map((doc) {
-    return Budget.fromMap(doc.data() as Map<String, dynamic>);
-  }).toList();
-
-  for (var budget in budgets) {
-    if (kDebugMode) {
-      print('Budget Name: ${budget.name}');
-    }
-    if (kDebugMode) {
-      print('Total Amount: \$${budget.totalAmount}');
-    }
-    if (kDebugMode) {
-      print('Spent Amount: \$${budget.spentAmount}');
-    }
-    for (var transaction in budget.transactions) {
-      print(
-          'Transaction - Title: ${transaction.title}, Amount: \$${transaction.amount}, Date: ${DateTime.fromMillisecondsSinceEpoch(transaction.date * 1000)}, Category: ${transaction.category}');
-    }
   }
 }

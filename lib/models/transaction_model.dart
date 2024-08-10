@@ -13,7 +13,7 @@ class TransactionModel {
     required this.category,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'title': title,
@@ -23,7 +23,7 @@ class TransactionModel {
     };
   }
 
-  static TransactionModel fromMap(Map<String, dynamic> map) {
+  factory TransactionModel.fromJson(Map<String, dynamic> map) {
     return TransactionModel(
       id: map['id'],
       title: map['title'],
