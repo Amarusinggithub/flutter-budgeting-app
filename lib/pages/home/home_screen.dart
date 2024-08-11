@@ -1,6 +1,9 @@
+import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
+import 'package:budgetingapp/pages/transaction/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 import 'components/expense_container.dart';
 import 'components/income_container.dart';
@@ -16,6 +19,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context);
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+    final budget = budgetProvider.budget;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -57,9 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [ExpenseContainer(), IncomeContainer()],
+                  children: [
+                    ExpenseContainer(
+                      expense: budget!.spentAmount,
+                    ),
+                    IncomeContainer(income: budget.income)
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
@@ -91,7 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Column(
                   children: List.generate(10, (index) {
-                    return const TransactionContainer(); // Adding each transaction item
+                    return TransactionContainer(
+                        transactionProvider:
+                            transactionProvider); // Adding each transaction item
                   }),
                 ),
               ],

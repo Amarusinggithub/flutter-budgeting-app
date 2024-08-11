@@ -24,11 +24,11 @@ class BudgetProvider extends ChangeNotifier {
   }
 
   void makeOrFetchBudget() {
-    if (budget == null) {
+    if (budget == null && budgetService.budget != null) {
       budget = budgetService.budget;
     } else {
-      budget =
-          BudgetModel(totalAmount: 0, spentAmount: 0, categories: categories);
+      budget = BudgetModel(
+          totalAmount: 0, spentAmount: 0, categories: categories, income: 0);
     }
     notifyListeners();
   }

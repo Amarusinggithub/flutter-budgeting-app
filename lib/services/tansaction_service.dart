@@ -6,7 +6,7 @@ import '../models/transaction_model.dart';
 
 class TransactionService extends ChangeNotifier {
   final FirebaseAuth auth;
-  List<TransactionModel>? transactions;
+  List<TransactionModel> transactions = [];
 
   TransactionService({required this.auth}) {
     fetchTransactionsFromDatabase();

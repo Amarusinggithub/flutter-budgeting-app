@@ -39,12 +39,12 @@ class BudgetService extends ChangeNotifier {
         await firestore.collection('users').doc(userId).get();
 
     if (documentSnapshot.exists) {
-      budget =
-          BudgetModel.fromJson(documentSnapshot.data() as Map<String, dynamic>);
-    } else {
-      budget = null;
+      Map<String, dynamic>? data =
+          documentSnapshot.data() as Map<String, dynamic>?;
+      if (data != null && data.containsKey('budget')) {
+        budget = BudgetModel.fromJson(data["budget"] as Map<String, dynamic>);
+      }
     }
-
     notifyListeners();
   }
 }

@@ -1,3 +1,5 @@
+import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
+import 'package:budgetingapp/pages/transaction/provider/transaction_provider.dart';
 import 'package:budgetingapp/services/auth_service.dart';
 import 'package:budgetingapp/services/budget_service.dart';
 import 'package:budgetingapp/services/tansaction_service.dart';
@@ -47,6 +49,14 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider<TransactionService>(
                 create: (context) =>
                     TransactionService(auth: FirebaseAuth.instance),
+              ),
+              ChangeNotifierProvider<BudgetProvider>(
+                create: (context) => BudgetProvider(
+                    budgetService: context.read<BudgetService>()),
+              ),
+              ChangeNotifierProvider<TransactionProvider>(
+                create: (context) => TransactionProvider(
+                    transactionService: context.read<TransactionService>()),
               ),
             ],
             child: Consumer<AuthService>(
