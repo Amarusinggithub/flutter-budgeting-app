@@ -8,8 +8,8 @@ class ExpenseContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      width: 150,
+      height: 150,
+      width: 170,
       padding:
           const EdgeInsetsDirectional.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(

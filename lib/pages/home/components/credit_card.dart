@@ -1,82 +1,97 @@
+import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
 
 class CreditCard extends StatelessWidget {
-  const CreditCard({super.key});
+  final BudgetProvider budgetProvider;
+
+  const CreditCard({super.key, required this.budgetProvider});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-        height: 220,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+        decoration: BoxDecoration(
+            color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+        height: 180,
+        width: 360,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  color: Colors.purple,
-                  child: Stack(
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Positioned(
-                        top: 16,
-                        left: 16,
-                        child: Image.asset(
-                          "assets/images/credit-card.png",
-                          height: 30,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Positioned(
-                        top: 10,
-                        left: 70,
-                        child: Image.asset(
-                          "assets/images/wifi.png",
-                          height: 30,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const Positioned(
-                        bottom: 16,
-                        left: 16,
-                        child: Text(
-                          "**** **** **** 5054",
-                          style: TextStyle(
-                            color: Colors.white,
+                      Text(
+                        "Available Balance",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
                             fontSize: 18,
-                          ),
+                            color: Colors.white.withOpacity(0.6)),
+                      ),
+                      Text(
+                        "\$3,500",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 27,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: const Text(
+                          "See Detials",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(
+                    width: 86,
+                  ),
+                  Image.asset(
+                    fit: BoxFit.contain,
+                    "assets/images/credit-card.png",
+                    height: 30,
+                    width: 30,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset(
+                    fit: BoxFit.contain,
+                    "assets/images/wifi.png",
+                    height: 30,
+                    width: 30,
+                  )
+                ],
               ),
-              Expanded(
-                  flex: 1,
-                  child: Container(
-                    color: Colors.purpleAccent,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "\$10,300.00",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Image.asset(
-                            "assets/images/mastercard-logo.png",
-                            height: 50,
-                            width: 50,
-                          )
-                        ],
-                      ),
-                    ),
-                  ))
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Text(
+                    "**** **** **** 3456",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    width: 93,
+                  ),
+                  Image.asset(
+                    "assets/images/mastercard-logo.png",
+                    width: 53,
+                    height: 53,
+                  )
+                ],
+              )
             ],
           ),
         ));

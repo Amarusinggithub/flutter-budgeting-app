@@ -2,7 +2,6 @@ import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
 import 'package:budgetingapp/pages/transaction/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import 'components/expense_container.dart';
@@ -59,42 +58,48 @@ class _HomeScreenState extends State<HomeScreen> {
                         )),
                   ],
                 ),
-                const CreditCard(),
+                const SizedBox(
+                  height: 10,
+                ),
+                CreditCard(budgetProvider: budgetProvider),
                 const SizedBox(
                   height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    IncomeContainer(income: budget!.income),
                     ExpenseContainer(
-                      expense: budget!.spentAmount,
+                      expense: budget.expense,
                     ),
-                    IncomeContainer(income: budget.income)
                   ],
                 ),
                 const SizedBox(
+                  width: 354.0,
                   height: 10,
                 ),
-                LinearPercentIndicator(
-                  width: 170.0,
-                  animation: true,
-                  animationDuration: 1000,
-                  lineHeight: 20.0,
-                  leading: const Text("left content"),
-                  trailing: const Text("right content"),
-                  percent: 0.2,
-                  center: const Text("20.0%"),
-                  progressColor: Colors.red,
-                  animateFromLastPercent: true,
-                ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Recent Transaction"),
-                    GestureDetector(onTap: () {}, child: const Text("See All"))
+                    const Text(
+                      "Recent Transaction",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    GestureDetector(
+                        onTap: () {},
+                        child: const Text(
+                          "See All",
+                          style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 13,
+                              color: Colors.black),
+                        ))
                   ],
                 ),
                 const SizedBox(
@@ -103,8 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Column(
                   children: List.generate(10, (index) {
                     return TransactionContainer(
-                        transactionProvider:
-                            transactionProvider); // Adding each transaction item
+                        transactionProvider: transactionProvider,
+                        index: index); // Adding each transaction item
                   }),
                 ),
               ],

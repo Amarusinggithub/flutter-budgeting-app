@@ -28,7 +28,7 @@ class BudgetProvider extends ChangeNotifier {
       budget = budgetService.budget;
     } else {
       budget = BudgetModel(
-          totalAmount: 0, spentAmount: 0, categories: categories, income: 0);
+          availableBalance: 0, expense: 0, categories: categories, income: 0);
     }
     notifyListeners();
   }

@@ -2,22 +2,22 @@ import 'category_model.dart';
 
 class BudgetModel {
   double income;
-  double totalAmount;
-  double spentAmount;
+  double availableBalance;
+  double expense;
   List<CategoryModel> categories;
 
   BudgetModel({
     required this.income,
-    required this.totalAmount,
-    required this.spentAmount,
+    required this.availableBalance,
+    required this.expense,
     required this.categories,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'income': income,
-      'totalAmount': totalAmount,
-      'spentAmount': spentAmount,
+      'totalAmount': availableBalance,
+      'spentAmount': expense,
       'categories': categories.map((category) => category.toJson()).toList(),
     };
   }
@@ -25,8 +25,8 @@ class BudgetModel {
   factory BudgetModel.fromJson(Map<String, dynamic> json) {
     return BudgetModel(
       income: json['income'],
-      totalAmount: json['totalAmount'],
-      spentAmount: json['spentAmount'],
+      availableBalance: json['totalAmount'],
+      expense: json['spentAmount'],
       categories: List<CategoryModel>.from(json['categories']
           .map((category) => CategoryModel.fromJson(category))),
     );

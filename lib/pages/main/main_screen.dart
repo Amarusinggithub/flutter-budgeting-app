@@ -120,8 +120,8 @@ class _MainScreenState extends State<MainScreen> {
         ),
         icon: const Icon(CupertinoIcons.house_fill),
         title: ("Home"),
-        activeColorPrimary: const Color(0xFF660FFF),
-        inactiveColorPrimary: Colors.purple.withOpacity(0.3),
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.blue.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
         onPressed: MainScreen.popUntil(
@@ -129,8 +129,8 @@ class _MainScreenState extends State<MainScreen> {
         ),
         icon: const Icon(CupertinoIcons.creditcard_fill),
         title: ("Transactions"),
-        activeColorPrimary: const Color(0xFF660FFF),
-        inactiveColorPrimary: Colors.purple.withOpacity(0.3),
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.blue.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
         onPressed: MainScreen.popUntil(
@@ -138,14 +138,14 @@ class _MainScreenState extends State<MainScreen> {
         ),
         icon: const Icon(CupertinoIcons.money_dollar_circle_fill),
         title: ("Budget"),
-        activeColorPrimary: const Color(0xFF660FFF),
-        inactiveColorPrimary: Colors.purple.withOpacity(0.3),
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.blue.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.person_fill),
         title: ("Profile"),
-        activeColorPrimary: const Color(0xFF660FFF),
-        inactiveColorPrimary: Colors.purple.withOpacity(0.3),
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.blue.withOpacity(0.7),
       ),
     ];
   }
