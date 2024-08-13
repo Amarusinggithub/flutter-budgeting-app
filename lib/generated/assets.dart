@@ -4,6 +4,8 @@ class Assets {
 
   static const String imagesBudget = 'assets/images/budget.png';
   static const String imagesCreditCard = 'assets/images/credit-card.png';
+  static const String imagesExpense = 'assets/images/expense.png';
+  static const String imagesIncome = 'assets/images/income.png';
   static const String imagesMastercardLogo =
       'assets/images/mastercard-logo.png';
   static const String imagesWifi = 'assets/images/wifi.png';

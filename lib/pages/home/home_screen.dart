@@ -50,12 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     const Spacer(),
-                    IconButton.outlined(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.notifications,
-                          color: Colors.black,
-                        )),
+                    GestureDetector(
+                      onTap: () {},
+                      child: CircleAvatar(
+                        radius: 30,
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -88,17 +88,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       "Recent Transaction",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 19,
                       ),
                     ),
                     GestureDetector(
                         onTap: () {},
-                        child: const Text(
-                          "See All",
-                          style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 13,
-                              color: Colors.black),
+                        child: Container(
+                          child: Text(
+                            "See All",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.blue),
+                          ),
                         ))
                   ],
                 ),
@@ -106,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 10,
                 ),
                 Column(
-                  children: List.generate(10, (index) {
+                  children: List.generate(6, (index) {
                     return TransactionContainer(
                         transactionProvider: transactionProvider,
                         index: index); // Adding each transaction item

@@ -16,7 +16,7 @@ class CreditCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
@@ -29,24 +29,14 @@ class CreditCard extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
-                            color: Colors.white.withOpacity(0.6)),
+                            color: Colors.white.withOpacity(0.8)),
                       ),
                       Text(
-                        "\$3,500",
+                        "\$1,000,500",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 27,
                             fontWeight: FontWeight.bold),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: const Text(
-                          "See Detials",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
                       ),
                     ],
                   ),
@@ -69,9 +59,6 @@ class CreditCard extends StatelessWidget {
                     width: 30,
                   )
                 ],
-              ),
-              const SizedBox(
-                height: 10,
               ),
               Row(
                 children: [
