@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 import '../models/transaction_model.dart';
 
@@ -13,25 +13,39 @@ class TransactionService extends ChangeNotifier {
   }
 
   Future<void> fetchTransactionsFromDatabase() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    String userId = auth.currentUser!.uid;
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      String? userId = auth.currentUser?.uid;
 
-    DocumentSnapshot documentSnapshot =
-        await firestore.collection('users').doc(userId).get();
+      if (userId == null) {
+        // Handle the case where the user is not logged in
+        return;
+      }
 
-    if (documentSnapshot.exists) {
-      List<dynamic> transactionsFromDatabase = documentSnapshot['transactions'];
-      transactions = transactionsFromDatabase
-          .map((item) => TransactionModel(
-              id: item["Id"],
-              title: item["title"],
-              amount: item["amount"],
-              date: item["date"],
-              category: item["category"]))
-          .toList();
+      DocumentSnapshot documentSnapshot =
+          await firestore.collection('users').doc(userId).get();
+
+      if (documentSnapshot.exists) {
+        List<dynamic> transactionsFromDatabase =
+            documentSnapshot['transactions'];
+        transactions = transactionsFromDatabase
+            .map((item) => TransactionModel(
+                id: item["Id"],
+                title: item["title"],
+                amount: item["amount"],
+                date: item["date"],
+                category: item["category"]))
+            .toList();
+      } else {
+        transactions = [];
+      }
+
+      notifyListeners();
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error fetching transactions: $e");
+      }
     }
-
-    notifyListeners();
   }
 
   Future<void> updateTransactionsInDatabase(

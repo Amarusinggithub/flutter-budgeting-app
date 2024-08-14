@@ -15,7 +15,7 @@ class BudgetProvider extends ChangeNotifier {
     CategoryModel(
         id: "Entertainment", name: "Entertainment", icon: "", totalSpent: 0),
     CategoryModel(id: "Shopping", name: "Shopping", icon: "", totalSpent: 0),
-    CategoryModel(id: "Savings", name: "Savings", icon: "", totalSpent: 0),
+    CategoryModel(id: "Salary", name: "Salary", icon: "", totalSpent: 0),
     CategoryModel(id: "Healthcare", name: "Healthcare", icon: "", totalSpent: 0)
   ];
 

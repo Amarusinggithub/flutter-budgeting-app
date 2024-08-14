@@ -4,9 +4,17 @@ class Assets {
 
   static const String imagesBudget = 'assets/images/budget.png';
   static const String imagesCreditCard = 'assets/images/credit-card.png';
+  static const String imagesEntertainment = 'assets/images/entertainment.png';
   static const String imagesExpense = 'assets/images/expense.png';
+  static const String imagesGroceries = 'assets/images/groceries.png';
+  static const String imagesHealthcare = 'assets/images/healthcare.png';
+  static const String imagesHouse = 'assets/images/house.png';
   static const String imagesIncome = 'assets/images/income.png';
   static const String imagesMastercardLogo =
       'assets/images/mastercard-logo.png';
+  static const String imagesMoney = 'assets/images/money.png';
+  static const String imagesShopping = 'assets/images/shopping.png';
+  static const String imagesTransportation = 'assets/images/transportation.png';
+  static const String imagesUtilities = 'assets/images/utilities.png';
   static const String imagesWifi = 'assets/images/wifi.png';
 }

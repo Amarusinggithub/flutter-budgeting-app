@@ -1,6 +1,8 @@
 import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
+import 'package:budgetingapp/pages/main/main_screen.dart';
 import 'package:budgetingapp/pages/transaction/provider/transaction_provider.dart';
+import 'package:budgetingapp/pages/transaction/transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -92,7 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          MainScreen.pushNewScreen(context, TransactionScreen(),
+                              isNavBarItem: true, tabIndex: 1);
+                        },
                         child: Container(
                           child: Text(
                             "See All",

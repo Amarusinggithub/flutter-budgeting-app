@@ -1,6 +1,8 @@
 import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
 
+import '../../../generated/assets.dart';
+
 class CreditCard extends StatelessWidget {
   final BudgetProvider budgetProvider;
 
@@ -45,7 +47,7 @@ class CreditCard extends StatelessWidget {
                   ),
                   Image.asset(
                     fit: BoxFit.contain,
-                    "assets/images/credit-card.png",
+                    Assets.imagesCreditCard,
                     height: 30,
                     width: 30,
                   ),
@@ -54,7 +56,7 @@ class CreditCard extends StatelessWidget {
                   ),
                   Image.asset(
                     fit: BoxFit.contain,
-                    "assets/images/wifi.png",
+                    Assets.imagesWifi,
                     height: 30,
                     width: 30,
                   )
@@ -73,7 +75,7 @@ class CreditCard extends StatelessWidget {
                     width: 93,
                   ),
                   Image.asset(
-                    "assets/images/mastercard-logo.png",
+                    Assets.imagesMastercardLogo,
                     width: 53,
                     height: 53,
                   )
