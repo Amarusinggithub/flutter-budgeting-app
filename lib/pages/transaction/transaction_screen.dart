@@ -1,4 +1,5 @@
 import 'package:budgetingapp/pages/transaction/components/linechart_container.dart';
+import 'package:budgetingapp/pages/transaction/components/transactions_by_date_container.dart';
 import 'package:budgetingapp/pages/transaction/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,14 +20,25 @@ class _TransactionScreenState extends State<TransactionScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 25),
         child: Column(
           children: [
-            const Text(
-              "Transactopns",
+            Text(
+              "${transactionProvider.currentDate().millisecondsSinceEpoch}",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
-            LinechartContainer(points: transactionProvider.transactionPoints)
+            LinechartContainer(points: transactionProvider.transactionPoints),
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: transactionProvider.transactionsByDate.length,
+                  itemBuilder: (context, index) => TransactionsByDateContainer(
+                        transactionProvider: transactionProvider,
+                        index: index,
+                      )),
+            )
           ],
         ),
       ),

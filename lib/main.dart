@@ -43,12 +43,12 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider<AuthService>(
                 create: (context) => AuthService(auth: FirebaseAuth.instance),
               ),
-              ChangeNotifierProvider<BudgetService>(
-                create: (context) => BudgetService(auth: FirebaseAuth.instance),
-              ),
               ChangeNotifierProvider<TransactionService>(
                 create: (context) =>
                     TransactionService(auth: FirebaseAuth.instance),
+              ),
+              ChangeNotifierProvider<BudgetService>(
+                create: (context) => BudgetService(auth: FirebaseAuth.instance),
               ),
               ChangeNotifierProvider<BudgetProvider>(
                 create: (context) => BudgetProvider(

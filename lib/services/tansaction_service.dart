@@ -6,46 +6,25 @@ import '../models/transaction_model.dart';
 
 class TransactionService extends ChangeNotifier {
   final FirebaseAuth auth;
-  List<TransactionModel> transactions = [];
 
   TransactionService({required this.auth}) {
     fetchTransactionsFromDatabase();
   }
 
-  Future<void> fetchTransactionsFromDatabase() async {
-    try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      String? userId = auth.currentUser?.uid;
+  Future<List<TransactionModel>> fetchTransactionsFromDatabase() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    String? userId = auth.currentUser?.uid;
 
-      if (userId == null) {
-        // Handle the case where the user is not logged in
-        return;
-      }
+    DocumentSnapshot documentSnapshot =
+        await firestore.collection('users').doc(userId).get();
 
-      DocumentSnapshot documentSnapshot =
-          await firestore.collection('users').doc(userId).get();
+    List<dynamic> transactionsFromDatabase = documentSnapshot['transactions'];
 
-      if (documentSnapshot.exists) {
-        List<dynamic> transactionsFromDatabase =
-            documentSnapshot['transactions'];
-        transactions = transactionsFromDatabase
-            .map((item) => TransactionModel(
-                id: item["Id"],
-                title: item["title"],
-                amount: item["amount"],
-                date: item["date"],
-                category: item["category"]))
-            .toList();
-      } else {
-        transactions = [];
-      }
-
-      notifyListeners();
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error fetching transactions: $e");
-      }
-    }
+    List<TransactionModel> transactions = transactionsFromDatabase
+        .map((item) => TransactionModel.fromJson(item as Map<String, dynamic>))
+        .toList();
+    notifyListeners();
+    return transactions;
   }
 
   Future<void> updateTransactionsInDatabase(

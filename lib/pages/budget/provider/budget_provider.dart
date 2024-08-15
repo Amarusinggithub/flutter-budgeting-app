@@ -23,18 +23,25 @@ class BudgetProvider extends ChangeNotifier {
     makeOrFetchBudget();
   }
 
-  void makeOrFetchBudget() {
-    if (budget == null && budgetService.budget != null) {
-      budget = budgetService.budget;
-    } else {
-      budget = BudgetModel(
-          availableBalance: 0, expense: 0, categories: categories, income: 0);
-    }
+  Future<void> makeOrFetchBudget() async {
+    // budget = await budgetService.fetchBudgetFromDatabase();
+
+    budget = BudgetModel(
+        availableBalance: 0, expense: 0, categories: categories, income: 0);
+    addBudgetInTheDatabase(budget!);
+
     notifyListeners();
   }
 
-  void updateTheBudgetInTheDatabase() {
-    budgetService.updateBudgetInDatabase(budget!);
+  void updateTheBudgetInTheDatabase(BudgetModel budget) {
+    budgetService.updateBudgetInDatabase(budget);
+    makeOrFetchBudget();
+    notifyListeners();
+  }
+
+  void addBudgetInTheDatabase(BudgetModel budgetModel) {
+    budgetService.addBudgetToDatabase(budget!);
+    makeOrFetchBudget();
     notifyListeners();
   }
 }

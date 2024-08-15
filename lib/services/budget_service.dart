@@ -6,7 +6,6 @@ import '../models/budget_model.dart';
 
 class BudgetService extends ChangeNotifier {
   final FirebaseAuth auth;
-  BudgetModel? budget;
 
   BudgetService({required this.auth}) {
     fetchBudgetFromDatabase();
@@ -31,20 +30,17 @@ class BudgetService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchBudgetFromDatabase() async {
+  Future<BudgetModel> fetchBudgetFromDatabase() async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     String userId = auth.currentUser!.uid;
 
     DocumentSnapshot documentSnapshot =
         await firestore.collection('users').doc(userId).get();
 
-    if (documentSnapshot.exists) {
-      Map<String, dynamic>? data =
-          documentSnapshot.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey('budget')) {
-        budget = BudgetModel.fromJson(data["budget"] as Map<String, dynamic>);
-      }
-    }
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    BudgetModel budget =
+        BudgetModel.fromJson(data["budget"] as Map<String, dynamic>);
     notifyListeners();
+    return budget;
   }
 }
