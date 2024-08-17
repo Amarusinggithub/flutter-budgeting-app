@@ -12,25 +12,36 @@ class TransactionProvider extends ChangeNotifier {
 
   TransactionProvider({required this.transactionService}) {
     getTransactionFromDatabase();
-    //updateTransactionsInDatabase(transactions);
   }
 
-  void getTransactionFromDatabase() async {
-    transactions = await transactionService.fetchTransactionsFromDatabase();
+  Future<void> getTransactionFromDatabase() async {
+    List<TransactionModel> _transactions =
+        await transactionService.fetchTransactionsFromDatabase();
+
     if (transactions == null) {
+      transactions = _transactions;
+    } else {
       transactions = [];
-      updateTransactionsInDatabase(transactions);
+
+      await updateTransactionsInDatabase(transactions!);
     }
     organizeTransactionsByDate();
     notifyListeners();
   }
 
-  void updateTransactionsInDatabase(List<TransactionModel>? transactions) {
-    transactionService.updateTransactionsInDatabase(transactions!);
-    getTransactionFromDatabase();
+  Future<void> updateTransactionsInDatabase(
+      List<TransactionModel> transactions) async {
+    try {
+      await transactionService.updateTransactionsInDatabase(transactions);
+      this.transactions = transactions;
+      organizeTransactionsByDate();
+      notifyListeners();
+    } catch (e) {
+      print("Error updating transactions: $e");
+    }
   }
 
-  List<dynamic>? getTransactionByDate(int index) {
+  List<TransactionModel>? getTransactionByDate(int index) {
     if (index < 0 || index >= transactionsByDate.length) {
       return null;
     }
@@ -38,7 +49,7 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   List<TransactionPoint> get transactionPoints {
-    final data = <double>[5.0, 4.0, 10.0, 5.0];
+    final data = transactions?.map((t) => t.amount).toList() ?? [0.0];
     return data
         .mapIndexed((index, element) =>
             TransactionPoint(x: index.toDouble(), y: element))
@@ -48,24 +59,24 @@ class TransactionProvider extends ChangeNotifier {
   void organizeTransactionsByDate() {
     if (transactions == null || transactions!.isEmpty) return;
 
-    // Group transactions by date
-    Map<int, List<TransactionModel>> grouped = {};
-    for (var transaction in transactions!) {
-      int date = DateTime.fromMillisecondsSinceEpoch(transaction.date)
-          .millisecondsSinceEpoch;
-      if (grouped.containsKey(date)) {
-        grouped[date]!.add(transaction);
-      } else {
-        grouped[date] = [transaction];
-      }
-    }
-
-    transactionsByDate = grouped.values.toList();
-    notifyListeners();
+    // Group transactions by date (ignoring time)
+    transactionsByDate = transactions!
+        .groupListsBy((transaction) =>
+            DateTime.fromMillisecondsSinceEpoch(transaction.date)
+                .toLocal()
+                .toIso8601String()
+                .substring(0, 10))
+        .values
+        .toList();
   }
 
   DateTime currentDate() {
-    notifyListeners();
     return DateTime.now();
+  }
+
+  Future<void> addTransaction(TransactionModel transaction) async {
+    transactions!.add(transaction);
+    await updateTransactionsInDatabase(transactions!);
+    notifyListeners();
   }
 }

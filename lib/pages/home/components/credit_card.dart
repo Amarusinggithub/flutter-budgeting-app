@@ -1,12 +1,12 @@
-import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
+import 'package:budgetingapp/models/budget_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/assets.dart';
 
 class CreditCard extends StatelessWidget {
-  final BudgetProvider budgetProvider;
+  final BudgetModel budget;
 
-  const CreditCard({super.key, required this.budgetProvider});
+  const CreditCard({super.key, required this.budget});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class CreditCard extends StatelessWidget {
                             color: Colors.white.withOpacity(0.8)),
                       ),
                       Text(
-                        "\$1,000,500",
+                        "\$${budget.availableBalance}",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 27,

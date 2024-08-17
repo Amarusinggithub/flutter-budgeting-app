@@ -25,11 +25,11 @@ class TransactionModel {
 
   factory TransactionModel.fromJson(Map<String, dynamic> map) {
     return TransactionModel(
-      id: map['Id'],
-      title: map['title'],
-      amount: map['amount'],
-      date: map['date'],
-      category: map['category'],
+      id: map['Id'] ?? '',
+      title: map['title'] ?? '',
+      amount: (map['amount'] ?? 0).toDouble(),
+      date: map['date'] ?? 0,
+      category: map['category'] ?? '',
     );
   }
 }

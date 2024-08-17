@@ -23,6 +23,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     final transactionProvider = Provider.of<TransactionProvider>(context);
     final budget = budgetProvider.budget;
+
+    if (budget == null) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -54,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Spacer(),
                     GestureDetector(
                       onTap: () {},
-                      child: CircleAvatar(
+                      child: const CircleAvatar(
                         radius: 30,
                       ),
                     )
@@ -63,14 +73,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                CreditCard(budgetProvider: budgetProvider),
+                CreditCard(
+                  budget: budget,
+                ),
                 const SizedBox(
                   height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IncomeContainer(income: budget!.income),
+                    IncomeContainer(income: budget.income),
                     ExpenseContainer(
                       expense: budget.expense,
                     ),
@@ -99,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               isNavBarItem: true, tabIndex: 1);
                         },
                         child: Container(
-                          child: Text(
+                          child: const Text(
                             "See All",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -115,8 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Column(
                   children: List.generate(6, (index) {
                     return TransactionContainer(
-                        transactionProvider: transactionProvider,
-                        index: index); // Adding each transaction item
+                        transactionProvider: transactionProvider, index: index);
                   }),
                 ),
               ],

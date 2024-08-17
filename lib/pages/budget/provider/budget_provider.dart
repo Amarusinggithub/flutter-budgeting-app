@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 class BudgetProvider extends ChangeNotifier {
   BudgetModel? budget;
+  CategoryModel? selectedCategory;
+
   final BudgetService budgetService;
   List<CategoryModel> categories = [
     CategoryModel(id: "Housing", name: "Housing", icon: "", totalSpent: 0),
@@ -24,24 +26,39 @@ class BudgetProvider extends ChangeNotifier {
   }
 
   Future<void> makeOrFetchBudget() async {
-    // budget = await budgetService.fetchBudgetFromDatabase();
-
-    budget = BudgetModel(
-        availableBalance: 0, expense: 0, categories: categories, income: 0);
-    addBudgetInTheDatabase(budget!);
-
+    BudgetModel? _budgetModel = await budgetService.fetchBudgetFromDatabase();
+    if (budget == null && _budgetModel != null) {
+      budget = _budgetModel;
+      calculateSavings();
+    } else {
+      BudgetModel? budget = BudgetModel(
+          availableBalance: 0,
+          expense: 0,
+          categories: categories,
+          income: 0,
+          savings: 0);
+      calculateSavings();
+      await updateTheBudgetInTheDatabase(budget);
+    }
     notifyListeners();
   }
 
-  void updateTheBudgetInTheDatabase(BudgetModel budget) {
-    budgetService.updateBudgetInDatabase(budget);
-    makeOrFetchBudget();
+  Future<void> updateTheBudgetInTheDatabase(BudgetModel budget) async {
+    await budgetService.updateBudgetInDatabase(budget);
+    this.budget = budget;
     notifyListeners();
   }
 
-  void addBudgetInTheDatabase(BudgetModel budgetModel) {
-    budgetService.addBudgetToDatabase(budget!);
-    makeOrFetchBudget();
+  void calculateSavings() {
+    if (budget != null) {
+      budget!.savings = budget!.income - budget!.expense;
+      budget!.availableBalance = budget!.availableBalance + budget!.savings;
+      updateTheBudgetInTheDatabase(budget!);
+    }
+  }
+
+  void selectCategory(CategoryModel category) {
+    selectedCategory = category;
     notifyListeners();
   }
 }

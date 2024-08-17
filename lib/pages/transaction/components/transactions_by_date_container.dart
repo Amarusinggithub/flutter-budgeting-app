@@ -26,17 +26,22 @@ class TransactionsByDateContainer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Date: ${DateTime.fromMillisecondsSinceEpoch(index)}"),
-        SizedBox(height: 10),
+        Text(
+          "Today",
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         ListView.builder(
+          padding: const EdgeInsets.only(bottom: 10, top: 10),
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(), // Prevent nested scrolling
+          physics: const NeverScrollableScrollPhysics(),
+          // Prevent nested scrolling
           itemCount: transactionsByDate.length,
           itemBuilder: (context, transactionIndex) => TransactionContainer(
             index: transactionIndex,
             transactionsByDate: transactionsByDate,
           ),
         ),
+        const SizedBox(height: 10),
       ],
     );
   }

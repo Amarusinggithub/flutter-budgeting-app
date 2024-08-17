@@ -12,10 +12,10 @@ class TransactionContainer extends StatelessWidget {
     final transaction = transactionsByDate![index];
 
     return Container(
-      height: 60,
+      padding: const EdgeInsetsDirectional.all(5),
+      height: 75,
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
         color: Colors.white,
       ),
       child: Row(
