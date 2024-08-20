@@ -20,8 +20,8 @@ class CustomButton extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
         child: Container(
-          color: const Color(0xFF660FFF),
-          width: 300,
+          color: Colors.blue,
+          width: double.infinity,
           height: 60,
           constraints: const BoxConstraints(
             maxWidth: 300,

@@ -1,12 +1,12 @@
-import 'package:budgetingapp/pages/transaction/provider/transaction_provider.dart';
+import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
 
 class TransactionContainer extends StatelessWidget {
   final int index;
-  final TransactionProvider transactionProvider;
+  final BudgetProvider budgetProvider;
 
   const TransactionContainer(
-      {super.key, required this.transactionProvider, required this.index});
+      {super.key, required this.budgetProvider, required this.index});
 
   @override
   Widget build(BuildContext context) {

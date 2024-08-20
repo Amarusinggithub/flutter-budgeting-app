@@ -1,7 +1,6 @@
 import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
 import 'package:budgetingapp/pages/main/main_screen.dart';
-import 'package:budgetingapp/pages/transaction/provider/transaction_provider.dart';
 import 'package:budgetingapp/pages/transaction/transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,19 +9,13 @@ import 'components/expense_container.dart';
 import 'components/income_container.dart';
 import 'components/transaction_container.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
-    final transactionProvider = Provider.of<TransactionProvider>(context);
-    final budget = budgetProvider.budget;
+    final budget = budgetProvider.currentBudget;
 
     if (budget == null) {
       return const Scaffold(
@@ -74,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 10,
                 ),
                 CreditCard(
-                  budget: budget,
+                  budgetProvider: budgetProvider,
                 ),
                 const SizedBox(
                   height: 10,
@@ -107,7 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                         onTap: () {
-                          MainScreen.pushNewScreen(context, TransactionScreen(),
+                          MainScreen.pushNewScreen(
+                              context, const TransactionScreen(),
                               isNavBarItem: true, tabIndex: 1);
                         },
                         child: Container(
@@ -127,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Column(
                   children: List.generate(6, (index) {
                     return TransactionContainer(
-                        transactionProvider: transactionProvider, index: index);
+                        budgetProvider: budgetProvider, index: index);
                   }),
                 ),
               ],

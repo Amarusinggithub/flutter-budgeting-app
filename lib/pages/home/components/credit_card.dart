@@ -1,12 +1,12 @@
-import 'package:budgetingapp/models/budget_model.dart';
+import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/assets.dart';
 
 class CreditCard extends StatelessWidget {
-  final BudgetModel budget;
+  final BudgetProvider budgetProvider;
 
-  const CreditCard({super.key, required this.budget});
+  const CreditCard({super.key, required this.budgetProvider});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class CreditCard extends StatelessWidget {
                             color: Colors.white.withOpacity(0.8)),
                       ),
                       Text(
-                        "\$${budget.availableBalance}",
+                        "\$${budgetProvider.budgetHistoryModel?.totalBalance}",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 27,

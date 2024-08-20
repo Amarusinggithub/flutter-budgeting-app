@@ -1,12 +1,10 @@
 import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:budgetingapp/pages/transaction/components/linechart_container.dart';
 import 'package:budgetingapp/pages/transaction/components/transactions_by_date_container.dart';
-import 'package:budgetingapp/pages/transaction/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../budget/provider/budget_provider.dart';
-import 'components/select_category_container.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -18,9 +16,8 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreenState extends State<TransactionScreen> {
   @override
   Widget build(BuildContext context) {
-    final transactionProvider = Provider.of<TransactionProvider>(context);
     final budgetProvider = Provider.of<BudgetProvider>(context);
-    final savings = budgetProvider.budget!.savings;
+    final savings = budgetProvider.currentBudget!.savings;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -39,7 +36,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   height: 10,
                 ),
                 LinechartContainer(
-                  points: transactionProvider.transactionPoints,
+                  points: budgetProvider.transactionPoints,
                   savings: savings,
                 ),
                 const SizedBox(
@@ -47,9 +44,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
                 Column(
                   children: List.generate(
-                    transactionProvider.transactionsByDate.length,
+                    budgetProvider.transactionsByDate.length,
                     (index) => TransactionsByDateContainer(
-                      transactionProvider: transactionProvider,
+                      budgetProvider: budgetProvider,
                       index: index,
                     ),
                   ),
@@ -61,8 +58,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _showTransactionBottomSheet(
-              context, transactionProvider, budgetProvider);
+          _showTransactionBottomSheet(context, budgetProvider);
         },
         shape: const CircleBorder(),
         elevation: 0,
@@ -71,8 +67,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
     );
   }
 
-  void _showTransactionBottomSheet(BuildContext context,
-      TransactionProvider transactionProvider, BudgetProvider budgetProvider) {
+  void _showTransactionBottomSheet(
+      BuildContext context, BudgetProvider budgetProvider) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -80,9 +76,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
       ),
       builder: (context) {
-        final titleController = TextEditingController();
-        final amountController = TextEditingController();
-
         return Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
@@ -94,7 +87,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: titleController,
+                onChanged: (value) {
+                  budgetProvider.updateTransactionTitle(value);
+                },
                 decoration: const InputDecoration(
                   labelText: 'Title',
                   border: OutlineInputBorder(),
@@ -102,7 +97,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
               ),
               const SizedBox(height: 10),
               TextField(
-                controller: amountController,
+                onChanged: (value) {
+                  budgetProvider
+                      .updateTransactionAmount(double.tryParse(value) ?? 0);
+                },
                 decoration: const InputDecoration(
                   labelText: 'Amount',
                   border: OutlineInputBorder(),
@@ -110,16 +108,32 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 10),
-              SelectCategoryContainer(budgetProvider: budgetProvider),
+              Wrap(
+                spacing: 8.0,
+                runSpacing: 4.0,
+                children:
+                    List.generate(budgetProvider.categories.length, (index) {
+                  final category = budgetProvider.categories[index];
+                  return ChoiceChip(
+                    label: Text(category.name),
+                    selected: index == budgetProvider.selectedCategory,
+                    onSelected: (selected) {
+                      if (selected) {
+                        budgetProvider.selectCategory(index);
+                      }
+                    },
+                  );
+                }),
+              ),
               const SizedBox(height: 10),
               ElevatedButton(
                 style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsets>(
+                  padding: WidgetStateProperty.all<EdgeInsets>(
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 155),
                   ),
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blueAccent),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      WidgetStateProperty.all<Color>(Colors.blueAccent),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -127,14 +141,15 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
                 onPressed: () {
                   final newTransaction = TransactionModel(
-                    id: '',
-                    // You might want to generate a unique ID here
-                    title: titleController.text,
-                    amount: double.tryParse(amountController.text) ?? 0,
+                    title: budgetProvider.transactionTitle ?? '',
+                    amount: budgetProvider.transactionAmount ?? 0,
                     date: DateTime.now().millisecondsSinceEpoch,
-                    category: budgetProvider.selectedCategory?.name ?? '',
+                    category: budgetProvider
+                        .categories[budgetProvider.selectedCategory!].name,
                   );
-                  transactionProvider.addTransaction(newTransaction);
+                  budgetProvider.addTransaction(newTransaction);
+                  budgetProvider
+                      .clearTransactionInputs(); // Clear inputs after transaction is added
                   Navigator.of(context).pop();
                 },
                 child: const Text(
