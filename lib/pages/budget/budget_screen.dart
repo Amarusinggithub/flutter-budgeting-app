@@ -1,9 +1,9 @@
 import 'package:budgetingapp/pages/budget/components/piechart_container.dart';
-import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:budgetingapp/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../provider/budget_provider.dart';
 import 'components/total_balance_and_expense_container.dart';
 
 class BudgetScreen extends StatelessWidget {

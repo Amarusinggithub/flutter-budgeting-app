@@ -6,7 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/transaction_model.dart';
-import '../../transaction/components/transaction_point.dart';
+import '../pages/transaction/components/transaction_point.dart';
 
 class BudgetProvider extends ChangeNotifier {
   BudgetModel? currentBudget;
@@ -16,6 +16,9 @@ class BudgetProvider extends ChangeNotifier {
   List<List<TransactionModel>> transactionsByDate = [];
   String? transactionTitle;
   double? transactionAmount;
+  int _selectedIndexForTransactionTime = 1;
+
+  int get selectedIndexForTransactionTime => _selectedIndexForTransactionTime;
 
   final BudgetService budgetService;
   List<CategoryModel> categories = [
@@ -211,6 +214,11 @@ class BudgetProvider extends ChangeNotifier {
     transactionTitle = null;
     transactionAmount = null;
     selectedCategory = null;
+    notifyListeners();
+  }
+
+  void setSelectedIndexForTransactionTime(int index) {
+    _selectedIndexForTransactionTime = index;
     notifyListeners();
   }
 }

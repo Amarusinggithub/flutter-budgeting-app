@@ -8,15 +8,15 @@ class HealthcareContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsetsDirectional.all(10),
-      height: 50,
-      width: 50,
+      height: 65,
+      width: 65,
       child: Image.asset(
         Assets.imagesHealthcare,
         fit: BoxFit.contain,
       ),
       decoration: BoxDecoration(
         color: Colors.pinkAccent,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(18),
       ),
     );
   }

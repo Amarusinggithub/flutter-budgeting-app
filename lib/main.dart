@@ -1,4 +1,4 @@
-import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
+import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:budgetingapp/services/auth_service.dart';
 import 'package:budgetingapp/services/budget_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';

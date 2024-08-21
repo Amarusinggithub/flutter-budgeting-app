@@ -1,5 +1,6 @@
-import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
+
+import '../../../provider/budget_provider.dart';
 
 class SelectCategoryContainer extends StatelessWidget {
   final BudgetProvider budgetProvider;

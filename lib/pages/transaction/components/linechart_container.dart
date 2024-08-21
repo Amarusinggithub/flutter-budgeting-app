@@ -1,78 +1,138 @@
-import 'package:budgetingapp/pages/transaction/components/savings_container.dart';
 import 'package:budgetingapp/pages/transaction/components/transaction_point.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class LinechartContainer extends StatelessWidget {
+class LineChartContainer extends StatelessWidget {
   final List<TransactionPoint> points;
-  final double savings;
 
-  const LinechartContainer(
-      {super.key, required this.points, required this.savings});
+  const LineChartContainer({super.key, required this.points});
+
+  List<Color> get gradientColors => [
+        const Color(0xFF007AFF),
+        const Color(0xFF00A2FF),
+      ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: Colors.black.withOpacity(0.2),
-            width: 0.5,
-          )),
-      padding: const EdgeInsetsDirectional.all(20),
+        color: Colors.white, // Ensure the container's background is white
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: Colors.white,
+          width: 0.5,
+        ),
+      ),
+      padding: const EdgeInsetsDirectional.all(10),
       child: Stack(
         children: [
           AspectRatio(
             aspectRatio: 1.4,
             child: LineChart(
-              LineChartData(
-                lineTouchData: const LineTouchData(
-                    touchTooltipData: LineTouchTooltipData(), enabled: true),
-                titlesData: FlTitlesData(
-                  bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                          getTitlesWidget: (value, meta) => Text(
-                                meta.formattedValue,
-                              ),
-                          showTitles: true)),
-                  leftTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
-                ),
-                lineBarsData: [
-                  LineChartBarData(
-                    color: const Color(0xFF6263F1),
-                    show: true,
-                    barWidth: 4,
-                    isCurved: true,
-                    preventCurveOverShooting: true,
-                    belowBarData: BarAreaData(
-                        show: true,
-                        color: const Color(0xFF6263F1).withOpacity(0.2)),
-                    spots: points
-                        .map((point) => FlSpot(point.x, point.y))
-                        .toList(),
-                  ),
-                ],
-                gridData: const FlGridData(
-                  show: false,
-                ),
-                borderData: FlBorderData(
-                    border: const Border(
-                        right: BorderSide.none,
-                        top: BorderSide.none,
-                        bottom: BorderSide.none,
-                        left: BorderSide.none)),
-              ),
+              _mainData(),
             ),
           ),
-          Positioned(
-              top: 10, left: 40, child: SavingsContainer(savings: savings))
         ],
       ),
+    );
+  }
+
+  LineChartData _mainData() {
+    return LineChartData(
+      backgroundColor: Colors.white,
+      // Set the chart's background to white
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: true,
+        horizontalInterval: 1,
+        verticalInterval: 1,
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: Colors.grey.withOpacity(0.3),
+            strokeWidth: 1,
+          );
+        },
+        getDrawingVerticalLine: (value) {
+          return FlLine(
+            color: Colors.grey.withOpacity(0.3),
+            strokeWidth: 1,
+          );
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 30,
+            interval: 1,
+            getTitlesWidget: (value, meta) {
+              switch (value.toInt()) {
+                case 2:
+                  return const Text('MAR',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 5:
+                  return const Text('JUN',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 8:
+                  return const Text('SEP',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                default:
+                  return const Text('');
+              }
+            },
+          ),
+        ),
+        leftTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false), // Left side titles hidden
+        ),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border.all(color: const Color(0xff37434d)),
+      ),
+      minX: 0,
+      maxX: points.length - 1.0,
+      minY: 0,
+      maxY: points.map((p) => p.y).reduce((a, b) => a > b ? a : b) + 1,
+      lineBarsData: [
+        LineChartBarData(
+          spots: points.map((point) => FlSpot(point.x, point.y)).toList(),
+          isCurved: true,
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          ),
+          barWidth: 5,
+          isStrokeCapRound: true,
+          dotData: const FlDotData(
+            show: false, // Dot display disabled
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: gradientColors
+                  .map((color) => color.withOpacity(0.1)) // Adjusted opacity
+                  .toList(),
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
+            spotsLine: BarAreaSpotsLine(
+              show: false, // Ensure no extra line is drawn
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

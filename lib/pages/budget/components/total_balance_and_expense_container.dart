@@ -1,10 +1,12 @@
-import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
+
+import '../../../provider/budget_provider.dart';
 
 class TotalBalanceAndExpenseContainer extends StatelessWidget {
   final BudgetProvider budgetProvider;
 
-  TotalBalanceAndExpenseContainer({super.key, required this.budgetProvider});
+  const TotalBalanceAndExpenseContainer(
+      {super.key, required this.budgetProvider});
 
   @override
   Widget build(BuildContext context) {

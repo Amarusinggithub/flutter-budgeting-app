@@ -8,15 +8,15 @@ class HousingContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsetsDirectional.all(10),
-      height: 50,
-      width: 50,
+      height: 65,
+      width: 65,
       child: Image.asset(
         Assets.imagesHouse,
         fit: BoxFit.contain,
       ),
       decoration: BoxDecoration(
-        color: Colors.lightBlueAccent,
-        borderRadius: BorderRadius.circular(15),
+        color: Colors.purple,
+        borderRadius: BorderRadius.circular(18),
       ),
     );
   }

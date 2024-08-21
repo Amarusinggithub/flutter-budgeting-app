@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/transaction_model.dart';
+import '../../../widgets/entertainment_container.dart';
+import '../../../widgets/groceries_container.dart';
+import '../../../widgets/healthcare_container.dart';
+import '../../../widgets/housing_container.dart';
+import '../../../widgets/shopping_container.dart';
+import '../../../widgets/transportation_container.dart';
+import '../../../widgets/utilities_container.dart';
+
 class TransactionContainer extends StatelessWidget {
   final int index;
   final List<dynamic>? transactionsByDate;
@@ -23,19 +32,7 @@ class TransactionContainer extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                height: 50,
-                width: 50,
-                child: Image.asset(
-                  "assets/images/expense.png",
-                  fit: BoxFit.contain,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
+              getCategoryIcon(transaction),
               SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +47,7 @@ class TransactionContainer extends StatelessWidget {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    transaction.title,
+                    transaction.category,
                     // Assuming `title` is a property of `TransactionModel`
                     style: const TextStyle(
                       fontWeight: FontWeight.normal,
@@ -88,5 +85,26 @@ class TransactionContainer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget getCategoryIcon(TransactionModel transaction) {
+    switch (transaction.category) {
+      case "Housing":
+        return HousingContainer();
+      case "Utilities":
+        return UtilitiesContainer();
+      case "Transportation":
+        return TransportationContainer();
+      case "Groceries":
+        return GroceriesContainer();
+      case "Entertainment":
+        return EntertainmentContainer();
+      case "Shopping":
+        return ShoppingContainer();
+      case "Healthcare":
+        return HealthcareContainer();
+      default:
+        return Container(); // You can define a default container or return a placeholder widget
+    }
   }
 }

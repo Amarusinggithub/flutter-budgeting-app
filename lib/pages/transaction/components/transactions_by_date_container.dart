@@ -1,6 +1,7 @@
-import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:budgetingapp/pages/transaction/components/transaction_container.dart';
 import 'package:flutter/material.dart';
+
+import '../../../provider/budget_provider.dart';
 
 class TransactionsByDateContainer extends StatelessWidget {
   final int index;
@@ -16,7 +17,7 @@ class TransactionsByDateContainer extends StatelessWidget {
     if (transactionsByDate == null || transactionsByDate.isEmpty) {
       return Container(
         padding: EdgeInsets.all(10),
-        child: Text(
+        child: const Text(
           "No transactions available for this day",
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),

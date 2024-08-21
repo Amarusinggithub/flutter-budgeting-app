@@ -13,7 +13,7 @@ class ExpenseContainer extends StatelessWidget {
       padding:
           const EdgeInsetsDirectional.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.7),
+        color: Colors.red.withOpacity(0.7), // Updated red color
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -28,7 +28,7 @@ class ExpenseContainer extends StatelessWidget {
               fit: BoxFit.contain,
             ),
             decoration: BoxDecoration(
-              color: Colors.red,
+              color: Color(0xFFD32F2F), // Updated red color
               borderRadius: BorderRadius.circular(15),
             ),
           ),

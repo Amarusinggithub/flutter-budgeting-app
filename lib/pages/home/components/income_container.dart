@@ -13,7 +13,7 @@ class IncomeContainer extends StatelessWidget {
       padding:
           const EdgeInsetsDirectional.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.8),
+        color: Colors.green.withOpacity(0.8), // Updated green color
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -28,7 +28,7 @@ class IncomeContainer extends StatelessWidget {
               fit: BoxFit.contain,
             ),
             decoration: BoxDecoration(
-              color: Colors.green,
+              color: Color(0xFF388E3C), // Updated green color
               borderRadius: BorderRadius.circular(15),
             ),
           ),

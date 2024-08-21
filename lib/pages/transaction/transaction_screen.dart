@@ -4,7 +4,9 @@ import 'package:budgetingapp/pages/transaction/components/transactions_by_date_c
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../budget/provider/budget_provider.dart';
+import '../../provider/budget_provider.dart';
+import 'components/budget_for_the_month_container.dart';
+import 'components/data_slider_container.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -17,7 +19,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   @override
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
-    final savings = budgetProvider.currentBudget!.savings;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -28,19 +30,50 @@ class _TransactionScreenState extends State<TransactionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  "Transactions",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Transactions",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _showTransactionBottomSheet(context, budgetProvider);
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll(Color(0xFFE0E0E0)),
+                          iconColor: WidgetStatePropertyAll(Colors.black),
+                          iconSize: WidgetStatePropertyAll(30),
+                          padding: const WidgetStatePropertyAll(
+                              EdgeInsetsDirectional.all(0)),
+                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)))),
+                      child: Icon(
+                        Icons.add,
+                        weight: 20,
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                LinechartContainer(
+                const DataSliderContainer(),
+                const SizedBox(
+                  height: 10,
+                ),
+                LineChartContainer(
                   points: budgetProvider.transactionPoints,
-                  savings: savings,
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
+                ),
+                BudgetForTheMonthContainer(),
+                SizedBox(
+                  height: 10,
                 ),
                 Column(
                   children: List.generate(
@@ -55,14 +88,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showTransactionBottomSheet(context, budgetProvider);
-        },
-        shape: const CircleBorder(),
-        elevation: 0,
-        child: const Icon(Icons.add), // Add an icon to the button
       ),
     );
   }
@@ -129,7 +154,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               ElevatedButton(
                 style: ButtonStyle(
                   padding: WidgetStateProperty.all<EdgeInsets>(
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 155),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   ),
                   backgroundColor:
                       WidgetStateProperty.all<Color>(Colors.blueAccent),
@@ -153,7 +178,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   Navigator.of(context).pop();
                 },
                 child: const Text(
-                  'Add',
+                  'Add Expense',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,

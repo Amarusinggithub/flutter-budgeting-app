@@ -1,13 +1,13 @@
-import 'package:budgetingapp/pages/budget/provider/budget_provider.dart';
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
 import 'package:budgetingapp/pages/main/main_screen.dart';
 import 'package:budgetingapp/pages/transaction/transaction_screen.dart';
+import 'package:budgetingapp/widgets/transaction_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../provider/budget_provider.dart';
 import 'components/expense_container.dart';
 import 'components/income_container.dart';
-import 'components/transaction_container.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -59,6 +59,7 @@ class HomeScreen extends StatelessWidget {
                       onTap: () {},
                       child: const CircleAvatar(
                         radius: 30,
+                        child: Icon(Icons.person, color: Colors.white),
                       ),
                     )
                   ],
@@ -66,9 +67,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                CreditCard(
-                  budgetProvider: budgetProvider,
-                ),
+                CreditCard(budgetProvider: budgetProvider),
                 const SizedBox(
                   height: 10,
                 ),
@@ -99,29 +98,40 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                        onTap: () {
-                          MainScreen.pushNewScreen(
-                              context, const TransactionScreen(),
-                              isNavBarItem: true, tabIndex: 1);
-                        },
-                        child: Container(
-                          child: const Text(
-                            "See All",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.blue),
+                      onTap: () {
+                        MainScreen.pushNewScreen(
+                            context, const TransactionScreen(),
+                            isNavBarItem: true, tabIndex: 1);
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Text(
+                          "See All",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.black,
                           ),
-                        ))
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 Column(
-                  children: List.generate(6, (index) {
+                  children: List.generate(
+                      budgetProvider.transactionsByDate[0].length, (index) {
                     return TransactionContainer(
-                        budgetProvider: budgetProvider, index: index);
+                      index: index,
+                      budgetProvider: budgetProvider,
+                    );
                   }),
                 ),
               ],
