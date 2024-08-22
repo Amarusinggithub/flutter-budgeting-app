@@ -1,6 +1,7 @@
 import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:budgetingapp/pages/transaction/components/linechart_container.dart';
 import 'package:budgetingapp/pages/transaction/components/transactions_by_date_container.dart';
+import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   @override
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
+    final transactionProvider = Provider.of<TransactionProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -40,7 +42,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        _showTransactionBottomSheet(context, budgetProvider);
+                        _showTransactionBottomSheet(
+                            context, budgetProvider, transactionProvider);
                       },
                       style: ButtonStyle(
                           backgroundColor:
@@ -66,7 +69,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   height: 10,
                 ),
                 LineChartContainer(
-                  points: budgetProvider.transactionPoints,
+                  points: transactionProvider.transactionPoints,
                 ),
                 const SizedBox(
                   height: 10,
@@ -77,9 +80,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
                 Column(
                   children: List.generate(
-                    budgetProvider.transactionsByDate.length,
+                    transactionProvider.transactionsByDate.length,
                     (index) => TransactionsByDateContainer(
-                      budgetProvider: budgetProvider,
+                      transactionProvider: transactionProvider,
                       index: index,
                     ),
                   ),
@@ -92,8 +95,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
     );
   }
 
-  void _showTransactionBottomSheet(
-      BuildContext context, BudgetProvider budgetProvider) {
+  void _showTransactionBottomSheet(BuildContext context,
+      BudgetProvider budgetProvider, TransactionProvider transactionProvider) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -113,7 +116,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               const SizedBox(height: 20),
               TextField(
                 onChanged: (value) {
-                  budgetProvider.updateTransactionTitle(value);
+                  transactionProvider.updateTransactionTitle(value);
                 },
                 decoration: const InputDecoration(
                   labelText: 'Title',
@@ -123,7 +126,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               const SizedBox(height: 10),
               TextField(
                 onChanged: (value) {
-                  budgetProvider
+                  transactionProvider
                       .updateTransactionAmount(double.tryParse(value) ?? 0);
                 },
                 decoration: const InputDecoration(
@@ -141,10 +144,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   final category = budgetProvider.categories[index];
                   return ChoiceChip(
                     label: Text(category.name),
-                    selected: index == budgetProvider.selectedCategory,
+                    selected: index == transactionProvider.selectedCategory,
                     onSelected: (selected) {
                       if (selected) {
-                        budgetProvider.selectCategory(index);
+                        transactionProvider.selectCategory(index);
                       }
                     },
                   );
@@ -166,14 +169,14 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
                 onPressed: () {
                   final newTransaction = TransactionModel(
-                    title: budgetProvider.transactionTitle ?? '',
-                    amount: budgetProvider.transactionAmount ?? 0,
+                    title: transactionProvider.transactionTitle ?? '',
+                    amount: transactionProvider.transactionAmount ?? 0,
                     date: DateTime.now().millisecondsSinceEpoch,
                     category: budgetProvider
-                        .categories[budgetProvider.selectedCategory!].name,
+                        .categories[transactionProvider.selectedCategory!].name,
                   );
-                  budgetProvider.addTransaction(newTransaction);
-                  budgetProvider
+                  transactionProvider.addTransaction(newTransaction);
+                  transactionProvider
                       .clearTransactionInputs(); // Clear inputs after transaction is added
                   Navigator.of(context).pop();
                 },

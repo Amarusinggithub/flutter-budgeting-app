@@ -1,13 +1,12 @@
 class CategoryModel {
   String id;
   String name;
-  String icon;
+
   double totalSpent;
 
   CategoryModel({
     required this.id,
     required this.name,
-    this.icon = '',
     this.totalSpent = 0.0,
   });
 
@@ -15,7 +14,6 @@ class CategoryModel {
     return {
       'id': id,
       'name': name,
-      'icon': icon,
       'totalSpent': totalSpent,
     };
   }
@@ -24,7 +22,6 @@ class CategoryModel {
     return CategoryModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      icon: map['icon'] ?? '',
       totalSpent: (map['totalSpent'] ?? 0).toDouble(),
     );
   }

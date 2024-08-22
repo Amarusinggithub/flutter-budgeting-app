@@ -1,6 +1,8 @@
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
+import 'package:budgetingapp/pages/home/components/no_transaction_container.dart';
 import 'package:budgetingapp/pages/main/main_screen.dart';
 import 'package:budgetingapp/pages/transaction/transaction_screen.dart';
+import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:budgetingapp/widgets/transaction_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     final budget = budgetProvider.currentBudget;
+    final transactionProvider = Provider.of<TransactionProvider>(context);
 
     if (budget == null) {
       return const Scaffold(
@@ -125,15 +128,19 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Column(
-                  children: List.generate(
-                      budgetProvider.transactionsByDate[0].length, (index) {
-                    return TransactionContainer(
-                      index: index,
-                      budgetProvider: budgetProvider,
-                    );
-                  }),
-                ),
+                transactionProvider.transactionsByDate.isNotEmpty &&
+                        transactionProvider.transactionsByDate[0].isNotEmpty
+                    ? Column(
+                        children: List.generate(
+                            transactionProvider.transactionsByDate[0].length,
+                            (index) {
+                          return TransactionContainer(
+                            index: index,
+                            transactionProvider: transactionProvider,
+                          );
+                        }),
+                      )
+                    : const NoTransactionContainer(),
               ],
             ),
           ),

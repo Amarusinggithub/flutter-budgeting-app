@@ -1,19 +1,21 @@
+import 'package:budgetingapp/provider/budget_provider.dart';
+import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
 
-import '../../../provider/budget_provider.dart';
-
 class SelectCategoryContainer extends StatelessWidget {
+  final TransactionProvider transactionProvider;
   final BudgetProvider budgetProvider;
 
   const SelectCategoryContainer({
     super.key,
+    required this.transactionProvider,
     required this.budgetProvider,
   });
 
   @override
   Widget build(BuildContext context) {
     final categories = budgetProvider.categories;
-    final selectedCategoryIndex = budgetProvider.selectedCategory;
+    final selectedCategoryIndex = transactionProvider.selectedCategory;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +35,7 @@ class SelectCategoryContainer extends StatelessWidget {
               selected: index == selectedCategoryIndex,
               onSelected: (selected) {
                 if (selected) {
-                  budgetProvider.selectCategory(
+                  transactionProvider.selectCategory(
                       index); // Update the selected category index
                 }
               },

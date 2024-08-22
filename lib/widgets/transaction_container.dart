@@ -1,5 +1,5 @@
 import 'package:budgetingapp/models/transaction_model.dart';
-import 'package:budgetingapp/provider/budget_provider.dart';
+import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:budgetingapp/widgets/entertainment_container.dart';
 import 'package:budgetingapp/widgets/groceries_container.dart';
 import 'package:budgetingapp/widgets/healthcare_container.dart';
@@ -11,19 +11,19 @@ import 'package:flutter/material.dart';
 
 class TransactionContainer extends StatelessWidget {
   final int index;
-  final BudgetProvider budgetProvider;
+  final TransactionProvider transactionProvider;
   final Color iconBackgroundColor;
 
   const TransactionContainer({
     super.key,
     this.iconBackgroundColor = const Color(0xFFA0AEC0),
     required this.index,
-    required this.budgetProvider,
+    required this.transactionProvider,
   });
 
   @override
   Widget build(BuildContext context) {
-    final transactionsByDate = budgetProvider.getTransactionByDate(0);
+    final transactionsByDate = transactionProvider.getTransactionByDate(0);
 
     // Check if transactionsByDate is null or empty
     if (transactionsByDate == null ||

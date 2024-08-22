@@ -1,6 +1,8 @@
 import 'package:budgetingapp/provider/budget_provider.dart';
+import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:budgetingapp/services/auth_service.dart';
 import 'package:budgetingapp/services/budget_service.dart';
+import 'package:budgetingapp/services/transaction_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +49,15 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider<BudgetProvider>(
                 create: (context) => BudgetProvider(
                   budgetService: context.read<BudgetService>(),
+                ),
+              ),
+              ChangeNotifierProvider<TransactionService>(
+                create: (context) =>
+                    TransactionService(auth: FirebaseAuth.instance),
+              ),
+              ChangeNotifierProvider<TransactionProvider>(
+                create: (context) => TransactionProvider(
+                  transactionService: context.read<TransactionService>(),
                 ),
               )
             ],

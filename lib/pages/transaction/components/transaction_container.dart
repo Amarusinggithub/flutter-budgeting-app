@@ -24,7 +24,7 @@ class TransactionContainer extends StatelessWidget {
       padding: const EdgeInsetsDirectional.all(5),
       height: 75,
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
       child: Row(
@@ -33,7 +33,7 @@ class TransactionContainer extends StatelessWidget {
           Row(
             children: [
               getCategoryIcon(transaction),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +45,7 @@ class TransactionContainer extends StatelessWidget {
                       fontSize: 17,
                     ),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Text(
                     transaction.category,
                     // Assuming `title` is a property of `TransactionModel`
@@ -73,9 +73,9 @@ class TransactionContainer extends StatelessWidget {
               ),
               SizedBox(height: 5),
               Text(
-                "transaction.date",
+                "${transaction.date}",
                 // Assuming `time` is a property of `TransactionModel`
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 15,
                 ),
@@ -90,19 +90,19 @@ class TransactionContainer extends StatelessWidget {
   Widget getCategoryIcon(TransactionModel transaction) {
     switch (transaction.category) {
       case "Housing":
-        return HousingContainer();
+        return const HousingContainer();
       case "Utilities":
-        return UtilitiesContainer();
+        return const UtilitiesContainer();
       case "Transportation":
-        return TransportationContainer();
+        return const TransportationContainer();
       case "Groceries":
-        return GroceriesContainer();
+        return const GroceriesContainer();
       case "Entertainment":
-        return EntertainmentContainer();
+        return const EntertainmentContainer();
       case "Shopping":
-        return ShoppingContainer();
+        return const ShoppingContainer();
       case "Healthcare":
-        return HealthcareContainer();
+        return const HealthcareContainer();
       default:
         return Container(); // You can define a default container or return a placeholder widget
     }

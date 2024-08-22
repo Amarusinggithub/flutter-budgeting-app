@@ -1,5 +1,3 @@
-import 'package:budgetingapp/models/transaction_model.dart';
-
 import 'category_model.dart';
 
 class BudgetModel {
@@ -7,14 +5,12 @@ class BudgetModel {
   double expense;
   double savings;
   List<CategoryModel> categories;
-  List<TransactionModel> transactions;
 
   BudgetModel({
     required this.income,
     required this.expense,
-    required this.categories,
     required this.savings,
-    required this.transactions,
+    required this.categories,
   });
 
   Map<String, dynamic> toJson() {
@@ -23,8 +19,6 @@ class BudgetModel {
       'expense': expense,
       'savings': savings,
       'categories': categories.map((category) => category.toJson()).toList(),
-      'transactions':
-          transactions.map((transaction) => transaction.toJson()).toList(),
     };
   }
 
@@ -36,10 +30,6 @@ class BudgetModel {
       categories: json['categories'] != null
           ? List<CategoryModel>.from(json['categories']
               .map((category) => CategoryModel.fromJson(category)))
-          : [],
-      transactions: json['transactions'] != null
-          ? List<TransactionModel>.from(json['transactions']
-              .map((transaction) => TransactionModel.fromJson(transaction)))
           : [],
     );
   }
