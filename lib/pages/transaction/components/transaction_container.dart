@@ -47,7 +47,7 @@ class TransactionContainer extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    transaction.category,
+                    transaction.title,
                     // Assuming `title` is a property of `TransactionModel`
                     style: const TextStyle(
                       fontWeight: FontWeight.normal,

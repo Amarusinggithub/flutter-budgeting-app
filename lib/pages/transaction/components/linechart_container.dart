@@ -42,7 +42,7 @@ class LineChartContainer extends StatelessWidget {
       backgroundColor: Colors.white,
       // Set the chart's background to white
       gridData: FlGridData(
-        show: true,
+        show: false,
         drawVerticalLine: true,
         horizontalInterval: 1,
         verticalInterval: 1,
@@ -64,20 +64,56 @@ class LineChartContainer extends StatelessWidget {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 30,
+            reservedSize: 17,
             interval: 1,
             getTitlesWidget: (value, meta) {
               switch (value.toInt()) {
+                case 0:
+                  return const Text('JAN',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 1:
+                  return const Text('FEB',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
                 case 2:
                   return const Text('MAR',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 3:
+                  return const Text('APR',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 4:
+                  return const Text('MAY',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
                 case 5:
                   return const Text('JUN',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 6:
+                  return const Text('JUL',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 7:
+                  return const Text('AUG',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
                 case 8:
                   return const Text('SEP',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 9:
+                  return const Text('OCT',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 10:
+                  return const Text('NOV',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                case 11:
+                  return const Text('DEC',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
                 default:
@@ -87,7 +123,7 @@ class LineChartContainer extends StatelessWidget {
           ),
         ),
         leftTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false), // Left side titles hidden
+          sideTitles: SideTitles(showTitles: false),
         ),
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
@@ -97,8 +133,11 @@ class LineChartContainer extends StatelessWidget {
         ),
       ),
       borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d)),
+        border: Border(
+            bottom: BorderSide(color: Colors.black),
+            left: BorderSide.none,
+            right: BorderSide.none,
+            top: BorderSide.none),
       ),
       minX: 0,
       maxX: points.length - 1.0,

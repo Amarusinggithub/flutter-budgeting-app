@@ -14,31 +14,44 @@ class SelectCategoryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = budgetProvider.categories;
+    final categories = budgetProvider.currentBudget?.categories;
     final selectedCategoryIndex = transactionProvider.selectedCategory;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Select a Category',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey[700],
+          ),
         ),
         const SizedBox(height: 10),
         Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
-          children: List.generate(categories.length, (index) {
+          children: List.generate(categories!.length, (index) {
             final category = categories[index];
             return ChoiceChip(
               label: Text(category.name),
               selected: index == selectedCategoryIndex,
               onSelected: (selected) {
                 if (selected) {
-                  transactionProvider.selectCategory(
-                      index); // Update the selected category index
+                  transactionProvider.selectCategory(index);
                 }
               },
+              selectedColor: Colors.blueAccent,
+              labelStyle: TextStyle(
+                color: index == selectedCategoryIndex
+                    ? Colors.white
+                    : Colors.grey[700],
+              ),
+              backgroundColor: Colors.grey[200],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             );
           }),
         ),

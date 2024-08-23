@@ -25,7 +25,6 @@ class TransactionContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final transactionsByDate = transactionProvider.getTransactionByDate(0);
 
-    // Check if transactionsByDate is null or empty
     if (transactionsByDate == null ||
         transactionsByDate.isEmpty ||
         index < 0 ||

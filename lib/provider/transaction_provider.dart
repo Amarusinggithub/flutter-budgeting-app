@@ -74,7 +74,10 @@ class TransactionProvider extends ChangeNotifier {
   void organizeTransactionsByDate() {
     if (transactions.isEmpty) return;
 
-    transactionsByDate = transactions
+    List<TransactionModel> reversedTransactions =
+        List.from(transactions.reversed);
+
+    transactionsByDate = reversedTransactions
         .groupListsBy((transaction) =>
             DateTime.fromMillisecondsSinceEpoch(transaction.date)
                 .toLocal()

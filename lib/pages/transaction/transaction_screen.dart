@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../provider/budget_provider.dart';
 import 'components/budget_for_the_month_container.dart';
 import 'components/data_slider_container.dart';
+import 'components/select_category_container.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -101,94 +102,102 @@ class _TransactionScreenState extends State<TransactionScreen> {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Transaction',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                onChanged: (value) {
-                  transactionProvider.updateTransactionTitle(value);
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Title',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                onChanged: (value) {
-                  transactionProvider
-                      .updateTransactionAmount(double.tryParse(value) ?? 0);
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Amount',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8.0,
-                runSpacing: 4.0,
-                children:
-                    List.generate(budgetProvider.categories.length, (index) {
-                  final category = budgetProvider.categories[index];
-                  return ChoiceChip(
-                    label: Text(category.name),
-                    selected: index == transactionProvider.selectedCategory,
-                    onSelected: (selected) {
-                      if (selected) {
-                        transactionProvider.selectCategory(index);
-                      }
-                    },
-                  );
-                }),
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                style: ButtonStyle(
-                  padding: WidgetStateProperty.all<EdgeInsets>(
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  ),
-                  backgroundColor:
-                      WidgetStateProperty.all<Color>(Colors.blueAccent),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    'Add New Transaction',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
                 ),
-                onPressed: () {
-                  final newTransaction = TransactionModel(
-                    title: transactionProvider.transactionTitle ?? '',
-                    amount: transactionProvider.transactionAmount ?? 0,
-                    date: DateTime.now().millisecondsSinceEpoch,
-                    category: budgetProvider
-                        .categories[transactionProvider.selectedCategory!].name,
-                  );
-                  transactionProvider.addTransaction(newTransaction);
-                  transactionProvider
-                      .clearTransactionInputs(); // Clear inputs after transaction is added
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'Add Expense',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
+                const SizedBox(height: 20),
+                TextField(
+                  onChanged: (value) {
+                    transactionProvider.updateTransactionTitle(value);
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 15),
+                TextField(
+                  onChanged: (value) {
+                    transactionProvider
+                        .updateTransactionAmount(double.tryParse(value) ?? 0);
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Amount',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 20),
+                SelectCategoryContainer(
+                  transactionProvider: transactionProvider,
+                  budgetProvider: budgetProvider,
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 120),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: Colors.blueAccent,
+                    ),
+                    onPressed: () {
+                      final newTransaction = TransactionModel(
+                        title: transactionProvider.transactionTitle ?? '',
+                        amount: transactionProvider.transactionAmount ?? 0,
+                        date: DateTime.now().millisecondsSinceEpoch,
+                        category: budgetProvider
+                            .categories[transactionProvider.selectedCategory!]
+                            .name,
+                      );
+                      transactionProvider.addTransaction(newTransaction);
+                      transactionProvider.clearTransactionInputs();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Add Expense',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
