@@ -129,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                   height: 10,
                 ),
                 transactionProvider.transactionsByDate.isNotEmpty &&
-                        transactionProvider.transactionsByDate[0].isNotEmpty
+                        transactionProvider.transactionsByDate.last.isNotEmpty
                     ? Column(
                         children: List.generate(
                             transactionProvider.transactionsByDate[0].length,

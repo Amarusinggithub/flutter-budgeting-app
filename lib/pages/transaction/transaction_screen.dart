@@ -70,7 +70,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   height: 10,
                 ),
                 LineChartContainer(
-                  points: transactionProvider.transactionPoints,
+                  provider: transactionProvider,
                 ),
                 const SizedBox(
                   height: 10,

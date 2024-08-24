@@ -63,6 +63,7 @@ class BudgetProvider extends ChangeNotifier {
       expense: 0,
       categories: categories,
       savings: 0,
+      date: DateTime.now().millisecondsSinceEpoch,
     );
     currentBudget = newBudget;
     budgetHistoryModel!.budgets.add(newBudget);

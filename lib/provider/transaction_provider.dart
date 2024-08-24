@@ -1,7 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../models/daily_transaction_model.dart';
+import '../models/monthly_transaction_model.dart';
 import '../models/transaction_model.dart';
+import '../models/weekly_transaction_model.dart';
 import '../pages/transaction/components/transaction_point.dart';
 import '../services/transaction_service.dart';
 
@@ -60,15 +63,99 @@ class TransactionProvider extends ChangeNotifier {
     return transactionsByDate[index];
   }
 
-  List<TransactionPoint> get transactionPoints {
-    if (transactions.isEmpty) return [];
-    final data = transactions.map((transaction) => transaction.amount).toList();
-    return data.isEmpty
-        ? []
-        : data
-            .mapIndexed((index, element) =>
-                TransactionPoint(x: index.toDouble(), y: element))
-            .toList();
+  List<TransactionPoint> getTransactionPoints(
+      int selectedIndexForTransactionTime) {
+    switch (selectedIndexForTransactionTime) {
+      case 0:
+        return _groupByDay().mapIndexed((index, dailyModel) {
+          return TransactionPoint(
+              x: index.toDouble(), y: dailyModel.totalAmount);
+        }).toList();
+      case 1:
+        return _groupByWeek().mapIndexed((index, weeklyModel) {
+          return TransactionPoint(
+              x: index.toDouble(), y: weeklyModel.totalAmount);
+        }).toList();
+      case 2:
+        return _groupByMonth().mapIndexed((index, monthlyModel) {
+          return TransactionPoint(
+              x: index.toDouble(), y: monthlyModel.totalAmount);
+        }).toList();
+      default:
+        return [];
+    }
+  }
+
+  List<DailyTransactionModel> _groupByDay() {
+    final DateTime now = DateTime.now();
+    final int currentYear = now.year;
+    final int currentMonth = now.month;
+
+    final Map<DateTime, List<TransactionModel>> grouped =
+        transactions.where((transaction) {
+      final transactionDate =
+          DateTime.fromMillisecondsSinceEpoch(transaction.date);
+      return transactionDate.year == currentYear &&
+          transactionDate.month == currentMonth;
+    }).groupListsBy(
+      (transaction) => DateTime(
+        DateTime.fromMillisecondsSinceEpoch(transaction.date).year,
+        DateTime.fromMillisecondsSinceEpoch(transaction.date).month,
+        DateTime.fromMillisecondsSinceEpoch(transaction.date).day,
+      ),
+    );
+
+    return grouped.entries.map((entry) {
+      return DailyTransactionModel(date: entry.key, transactions: entry.value);
+    }).toList();
+  }
+
+  List<WeeklyTransactionModel> _groupByWeek() {
+    final DateTime now = DateTime.now();
+    final int currentYear = now.year;
+    final int currentMonth = now.month;
+
+    final Map<int, List<TransactionModel>> grouped =
+        transactions.where((transaction) {
+      final transactionDate =
+          DateTime.fromMillisecondsSinceEpoch(transaction.date);
+      return transactionDate.year == currentYear &&
+          transactionDate.month == currentMonth;
+    }).groupListsBy(
+      (transaction) =>
+          _weekOfYear(DateTime.fromMillisecondsSinceEpoch(transaction.date)),
+    );
+
+    return grouped.entries.map((entry) {
+      return WeeklyTransactionModel(
+          weekNumber: entry.key, transactions: entry.value);
+    }).toList();
+  }
+
+  List<MonthlyTransactionModel> _groupByMonth() {
+    final DateTime now = DateTime.now();
+    final int currentYear = now.year;
+
+    final Map<int, List<TransactionModel>> grouped =
+        transactions.where((transaction) {
+      final transactionDate =
+          DateTime.fromMillisecondsSinceEpoch(transaction.date);
+      return transactionDate.year == currentYear;
+    }).groupListsBy(
+      (transaction) =>
+          DateTime.fromMillisecondsSinceEpoch(transaction.date).month,
+    );
+
+    return grouped.entries.map((entry) {
+      return MonthlyTransactionModel(
+          month: entry.key, transactions: entry.value);
+    }).toList();
+  }
+
+  int _weekOfYear(DateTime date) {
+    final firstDayOfYear = DateTime(date.year, 1, 1);
+    final daysDifference = date.difference(firstDayOfYear).inDays;
+    return (daysDifference / 7).ceil();
   }
 
   void organizeTransactionsByDate() {
@@ -87,16 +174,11 @@ class TransactionProvider extends ChangeNotifier {
         .toList();
   }
 
-  DateTime currentDate() {
-    return DateTime.now();
-  }
-
   Future<void> addTransaction(TransactionModel transaction) async {
     transactions.add(transaction);
     organizeTransactionsByDate();
     await updateTheTransactionsInTheDatabase(transactions);
     notifyListeners();
-    print("Transaction added: ${transaction.title}, ${transaction.amount}");
   }
 
   void updateTransactionTitle(String title) {

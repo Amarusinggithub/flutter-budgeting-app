@@ -1,11 +1,11 @@
-import 'package:budgetingapp/pages/transaction/components/transaction_point.dart';
+import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class LineChartContainer extends StatelessWidget {
-  final List<TransactionPoint> points;
+  final TransactionProvider provider;
 
-  const LineChartContainer({super.key, required this.points});
+  const LineChartContainer({super.key, required this.provider});
 
   List<Color> get gradientColors => [
         const Color(0xFF007AFF),
@@ -38,9 +38,11 @@ class LineChartContainer extends StatelessWidget {
   }
 
   LineChartData _mainData() {
+    final points =
+        provider.getTransactionPoints(provider.selectedIndexForTransactionTime);
+
     return LineChartData(
       backgroundColor: Colors.white,
-      // Set the chart's background to white
       gridData: FlGridData(
         show: false,
         drawVerticalLine: true,
@@ -67,55 +69,13 @@ class LineChartContainer extends StatelessWidget {
             reservedSize: 17,
             interval: 1,
             getTitlesWidget: (value, meta) {
-              switch (value.toInt()) {
+              switch (provider.selectedIndexForTransactionTime) {
                 case 0:
-                  return const Text('JAN',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                  return bottomTitleForDays(value.toInt());
                 case 1:
-                  return const Text('FEB',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                  return bottomTitleForWeeks(value.toInt());
                 case 2:
-                  return const Text('MAR',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 3:
-                  return const Text('APR',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 4:
-                  return const Text('MAY',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 5:
-                  return const Text('JUN',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 6:
-                  return const Text('JUL',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 7:
-                  return const Text('AUG',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 8:
-                  return const Text('SEP',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 9:
-                  return const Text('OCT',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 10:
-                  return const Text('NOV',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-                case 11:
-                  return const Text('DEC',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+                  return bottomTitleForMonths(value.toInt());
                 default:
                   return const Text('');
               }
@@ -133,11 +93,12 @@ class LineChartContainer extends StatelessWidget {
         ),
       ),
       borderData: FlBorderData(
-        border: Border(
-            bottom: BorderSide(color: Colors.black),
-            left: BorderSide.none,
-            right: BorderSide.none,
-            top: BorderSide.none),
+        border: const Border(
+          bottom: BorderSide(color: Colors.black),
+          left: BorderSide.none,
+          right: BorderSide.none,
+          top: BorderSide.none,
+        ),
       ),
       minX: 0,
       maxX: points.length - 1.0,
@@ -173,5 +134,98 @@ class LineChartContainer extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Text bottomTitleForMonths(int value) {
+    switch (value.toInt()) {
+      case 0:
+        return const Text('JAN',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 1:
+        return const Text('FEB',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 2:
+        return const Text('MAR',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 3:
+        return const Text('APR',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 4:
+        return const Text('MAY',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 5:
+        return const Text('JUN',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 6:
+        return const Text('JUL',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 7:
+        return const Text('AUG',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 8:
+        return const Text('SEP',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 9:
+        return const Text('OCT',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 10:
+        return const Text('NOV',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 11:
+        return const Text('DEC',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      default:
+        return const Text('');
+    }
+  }
+
+  Text bottomTitleForDays(int value) {
+    switch (value.toInt()) {
+      case 0:
+        return const Text('MON',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 1:
+        return const Text('TUE',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 2:
+        return const Text('WED',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 3:
+        return const Text('THU',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 4:
+        return const Text('FRI',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 5:
+        return const Text('SAT',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 6:
+        return const Text('SUN',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      default:
+        return const Text('');
+    }
+  }
+
+  Text bottomTitleForWeeks(int value) {
+    switch (value.toInt()) {
+      case 0:
+        return const Text('WK 1',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 1:
+        return const Text('WK 2',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 2:
+        return const Text('WK 3',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 3:
+        return const Text('WK 4',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      case 4:
+        return const Text('WK 5',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
+      default:
+        return const Text('');
+    }
   }
 }
