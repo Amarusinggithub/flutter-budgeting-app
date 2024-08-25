@@ -15,79 +15,75 @@ class _PieChartContainerState extends State<PieChartContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 400,
-      child: Column(
-        children: [
-          const SizedBox(height: 18),
-          SizedBox(
-            height: 200,
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: PieChart(
-                PieChartData(
-                  pieTouchData: PieTouchData(
-                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      });
-                    },
-                  ),
-                  borderData: FlBorderData(show: false),
-                  sectionsSpace: 0,
-                  centerSpaceRadius: 40,
-                  sections: _showingSections(),
+    return Column(
+      children: [
+        SizedBox(
+          height: 200,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: PieChart(
+              PieChartData(
+                pieTouchData: PieTouchData(
+                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                    setState(() {
+                      if (!event.isInterestedForInteractions ||
+                          pieTouchResponse == null ||
+                          pieTouchResponse.touchedSection == null) {
+                        touchedIndex = -1;
+                        return;
+                      }
+                      touchedIndex =
+                          pieTouchResponse.touchedSection!.touchedSectionIndex;
+                    });
+                  },
                 ),
+                borderData: FlBorderData(show: false),
+                sectionsSpace: 0,
+                centerSpaceRadius: 40,
+                sections: _showingSections(),
               ),
             ),
           ),
-          const SizedBox(height: 60),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
-                  Indicator(
-                      color: Colors.blue, text: 'Category 1', isSquare: true),
-                  SizedBox(height: 4),
-                  Indicator(
-                      color: Colors.orange, text: 'Category 2', isSquare: true),
-                  SizedBox(height: 4),
-                  Indicator(
-                      color: Colors.purple, text: 'Category 3', isSquare: true),
-                  SizedBox(height: 4),
-                  Indicator(
-                      color: Colors.green, text: 'Category 4', isSquare: true),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
-                  Indicator(
-                      color: Colors.yellow, text: 'Category 5', isSquare: true),
-                  SizedBox(height: 4),
-                  Indicator(
-                      color: Colors.red, text: 'Category 6', isSquare: true),
-                  SizedBox(height: 4),
-                  Indicator(
-                      color: Colors.pink, text: 'Category 7', isSquare: true),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 70),
+        const Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Indicator(
+                    color: Colors.blue, text: 'Category 1', isSquare: false),
+                SizedBox(height: 20),
+                Indicator(
+                    color: Colors.orange, text: 'Category 2', isSquare: false),
+                SizedBox(height: 20),
+                Indicator(
+                    color: Colors.purple, text: 'Category 3', isSquare: false),
+                SizedBox(height: 20),
+                Indicator(
+                    color: Colors.green, text: 'Category 4', isSquare: false),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Indicator(
+                    color: Colors.yellow, text: 'Category 5', isSquare: false),
+                SizedBox(height: 20),
+                Indicator(
+                    color: Colors.red, text: 'Category 6', isSquare: false),
+                SizedBox(height: 20),
+                Indicator(
+                    color: Colors.pink, text: 'Category 7', isSquare: false),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 

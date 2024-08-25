@@ -2,11 +2,12 @@ import 'package:budgetingapp/models/budget_history_model.dart';
 import 'package:budgetingapp/models/budget_model.dart';
 import 'package:budgetingapp/models/category_model.dart';
 import 'package:budgetingapp/services/budget_service.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class BudgetProvider extends ChangeNotifier {
   BudgetModel? currentBudget;
-  double? totalBalanceModel;
+  double totalBalanceModel = 0.0;
   BudgetHistoryModel? budgetHistoryModel;
 
   final BudgetService budgetService;
@@ -27,34 +28,28 @@ class BudgetProvider extends ChangeNotifier {
 
   Future<void> initializeBudgetData() async {
     await getBudgetHistory();
+    await getCurrentBudget();
     await getTotalBalance();
-
     notifyListeners();
   }
 
   Future<void> getBudgetHistory() async {
-    BudgetHistoryModel? _budgetHistoryModel =
-        await budgetService.fetchBudgetsFromDatabase();
+    final fetchedBudgetHistory = await budgetService.fetchBudgetsFromDatabase();
 
-    if (_budgetHistoryModel != null) {
-      budgetHistoryModel = _budgetHistoryModel;
-      await getCurrentBudget();
+    if (fetchedBudgetHistory != null) {
+      budgetHistoryModel = fetchedBudgetHistory;
     } else {
-      budgetHistoryModel = BudgetHistoryModel(totalBalance: 0, budgets: []);
+      budgetHistoryModel = BudgetHistoryModel(totalBalance: 0.0, budgets: []);
       await createNewBudget();
     }
-
-    notifyListeners();
   }
 
   Future<void> getCurrentBudget() async {
-    if (budgetHistoryModel != null && budgetHistoryModel!.budgets.isNotEmpty) {
-      currentBudget = budgetHistoryModel!.budgets.last;
-      calculateSavings();
+    if (budgetHistoryModel!.budgets.isNotEmpty) {
+      currentBudget = budgetHistoryModel?.budgets.last;
     } else {
       await createNewBudget();
     }
-    notifyListeners();
   }
 
   Future<void> createNewBudget() async {
@@ -66,38 +61,34 @@ class BudgetProvider extends ChangeNotifier {
       date: DateTime.now().millisecondsSinceEpoch,
     );
     currentBudget = newBudget;
-    budgetHistoryModel!.budgets.add(newBudget);
-    await updateTheBudgetInTheDatabase(budgetHistoryModel!);
+    budgetHistoryModel?.budgets.add(newBudget);
+    await updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
   }
 
   Future<void> getTotalBalance() async {
-    if (budgetHistoryModel != null && totalBalanceModel == null) {
-      totalBalanceModel = budgetHistoryModel?.totalBalance;
-    } else if (totalBalanceModel == null) {
-      totalBalanceModel = 0;
-      await updateTotalBalanceInTheDatabase(totalBalanceModel!);
+    if (budgetHistoryModel != null) {
+      totalBalanceModel = budgetHistoryModel!.totalBalance;
+      if (kDebugMode) {
+        print("Total Balance Fetched: $totalBalanceModel");
+      } // Debugging statement
     }
     notifyListeners();
   }
 
-  Future<void> updateTheBudgetInTheDatabase(BudgetHistoryModel budgets) async {
+  Future<void> updateTheBudgetHistoryInTheDatabase(
+      BudgetHistoryModel budgets) async {
     if (currentBudget != null && budgetHistoryModel != null) {
       budgetHistoryModel!.budgets.last = currentBudget!;
+      budgetHistoryModel?.totalBalance = totalBalanceModel;
       await budgetService.updateBudgetsInDatabase(budgets);
     }
   }
 
-  Future<void> updateTotalBalanceInTheDatabase(double totalBalance) async {
-    budgetHistoryModel?.totalBalance = totalBalance;
-    await updateTheBudgetInTheDatabase(budgetHistoryModel!);
-    notifyListeners();
-  }
-
   void calculateSavings() {
-    if (currentBudget != null && totalBalanceModel != null) {
+    if (currentBudget != null) {
       currentBudget!.savings = currentBudget!.income - currentBudget!.expense;
-      totalBalanceModel = (totalBalanceModel ?? 0) + currentBudget!.savings;
-      updateTheBudgetInTheDatabase(budgetHistoryModel!);
+      totalBalanceModel = (totalBalanceModel) + currentBudget!.savings;
+      updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
     }
   }
 
@@ -113,5 +104,10 @@ class BudgetProvider extends ChangeNotifier {
       currentBudget!.expense += newExpense;
       calculateSavings();
     }
+  }
+
+  String numberCurrencyFormater(double number) {
+    final formatCurrency = new NumberFormat.simpleCurrency();
+    return formatCurrency.format(number);
   }
 }

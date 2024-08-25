@@ -35,6 +35,12 @@ class SelectCategoryContainer extends StatelessWidget {
           children: List.generate(categories!.length, (index) {
             final category = categories[index];
             return ChoiceChip(
+              side: BorderSide(style: BorderStyle.none),
+              avatarBorder:
+                  const OutlineInputBorder(borderSide: BorderSide.none),
+              chipAnimationStyle: ChipAnimationStyle(
+                  selectAnimation: AnimationStyle(
+                      duration: const Duration(milliseconds: 2000))),
               label: Text(category.name),
               selected: index == selectedCategoryIndex,
               onSelected: (selected) {

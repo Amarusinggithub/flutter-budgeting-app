@@ -99,6 +99,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   void _showTransactionBottomSheet(BuildContext context,
       BudgetProvider budgetProvider, TransactionProvider transactionProvider) {
     showModalBottomSheet(
+      backgroundColor: Colors.white,
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -117,28 +118,19 @@ class _TransactionScreenState extends State<TransactionScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Center(
-                  child: Text(
-                    'Add New Transaction',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
                 const SizedBox(height: 20),
                 TextField(
                   onChanged: (value) {
                     transactionProvider.updateTransactionTitle(value);
                   },
                   decoration: InputDecoration(
-                    labelText: 'Title',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(15),
                     ),
+                    labelText: 'Title',
                     filled: true,
-                    fillColor: Colors.grey[100],
+                    fillColor: Colors.grey[200],
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -148,12 +140,13 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         .updateTransactionAmount(double.tryParse(value) ?? 0);
                   },
                   decoration: InputDecoration(
-                    labelText: 'Amount',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(15),
                     ),
+                    labelText: 'Amount',
                     filled: true,
-                    fillColor: Colors.grey[100],
+                    fillColor: Colors.grey[200],
                   ),
                   keyboardType: TextInputType.number,
                 ),

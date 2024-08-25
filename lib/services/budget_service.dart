@@ -36,12 +36,14 @@ class BudgetService extends ChangeNotifier {
             documentSnapshot.data() as Map<String, dynamic>?;
 
         if (data != null && data.containsKey('budgets')) {
-          // Convert the JSON data back into a BudgetHistoryModel object
           BudgetHistoryModel budgets = BudgetHistoryModel.fromJson(
               data["budgets"] as Map<String, dynamic>);
+
           if (kDebugMode) {
-            print("Fetched budgets in database: $budgets");
+            print("Fetched totalBalance: ${budgets.totalBalance}");
+            print("Number of budgets: ${budgets.budgets.length}");
           }
+
           return budgets;
         }
       }

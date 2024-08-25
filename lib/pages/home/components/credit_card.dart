@@ -16,7 +16,7 @@ class CreditCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       // Add padding to the container
       decoration: ShapeDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Color(0xFF42A5F5), Color(0xFF64B5F6)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -28,7 +28,7 @@ class CreditCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Total Balance',
             style: TextStyle(
               color: Color(0xFFFFFFFF),
@@ -42,8 +42,8 @@ class CreditCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            '\$23,345.43',
-            style: TextStyle(
+            "${budgetProvider.numberCurrencyFormater(budgetProvider.totalBalanceModel)}",
+            style: const TextStyle(
               color: Color(0xFFFFFFFF),
               // White text color
               fontSize: 24,
@@ -57,7 +57,7 @@ class CreditCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 '**** **** **** 1234',
                 style: TextStyle(
                   color: Color(0xFFE3F2FD),

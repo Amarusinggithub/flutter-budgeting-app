@@ -24,7 +24,7 @@ class TotalBalanceAndExpenseContainer extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 "Total Balance",
                 style: TextStyle(
@@ -34,7 +34,7 @@ class TotalBalanceAndExpenseContainer extends StatelessWidget {
               ),
               SizedBox(height: 5),
               Text(
-                "\$48,000",
+                "${budgetProvider.numberCurrencyFormater(budgetProvider.totalBalanceModel!)}",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 24,
