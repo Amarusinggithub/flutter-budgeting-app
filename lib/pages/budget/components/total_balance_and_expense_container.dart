@@ -25,46 +25,50 @@ class TotalBalanceAndExpenseContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Total Balance",
+              const Text(
+                "Income",
                 style: TextStyle(
                   color: Colors.black54, // Inverted text color (dark)
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 3),
               Text(
-                "${budgetProvider.numberCurrencyFormater(budgetProvider.totalBalanceModel!)}",
-                style: TextStyle(
+                budgetProvider.numberCurrencyFormater(
+                    budgetProvider.currentBudget!.income),
+                style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 24,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-          VerticalDivider(
-            width: 20,
-            color: Colors.black45,
-            thickness: 1,
+          const SizedBox(
+            height: 40,
+            child: VerticalDivider(
+              color: Colors.white30,
+              thickness: 1,
+            ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 "Total Expense",
                 style: TextStyle(
                   color: Colors.black54,
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 3),
               Text(
-                "\$25,000",
-                style: TextStyle(
+                budgetProvider.numberCurrencyFormater(
+                    budgetProvider.calculateTotalExpenseForTheMonth()),
+                style: const TextStyle(
                   color: Colors.black, // Inverted text color (darker)
-                  fontSize: 24,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),

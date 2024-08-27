@@ -1,6 +1,7 @@
 import 'package:budgetingapp/models/budget_history_model.dart';
 import 'package:budgetingapp/models/budget_model.dart';
 import 'package:budgetingapp/models/category_model.dart';
+import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:budgetingapp/services/budget_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
@@ -12,14 +13,30 @@ class BudgetProvider extends ChangeNotifier {
 
   final BudgetService budgetService;
   List<CategoryModel> categories = [
-    CategoryModel(id: "Housing", name: "Housing", totalSpent: 0),
-    CategoryModel(id: "Utilities", name: "Utilities", totalSpent: 0),
-    CategoryModel(id: "Transportation", name: "Transportation", totalSpent: 0),
-    CategoryModel(id: "Groceries", name: "Groceries", totalSpent: 0),
-    CategoryModel(id: "Entertainment", name: "Entertainment", totalSpent: 0),
-    CategoryModel(id: "Shopping", name: "Shopping", totalSpent: 0),
-    CategoryModel(id: "Salary", name: "Salary", totalSpent: 0),
-    CategoryModel(id: "Healthcare", name: "Healthcare", totalSpent: 0)
+    CategoryModel(
+        id: "Housing", name: "Housing", totalSpent: 0, planToSpend: 0),
+    CategoryModel(
+        id: "Utilities", name: "Utilities", totalSpent: 0, planToSpend: 0),
+    CategoryModel(
+        id: "Transportation",
+        name: "Transportation",
+        totalSpent: 0,
+        planToSpend: 0),
+    CategoryModel(
+        id: "Groceries", name: "Groceries", totalSpent: 0, planToSpend: 0),
+    CategoryModel(
+        id: "Entertainment",
+        name: "Entertainment",
+        totalSpent: 0,
+        planToSpend: 0),
+    CategoryModel(
+        id: "Shopping", name: "Shopping", totalSpent: 0, planToSpend: 0),
+    CategoryModel(id: "Salary", name: "Salary", totalSpent: 0, planToSpend: 0),
+    CategoryModel(
+        id: "Personal care",
+        name: "Personal care",
+        totalSpent: 0,
+        planToSpend: 0)
   ];
 
   BudgetProvider({required this.budgetService}) {
@@ -99,15 +116,52 @@ class BudgetProvider extends ChangeNotifier {
     }
   }
 
-  void updateExpense(double newExpense) {
+  void updateExpense() {
     if (currentBudget != null) {
-      currentBudget!.expense += newExpense;
-      calculateSavings();
+      currentBudget!.categories.fold(
+        0.0,
+        (sum, category) => sum + category.totalSpent,
+      );
     }
+    notifyListeners();
+  }
+
+  void calculatePlanToSpend(double newExpense) {
+    if (currentBudget != null) {
+      currentBudget!.categories.fold(
+        0.0,
+        (sum, category) => sum + category.planToSpend,
+      );
+    }
+    notifyListeners();
   }
 
   String numberCurrencyFormater(double number) {
     final formatCurrency = new NumberFormat.simpleCurrency();
     return formatCurrency.format(number);
+  }
+
+  double calculateTotalExpenseForTheMonth() {
+    List<double> numbers = [];
+    currentBudget?.categories.forEach((element) {
+      numbers.add(element.totalSpent);
+    });
+
+    double num = numbers.fold(0, (sum, item) => sum + item);
+
+    currentBudget?.expense = num;
+    notifyListeners();
+    return num;
+  }
+
+  void updateCategorySpentWithTransactionAmount(TransactionModel transaction) {
+    for (int i = 0; i < categories.length; i++) {
+      if (transaction.category == categories[i].id) {
+        categories[i].totalSpent += transaction.amount;
+        break;
+      }
+    }
+    updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
+    notifyListeners();
   }
 }

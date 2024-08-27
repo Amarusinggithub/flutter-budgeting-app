@@ -137,7 +137,7 @@ class TransactionContainer extends StatelessWidget {
         return EntertainmentContainer();
       case "Shopping":
         return ShoppingContainer();
-      case "Healthcare":
+      case "Personal care":
         return HealthcareContainer();
       default:
         return Container(); // You can define a default container or return a placeholder widget

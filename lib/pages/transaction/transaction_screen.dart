@@ -48,14 +48,14 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       },
                       style: ButtonStyle(
                           backgroundColor:
-                              WidgetStatePropertyAll(Color(0xFFE0E0E0)),
-                          iconColor: WidgetStatePropertyAll(Colors.black),
-                          iconSize: WidgetStatePropertyAll(30),
+                              const WidgetStatePropertyAll(Color(0xFFE0E0E0)),
+                          iconColor: const WidgetStatePropertyAll(Colors.black),
+                          iconSize: const WidgetStatePropertyAll(30),
                           padding: const WidgetStatePropertyAll(
                               EdgeInsetsDirectional.all(0)),
                           shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15)))),
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         weight: 20,
                       ),
@@ -75,8 +75,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                BudgetForTheMonthContainer(),
-                SizedBox(
+                const BudgetForTheMonthContainer(),
+                const SizedBox(
                   height: 10,
                 ),
                 Column(

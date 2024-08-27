@@ -1,3 +1,4 @@
+import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -14,13 +15,15 @@ class TransactionProvider extends ChangeNotifier {
   List<List<TransactionModel>> transactionsByDate = [];
   String? transactionTitle;
   double? transactionAmount;
-  int _selectedIndexForTransactionTime = 1;
+  int _selectedIndexForTransactionTime = 0;
+  BudgetProvider budgetProvider;
 
   int get selectedIndexForTransactionTime => _selectedIndexForTransactionTime;
   TransactionService transactionService;
   List<TransactionModel> transactions = [];
 
-  TransactionProvider({required this.transactionService}) {
+  TransactionProvider(
+      {required this.budgetProvider, required this.transactionService}) {
     getTransactions();
   }
 
@@ -176,6 +179,7 @@ class TransactionProvider extends ChangeNotifier {
 
   Future<void> addTransaction(TransactionModel transaction) async {
     transactions.add(transaction);
+    budgetProvider.updateCategorySpentWithTransactionAmount(transaction);
     organizeTransactionsByDate();
     await updateTheTransactionsInTheDatabase(transactions);
     notifyListeners();
