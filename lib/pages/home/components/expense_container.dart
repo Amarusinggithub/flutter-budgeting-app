@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ExpenseContainer extends StatelessWidget {
-  final double expense;
+import '../../../provider/budget_provider.dart';
 
-  const ExpenseContainer({super.key, required this.expense});
+class ExpenseContainer extends StatelessWidget {
+  final BudgetProvider budgetProvider;
+
+  const ExpenseContainer({super.key, required this.budgetProvider});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class ExpenseContainer extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text(
@@ -43,8 +45,8 @@ class ExpenseContainer extends StatelessWidget {
                 fontSize: 16),
           ),
           Text(
-            "\$ $expense",
-            style: TextStyle(
+            " ${budgetProvider.numberCurrencyFormater(budgetProvider.currentBudget!.expense)}",
+            style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ],

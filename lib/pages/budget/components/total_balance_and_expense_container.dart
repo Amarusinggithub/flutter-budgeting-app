@@ -5,74 +5,76 @@ import '../../../provider/budget_provider.dart';
 class TotalBalanceAndExpenseContainer extends StatelessWidget {
   final BudgetProvider budgetProvider;
 
-  const TotalBalanceAndExpenseContainer(
-      {super.key, required this.budgetProvider});
+  const TotalBalanceAndExpenseContainer({
+    super.key,
+    required this.budgetProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.grey[300], // Inverted background color (light)
-        borderRadius:
-            BorderRadius.circular(15), // Rounded corners for a smooth look
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(15),
       ),
-      height: 100,
+      height: 109,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Income",
-                style: TextStyle(
-                  color: Colors.black54, // Inverted text color (dark)
-                  fontSize: 16,
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Total Income",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                budgetProvider.numberCurrencyFormater(
-                    budgetProvider.currentBudget!.income),
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 5),
+                Text(
+                  budgetProvider.numberCurrencyFormater(
+                      budgetProvider.currentBudget!.income),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 40,
-            child: VerticalDivider(
-              color: Colors.white30,
-              thickness: 1,
+              ],
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Total Expense",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
+          const VerticalDivider(
+            color: Colors.black54,
+            thickness: 1,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Text(
+                  "Total Expense",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                budgetProvider.numberCurrencyFormater(
-                    budgetProvider.calculateTotalExpenseForTheMonth()),
-                style: const TextStyle(
-                  color: Colors.black, // Inverted text color (darker)
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 5),
+                Text(
+                  budgetProvider.numberCurrencyFormater(
+                      budgetProvider.currentBudget!.expense),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

@@ -1,46 +1,59 @@
+import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import 'indicator.dart';
 
-class PieChartContainer extends StatefulWidget {
-  const PieChartContainer({super.key});
+class PieChartContainer extends StatelessWidget {
+  final BudgetProvider budgetProvider;
 
-  @override
-  _PieChartContainerState createState() => _PieChartContainerState();
-}
+  PieChartContainer({super.key, required this.budgetProvider});
 
-class _PieChartContainerState extends State<PieChartContainer> {
   int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
+    final utilities =
+        budgetProvider.currentBudget?.categories[1].planToSpend ?? 0;
+    final transportation =
+        budgetProvider.currentBudget?.categories[2].planToSpend ?? 0;
+    final housing =
+        budgetProvider.currentBudget?.categories[0].planToSpend ?? 0;
+    final shopping =
+        budgetProvider.currentBudget?.categories[5].planToSpend ?? 0;
+    final entertainment =
+        budgetProvider.currentBudget?.categories[4].planToSpend ?? 0;
+    final personalCare =
+        budgetProvider.currentBudget?.categories[7].planToSpend ?? 0;
+    final groceries =
+        budgetProvider.currentBudget?.categories[3].planToSpend ?? 0;
+
     return Column(
       children: [
         SizedBox(
-          height: 200,
+          height: 300, // Increased height to make the chart bigger
           child: AspectRatio(
-            aspectRatio: 1,
+            aspectRatio: 1.4, // Adjusted aspect ratio for a larger chart
             child: PieChart(
               PieChartData(
                 pieTouchData: PieTouchData(
                   touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                    setState(() {
-                      if (!event.isInterestedForInteractions ||
-                          pieTouchResponse == null ||
-                          pieTouchResponse.touchedSection == null) {
-                        touchedIndex = -1;
-                        return;
-                      }
-                      touchedIndex =
-                          pieTouchResponse.touchedSection!.touchedSectionIndex;
-                    });
+                    if (!event.isInterestedForInteractions ||
+                        pieTouchResponse == null ||
+                        pieTouchResponse.touchedSection == null) {
+                      touchedIndex = -1;
+                      return;
+                    }
+                    touchedIndex =
+                        pieTouchResponse.touchedSection!.touchedSectionIndex;
                   },
                 ),
                 borderData: FlBorderData(show: false),
                 sectionsSpace: 0,
-                centerSpaceRadius: 40,
-                sections: _showingSections(),
+                centerSpaceRadius: 30,
+                // Adjusted for a smaller center space
+                sections: _showingSections(utilities, transportation, housing,
+                    shopping, entertainment, groceries, personalCare),
               ),
             ),
           ),
@@ -55,16 +68,18 @@ class _PieChartContainerState extends State<PieChartContainer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Indicator(
-                    color: Colors.blue, text: 'Category 1', isSquare: false),
+                    color: Colors.blue,
+                    text: 'Transportation',
+                    isSquare: false),
                 SizedBox(height: 20),
                 Indicator(
-                    color: Colors.orange, text: 'Category 2', isSquare: false),
+                    color: Colors.orange, text: 'Utilities', isSquare: false),
                 SizedBox(height: 20),
                 Indicator(
-                    color: Colors.purple, text: 'Category 3', isSquare: false),
+                    color: Colors.purple, text: 'Housing', isSquare: false),
                 SizedBox(height: 20),
                 Indicator(
-                    color: Colors.green, text: 'Category 4', isSquare: false),
+                    color: Colors.green, text: 'Shopping', isSquare: false),
               ],
             ),
             Column(
@@ -72,13 +87,15 @@ class _PieChartContainerState extends State<PieChartContainer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Indicator(
-                    color: Colors.yellow, text: 'Category 5', isSquare: false),
+                    color: Colors.yellow,
+                    text: 'Entertainment',
+                    isSquare: false),
                 SizedBox(height: 20),
                 Indicator(
-                    color: Colors.red, text: 'Category 6', isSquare: false),
+                    color: Colors.red, text: 'Groceries', isSquare: false),
                 SizedBox(height: 20),
                 Indicator(
-                    color: Colors.pink, text: 'Category 7', isSquare: false),
+                    color: Colors.pink, text: 'Personal care', isSquare: false),
               ],
             ),
           ],
@@ -87,19 +104,29 @@ class _PieChartContainerState extends State<PieChartContainer> {
     );
   }
 
-  List<PieChartSectionData> _showingSections() {
+  List<PieChartSectionData> _showingSections(
+      double utilities,
+      double transportation,
+      double housing,
+      double shopping,
+      double entertainment,
+      double groceries,
+      double personalCare) {
     return List.generate(7, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 50.0;
+      final fontSize =
+          isTouched ? 28.0 : 18.0; // Increased font size for larger chart
+      final radius =
+          isTouched ? 80.0 : 70.0; // Increased radius for larger chart
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       switch (i) {
         case 0:
           return PieChartSectionData(
             color: Colors.blue,
-            value: 15,
-            title: '15%',
+            value: transportation,
+            title:
+                '${budgetProvider.calculatePercentageOfTotalPlanToSpend(transportation)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -111,8 +138,9 @@ class _PieChartContainerState extends State<PieChartContainer> {
         case 1:
           return PieChartSectionData(
             color: Colors.orange,
-            value: 20,
-            title: '20%',
+            value: utilities,
+            title:
+                '${budgetProvider.calculatePercentageOfTotalPlanToSpend(utilities)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -124,8 +152,9 @@ class _PieChartContainerState extends State<PieChartContainer> {
         case 2:
           return PieChartSectionData(
             color: Colors.purple,
-            value: 10,
-            title: '10%',
+            value: housing,
+            title:
+                '${budgetProvider.calculatePercentageOfTotalPlanToSpend(housing)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -137,8 +166,9 @@ class _PieChartContainerState extends State<PieChartContainer> {
         case 3:
           return PieChartSectionData(
             color: Colors.green,
-            value: 25,
-            title: '25%',
+            value: shopping,
+            title:
+                '${budgetProvider.calculatePercentageOfTotalPlanToSpend(shopping)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -150,8 +180,9 @@ class _PieChartContainerState extends State<PieChartContainer> {
         case 4:
           return PieChartSectionData(
             color: Colors.yellow,
-            value: 5,
-            title: '5%',
+            value: entertainment,
+            title:
+                '${budgetProvider.calculatePercentageOfTotalPlanToSpend(entertainment)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -163,8 +194,9 @@ class _PieChartContainerState extends State<PieChartContainer> {
         case 5:
           return PieChartSectionData(
             color: Colors.red,
-            value: 15,
-            title: '15%',
+            value: groceries,
+            title:
+                '${budgetProvider.calculatePercentageOfTotalPlanToSpend(groceries)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -176,8 +208,9 @@ class _PieChartContainerState extends State<PieChartContainer> {
         case 6:
           return PieChartSectionData(
             color: Colors.pink,
-            value: 10,
-            title: '10%',
+            value: personalCare,
+            title:
+                '${budgetProvider.calculatePercentageOfTotalPlanToSpend(personalCare)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

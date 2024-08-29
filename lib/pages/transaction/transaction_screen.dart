@@ -172,6 +172,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         amount: transactionProvider.transactionAmount ?? 0,
                         date: DateTime.now().millisecondsSinceEpoch,
                         category: budgetProvider
+                            .currentBudget!
                             .categories[transactionProvider.selectedCategory!]
                             .name,
                       );

@@ -60,7 +60,9 @@ class TransactionService extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      print("Error updating transactions in database: $e");
+      if (kDebugMode) {
+        print("Error updating transactions in database: $e");
+      }
     }
   }
 }

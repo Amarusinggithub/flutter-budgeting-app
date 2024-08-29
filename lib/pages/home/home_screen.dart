@@ -77,10 +77,8 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IncomeContainer(income: budget.income),
-                    ExpenseContainer(
-                      expense: budget.expense,
-                    ),
+                    IncomeContainer(budgetProvider: budgetProvider),
+                    ExpenseContainer(budgetProvider: budgetProvider),
                   ],
                 ),
                 const SizedBox(
@@ -146,6 +144,91 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context, BudgetProvider budgetProvider) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    'Edit Balances ',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    labelText: 'Total Balance',
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                  onSubmitted: (value) {
+                    budgetProvider.totalBalanceModel =
+                        double.tryParse(value) ?? 0;
+                  },
+                ),
+                const SizedBox(height: 20),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 120),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: Colors.blueAccent,
+                    ),
+                    onPressed: () {
+                      // Calculate the total expenses by summing up all category expenditures
+
+                      budgetProvider.updateTheBudgetHistoryInTheDatabase(
+                          budgetProvider.budgetHistoryModel!);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Save Balances',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

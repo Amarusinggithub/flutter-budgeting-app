@@ -14,7 +14,7 @@ class ShoppingContainer extends StatelessWidget {
         fit: BoxFit.contain,
       ),
       decoration: BoxDecoration(
-        color: Colors.red,
+        color: Colors.green,
         borderRadius: BorderRadius.circular(18),
       ),
     );

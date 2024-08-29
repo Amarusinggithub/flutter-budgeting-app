@@ -1,9 +1,10 @@
+import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
 
 class IncomeContainer extends StatelessWidget {
-  final double income;
+  final BudgetProvider budgetProvider;
 
-  const IncomeContainer({super.key, required this.income});
+  const IncomeContainer({super.key, required this.budgetProvider});
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +44,9 @@ class IncomeContainer extends StatelessWidget {
                 fontSize: 16),
           ),
           Text(
-            "\$ $income",
-            style: TextStyle(
+            budgetProvider
+                .numberCurrencyFormater(budgetProvider.currentBudget!.income),
+            style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ],

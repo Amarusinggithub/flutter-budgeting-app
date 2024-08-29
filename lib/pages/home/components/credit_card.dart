@@ -42,7 +42,8 @@ class CreditCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            "${budgetProvider.numberCurrencyFormater(budgetProvider.totalBalanceModel)}",
+            budgetProvider
+                .numberCurrencyFormater(budgetProvider.totalBalanceModel),
             style: const TextStyle(
               color: Color(0xFFFFFFFF),
               // White text color

@@ -1,6 +1,5 @@
 import 'package:budgetingapp/models/budget_history_model.dart';
 import 'package:budgetingapp/models/budget_model.dart';
-import 'package:budgetingapp/models/category_model.dart';
 import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:budgetingapp/services/budget_service.dart';
 import 'package:flutter/foundation.dart';
@@ -12,32 +11,6 @@ class BudgetProvider extends ChangeNotifier {
   BudgetHistoryModel? budgetHistoryModel;
 
   final BudgetService budgetService;
-  List<CategoryModel> categories = [
-    CategoryModel(
-        id: "Housing", name: "Housing", totalSpent: 0, planToSpend: 0),
-    CategoryModel(
-        id: "Utilities", name: "Utilities", totalSpent: 0, planToSpend: 0),
-    CategoryModel(
-        id: "Transportation",
-        name: "Transportation",
-        totalSpent: 0,
-        planToSpend: 0),
-    CategoryModel(
-        id: "Groceries", name: "Groceries", totalSpent: 0, planToSpend: 0),
-    CategoryModel(
-        id: "Entertainment",
-        name: "Entertainment",
-        totalSpent: 0,
-        planToSpend: 0),
-    CategoryModel(
-        id: "Shopping", name: "Shopping", totalSpent: 0, planToSpend: 0),
-    CategoryModel(id: "Salary", name: "Salary", totalSpent: 0, planToSpend: 0),
-    CategoryModel(
-        id: "Personal care",
-        name: "Personal care",
-        totalSpent: 0,
-        planToSpend: 0)
-  ];
 
   BudgetProvider({required this.budgetService}) {
     initializeBudgetData();
@@ -62,20 +35,36 @@ class BudgetProvider extends ChangeNotifier {
   }
 
   Future<void> getCurrentBudget() async {
-    if (budgetHistoryModel!.budgets.isNotEmpty) {
-      currentBudget = budgetHistoryModel?.budgets.last;
+    if (budgetHistoryModel!.budgets.isNotEmpty && !isEndOfMonth()) {
+      currentBudget = findBudgetForCurrentMonth();
+      if (currentBudget == null || isEndOfMonth()) {
+        await createNewBudget();
+      }
     } else {
       await createNewBudget();
     }
+
+    calculatePlanToSpend();
+  }
+
+  BudgetModel? findBudgetForCurrentMonth() {
+    DateTime now = DateTime.now();
+    for (BudgetModel budget in budgetHistoryModel!.budgets) {
+      DateTime budgetDate = DateTime.fromMillisecondsSinceEpoch(budget.date);
+      if (budgetDate.year == now.year && budgetDate.month == now.month) {
+        return budget;
+      }
+    }
+    return null;
   }
 
   Future<void> createNewBudget() async {
     BudgetModel newBudget = BudgetModel(
       income: 0,
       expense: 0,
-      categories: categories,
       savings: 0,
       date: DateTime.now().millisecondsSinceEpoch,
+      planToSpend: 0,
     );
     currentBudget = newBudget;
     budgetHistoryModel?.budgets.add(newBudget);
@@ -87,7 +76,7 @@ class BudgetProvider extends ChangeNotifier {
       totalBalanceModel = budgetHistoryModel!.totalBalance;
       if (kDebugMode) {
         print("Total Balance Fetched: $totalBalanceModel");
-      } // Debugging statement
+      }
     }
     notifyListeners();
   }
@@ -95,8 +84,10 @@ class BudgetProvider extends ChangeNotifier {
   Future<void> updateTheBudgetHistoryInTheDatabase(
       BudgetHistoryModel budgets) async {
     if (currentBudget != null && budgetHistoryModel != null) {
+      calculatePlanToSpend();
       budgetHistoryModel!.budgets.last = currentBudget!;
       budgetHistoryModel?.totalBalance = totalBalanceModel;
+
       await budgetService.updateBudgetsInDatabase(budgets);
     }
   }
@@ -112,56 +103,65 @@ class BudgetProvider extends ChangeNotifier {
   void updateIncome(double newIncome) {
     if (currentBudget != null) {
       currentBudget!.income += newIncome;
-      calculateSavings();
-    }
-  }
-
-  void updateExpense() {
-    if (currentBudget != null) {
-      currentBudget!.categories.fold(
-        0.0,
-        (sum, category) => sum + category.totalSpent,
-      );
     }
     notifyListeners();
   }
 
-  void calculatePlanToSpend(double newExpense) {
+  void calculatePlanToSpend() {
+    final currentBudget = this.currentBudget;
     if (currentBudget != null) {
-      currentBudget!.categories.fold(
+      currentBudget.planToSpend = currentBudget.categories.fold(
         0.0,
         (sum, category) => sum + category.planToSpend,
       );
     }
+
     notifyListeners();
   }
 
   String numberCurrencyFormater(double number) {
-    final formatCurrency = new NumberFormat.simpleCurrency();
+    final formatCurrency = NumberFormat.simpleCurrency();
     return formatCurrency.format(number);
   }
 
-  double calculateTotalExpenseForTheMonth() {
-    List<double> numbers = [];
-    currentBudget?.categories.forEach((element) {
-      numbers.add(element.totalSpent);
-    });
-
-    double num = numbers.fold(0, (sum, item) => sum + item);
-
-    currentBudget?.expense = num;
-    notifyListeners();
-    return num;
+  void calculateTotalExpenseForTheMonth() {
+    double totalExpense = 0.0;
+    if (currentBudget != null) {
+      totalExpense = currentBudget!.categories.fold(
+        0.0,
+        (sum, category) => sum + category.totalSpent,
+      );
+      currentBudget?.expense = totalExpense;
+      notifyListeners();
+    }
   }
 
   void updateCategorySpentWithTransactionAmount(TransactionModel transaction) {
-    for (int i = 0; i < categories.length; i++) {
-      if (transaction.category == categories[i].id) {
-        categories[i].totalSpent += transaction.amount;
+    for (int i = 0; i < currentBudget!.categories.length; i++) {
+      if (transaction.category == currentBudget?.categories[i].id) {
+        currentBudget!.categories[i].totalSpent += transaction.amount;
         break;
       }
     }
+    calculateTotalExpenseForTheMonth();
     updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
     notifyListeners();
+  }
+
+  bool isEndOfMonth() {
+    DateTime today = DateTime.now();
+    DateTime lastDayOfMonth = DateTime(today.year, today.month + 1, 0);
+
+    return today.day == lastDayOfMonth.day;
+  }
+
+  int calculatePercentageOfTotalPlanToSpend(double num) {
+    calculatePlanToSpend();
+
+    if (currentBudget!.planToSpend == 0) {
+      return 0;
+    }
+
+    return ((num / currentBudget!.planToSpend) * 100).round();
   }
 }

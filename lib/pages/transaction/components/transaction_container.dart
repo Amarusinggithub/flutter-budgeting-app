@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../models/transaction_model.dart';
 import '../../../widgets/entertainment_container.dart';
@@ -73,7 +74,7 @@ class TransactionContainer extends StatelessWidget {
               ),
               SizedBox(height: 5),
               Text(
-                "${transaction.date}",
+                formatTime(transaction.date),
                 // Assuming `time` is a property of `TransactionModel`
                 style: const TextStyle(
                   fontWeight: FontWeight.normal,
@@ -106,5 +107,17 @@ class TransactionContainer extends StatelessWidget {
       default:
         return Container(); // You can define a default container or return a placeholder widget
     }
+  }
+
+  String formatTime(int epochMillis) {
+    // Convert the epoch time to a DateTime object
+    final DateTime parsedTime =
+        DateTime.fromMillisecondsSinceEpoch(epochMillis);
+
+    // Format the time to include hour, minute, and AM/PM without leading zeros for the hour
+    final String formattedTime =
+        DateFormat('h:m a', 'en_US').format(parsedTime);
+
+    return formattedTime;
   }
 }

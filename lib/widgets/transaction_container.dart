@@ -8,6 +8,7 @@ import 'package:budgetingapp/widgets/shopping_container.dart';
 import 'package:budgetingapp/widgets/transportation_container.dart';
 import 'package:budgetingapp/widgets/utilities_container.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransactionContainer extends StatelessWidget {
   final int index;
@@ -108,7 +109,7 @@ class TransactionContainer extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                "${transaction.date}",
+                formatTime(transaction.date),
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 12,
@@ -142,5 +143,17 @@ class TransactionContainer extends StatelessWidget {
       default:
         return Container(); // You can define a default container or return a placeholder widget
     }
+  }
+
+  String formatTime(int epochMillis) {
+    // Convert the epoch time to a DateTime object
+    final DateTime parsedTime =
+        DateTime.fromMillisecondsSinceEpoch(epochMillis);
+
+    // Format the time to include hour, minute, and AM/PM without leading zeros for the hour
+    final String formattedTime =
+        DateFormat('h:m a', 'en_US').format(parsedTime);
+
+    return formattedTime;
   }
 }
