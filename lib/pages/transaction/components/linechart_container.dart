@@ -1,11 +1,10 @@
 import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LineChartContainer extends StatelessWidget {
-  final TransactionProvider provider;
-
-  const LineChartContainer({super.key, required this.provider});
+  const LineChartContainer({super.key});
 
   List<Color> get gradientColors => [
         const Color(0xFF007AFF),
@@ -14,9 +13,11 @@ class LineChartContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white, // Ensure the container's background is white
+        color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
           color: Colors.white,
@@ -29,7 +30,7 @@ class LineChartContainer extends StatelessWidget {
           AspectRatio(
             aspectRatio: 1.4,
             child: LineChart(
-              _mainData(),
+              _mainData(transactionProvider),
             ),
           ),
         ],
@@ -37,9 +38,13 @@ class LineChartContainer extends StatelessWidget {
     );
   }
 
-  LineChartData _mainData() {
-    final points =
-        provider.getTransactionPoints(provider.selectedIndexForTransactionTime);
+  LineChartData _mainData(TransactionProvider transactionProvider) {
+    final points = transactionProvider.getTransactionPoints(
+        transactionProvider.selectedIndexForTransactionTime);
+
+    final maxY = points.isEmpty
+        ? 0.0
+        : points.map((p) => p.y).reduce((a, b) => a > b ? a : b) + 1;
 
     return LineChartData(
       backgroundColor: Colors.white,
@@ -69,7 +74,7 @@ class LineChartContainer extends StatelessWidget {
             reservedSize: 17,
             interval: 1,
             getTitlesWidget: (value, meta) {
-              switch (provider.selectedIndexForTransactionTime) {
+              switch (transactionProvider.selectedIndexForTransactionTime) {
                 case 0:
                   return bottomTitleForDays(value.toInt());
                 case 1:
@@ -101,9 +106,9 @@ class LineChartContainer extends StatelessWidget {
         ),
       ),
       minX: 0,
-      maxX: points.length - 1.0,
+      maxX: points.isEmpty ? 0 : points.length - 1.0,
       minY: 0,
-      maxY: points.map((p) => p.y).reduce((a, b) => a > b ? a : b) + 1,
+      maxY: maxY,
       lineBarsData: [
         LineChartBarData(
           spots: points.map((point) => FlSpot(point.x, point.y)).toList(),
@@ -122,13 +127,13 @@ class LineChartContainer extends StatelessWidget {
             show: true,
             gradient: LinearGradient(
               colors: gradientColors
-                  .map((color) => color.withOpacity(0.1)) // Adjusted opacity
+                  .map((color) => color.withOpacity(0.1))
                   .toList(),
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
             ),
             spotsLine: BarAreaSpotsLine(
-              show: false, // Ensure no extra line is drawn
+              show: false,
             ),
           ),
         ),

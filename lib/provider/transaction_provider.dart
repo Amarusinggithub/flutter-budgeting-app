@@ -30,14 +30,25 @@ class TransactionProvider extends ChangeNotifier {
   Future<void> getTransactions() async {
     List<TransactionModel>? _transactions =
         await transactionService.fetchTransactionsFromDatabase();
+
     if (_transactions != null) {
-      transactions = _transactions;
+      final DateTime now = DateTime.now();
+      final int currentMonth = now.month;
+      final int currentYear = now.year;
+      transactions = _transactions.where((transaction) {
+        final transactionDate =
+            DateTime.fromMillisecondsSinceEpoch(transaction.date);
+        return transactionDate.month == currentMonth &&
+            transactionDate.year == currentYear;
+      }).toList();
+
       organizeTransactionsByDate();
     } else {
       transactions = [];
       organizeTransactionsByDate();
       await transactionService.updateTransactionsInDatabase(transactions);
     }
+
     notifyListeners();
   }
 

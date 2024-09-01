@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
 import 'package:budgetingapp/pages/home/components/no_transaction_container.dart';
 import 'package:budgetingapp/pages/main/main_screen.dart';
@@ -11,8 +12,24 @@ import '../../provider/budget_provider.dart';
 import 'components/expense_container.dart';
 import 'components/income_container.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,15 +87,15 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                CreditCard(budgetProvider: budgetProvider),
+                CreditCard(),
                 const SizedBox(
                   height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IncomeContainer(budgetProvider: budgetProvider),
-                    ExpenseContainer(budgetProvider: budgetProvider),
+                    IncomeContainer(),
+                    const ExpenseContainer(),
                   ],
                 ),
                 const SizedBox(

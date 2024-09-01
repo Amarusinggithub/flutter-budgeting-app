@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 
 class BudgetProvider extends ChangeNotifier {
   BudgetModel? currentBudget;
-  double totalBalanceModel = 0.0;
+  double? totalBalanceModel;
   BudgetHistoryModel? budgetHistoryModel;
 
   final BudgetService budgetService;
+
+  bool didSavingsAddAlready = false;
 
   BudgetProvider({required this.budgetService}) {
     initializeBudgetData();
@@ -28,6 +30,7 @@ class BudgetProvider extends ChangeNotifier {
 
     if (fetchedBudgetHistory != null) {
       budgetHistoryModel = fetchedBudgetHistory;
+      totalBalanceModel = budgetHistoryModel?.totalBalance;
     } else {
       budgetHistoryModel = BudgetHistoryModel(totalBalance: 0.0, budgets: []);
       await createNewBudget();
@@ -35,27 +38,39 @@ class BudgetProvider extends ChangeNotifier {
   }
 
   Future<void> getCurrentBudget() async {
-    if (budgetHistoryModel!.budgets.isNotEmpty && !isEndOfMonth()) {
+    if (budgetHistoryModel!.budgets.isNotEmpty) {
       currentBudget = findBudgetForCurrentMonth();
-      if (currentBudget == null || isEndOfMonth()) {
-        await createNewBudget();
+
+      if (isEndOfMonthAndDay() && !didSavingsAddAlready) {
+        calculateSavings();
       }
     } else {
       await createNewBudget();
     }
 
+    if (isStartOfMonth()) {
+      didSavingsAddAlready = false;
+    }
     calculatePlanToSpend();
+    notifyListeners();
   }
 
   BudgetModel? findBudgetForCurrentMonth() {
     DateTime now = DateTime.now();
+    BudgetModel? foundBudget;
     for (BudgetModel budget in budgetHistoryModel!.budgets) {
       DateTime budgetDate = DateTime.fromMillisecondsSinceEpoch(budget.date);
       if (budgetDate.year == now.year && budgetDate.month == now.month) {
-        return budget;
+        foundBudget = budget;
+        break;
       }
     }
-    return null;
+
+    if (foundBudget == null) {
+      createNewBudget();
+    }
+
+    return foundBudget;
   }
 
   Future<void> createNewBudget() async {
@@ -84,9 +99,12 @@ class BudgetProvider extends ChangeNotifier {
   Future<void> updateTheBudgetHistoryInTheDatabase(
       BudgetHistoryModel budgets) async {
     if (currentBudget != null && budgetHistoryModel != null) {
+      if (isEndOfMonthAndDay() && !didSavingsAddAlready) {
+        calculateSavings();
+      }
       calculatePlanToSpend();
       budgetHistoryModel!.budgets.last = currentBudget!;
-      budgetHistoryModel?.totalBalance = totalBalanceModel;
+      budgetHistoryModel?.totalBalance = totalBalanceModel!;
 
       await budgetService.updateBudgetsInDatabase(budgets);
     }
@@ -95,9 +113,9 @@ class BudgetProvider extends ChangeNotifier {
   void calculateSavings() {
     if (currentBudget != null) {
       currentBudget!.savings = currentBudget!.income - currentBudget!.expense;
-      totalBalanceModel = (totalBalanceModel) + currentBudget!.savings;
-      updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
+      totalBalanceModel = ((totalBalanceModel)! + currentBudget!.savings);
     }
+    didSavingsAddAlready = true;
   }
 
   void updateIncome(double newIncome) {
@@ -108,14 +126,13 @@ class BudgetProvider extends ChangeNotifier {
   }
 
   void calculatePlanToSpend() {
-    final currentBudget = this.currentBudget;
     if (currentBudget != null) {
-      currentBudget.planToSpend = currentBudget.categories.fold(
+      currentBudget!.planToSpend = currentBudget!.categories.fold(
         0.0,
         (sum, category) => sum + category.planToSpend,
       );
     }
-
+    updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
     notifyListeners();
   }
 
@@ -148,11 +165,9 @@ class BudgetProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isEndOfMonth() {
+  bool isStartOfMonth() {
     DateTime today = DateTime.now();
-    DateTime lastDayOfMonth = DateTime(today.year, today.month + 1, 0);
-
-    return today.day == lastDayOfMonth.day;
+    return today.day == 1;
   }
 
   int calculatePercentageOfTotalPlanToSpend(double num) {
@@ -161,7 +176,19 @@ class BudgetProvider extends ChangeNotifier {
     if (currentBudget!.planToSpend == 0) {
       return 0;
     }
-
+    notifyListeners();
     return ((num / currentBudget!.planToSpend) * 100).round();
+  }
+
+  bool isEndOfMonthAndDay() {
+    DateTime today = DateTime.now();
+
+    DateTime lastDayOfMonth = DateTime(today.year, today.month + 1, 0);
+
+    bool isEndOfMonth = today.day == lastDayOfMonth.day;
+
+    bool isEndOfDay = today.hour == 23 && today.minute == 59;
+
+    return isEndOfMonth && isEndOfDay;
   }
 }

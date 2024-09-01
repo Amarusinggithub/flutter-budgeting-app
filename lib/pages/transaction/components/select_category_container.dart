@@ -1,20 +1,19 @@
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SelectCategoryContainer extends StatelessWidget {
-  final TransactionProvider transactionProvider;
-  final BudgetProvider budgetProvider;
-
   const SelectCategoryContainer({
     super.key,
-    required this.transactionProvider,
-    required this.budgetProvider,
   });
 
   @override
   Widget build(BuildContext context) {
-    final categories = budgetProvider.currentBudget?.categories;
+    final budgetProvider = Provider.of<BudgetProvider>(context);
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+
+    final categories = budgetProvider.currentBudget?.categories ?? [];
     final selectedCategoryIndex = transactionProvider.selectedCategory;
 
     return Column(
@@ -32,10 +31,10 @@ class SelectCategoryContainer extends StatelessWidget {
         Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
-          children: List.generate(categories!.length, (index) {
+          children: List.generate(categories.length, (index) {
             final category = categories[index];
             return ChoiceChip(
-              side: BorderSide(style: BorderStyle.none),
+              side: const BorderSide(style: BorderStyle.none),
               avatarBorder:
                   const OutlineInputBorder(borderSide: BorderSide.none),
               chipAnimationStyle: ChipAnimationStyle(

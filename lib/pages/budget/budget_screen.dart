@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/budget_provider.dart';
-import '../../provider/transaction_provider.dart';
 import 'components/piechart_container.dart';
 import 'components/total_balance_and_expense_container.dart';
 
@@ -12,7 +11,7 @@ class BudgetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
-    final transactionProvider = Provider.of<TransactionProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -51,15 +50,11 @@ class BudgetScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            TotalBalanceAndExpenseContainer(
-              budgetProvider: budgetProvider,
-            ),
+            TotalBalanceAndExpenseContainer(),
             const SizedBox(
               height: 50,
             ),
-            PieChartContainer(
-              budgetProvider: budgetProvider,
-            ),
+            PieChartContainer(),
           ],
         ),
       ))),
@@ -134,13 +129,13 @@ class BudgetScreen extends StatelessWidget {
                           filled: true,
                           fillColor: Colors.grey[200],
                         ),
-                        onChanged: (value) {
+                        onSubmitted: (value) {
                           category.planToSpend = double.tryParse(value) ?? 0;
                         },
                       ),
                     ],
                   );
-                }).toList(),
+                }),
                 const SizedBox(height: 10),
                 Center(
                   child: ElevatedButton(

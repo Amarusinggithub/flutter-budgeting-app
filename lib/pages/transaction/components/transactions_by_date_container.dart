@@ -3,16 +3,17 @@ import 'package:budgetingapp/pages/transaction/components/transaction_container.
 import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class TransactionsByDateContainer extends StatelessWidget {
   final int index;
-  final TransactionProvider transactionProvider;
 
-  const TransactionsByDateContainer(
-      {super.key, required this.index, required this.transactionProvider});
+  const TransactionsByDateContainer({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+
     final transactionsByDate = transactionProvider.getTransactionByDate(index);
 
     if (transactionsByDate == null || transactionsByDate.isEmpty) {

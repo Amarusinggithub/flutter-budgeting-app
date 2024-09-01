@@ -1,4 +1,3 @@
-import 'package:budgetingapp/pages/profile/components/account_info_container.dart';
 import 'package:budgetingapp/pages/profile/components/help_andsupport.dart';
 import 'package:budgetingapp/pages/profile/components/logoutcontainer.dart';
 import 'package:budgetingapp/pages/profile/components/notification_and_themes_container.dart';
@@ -42,10 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   vertical: 15, horizontal: 15),
               child: const Column(
                 children: [
-                  AccountInfoContainer(),
-                  SizedBox(
-                    height: 15,
-                  ),
                   NotificationAndThemesContainer(),
                   SizedBox(
                     height: 15,

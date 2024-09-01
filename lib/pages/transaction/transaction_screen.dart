@@ -69,9 +69,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                LineChartContainer(
-                  provider: transactionProvider,
-                ),
+                const LineChartContainer(),
                 const SizedBox(
                   height: 10,
                 ),
@@ -83,7 +81,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   children: List.generate(
                     transactionProvider.transactionsByDate.length,
                     (index) => TransactionsByDateContainer(
-                      transactionProvider: transactionProvider,
                       index: index,
                     ),
                   ),
@@ -151,10 +148,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
-                SelectCategoryContainer(
-                  transactionProvider: transactionProvider,
-                  budgetProvider: budgetProvider,
-                ),
+                const SelectCategoryContainer(),
                 const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(

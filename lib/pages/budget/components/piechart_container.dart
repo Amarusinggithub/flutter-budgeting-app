@@ -1,18 +1,20 @@
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'indicator.dart';
 
 class PieChartContainer extends StatelessWidget {
-  final BudgetProvider budgetProvider;
-
-  PieChartContainer({super.key, required this.budgetProvider});
+  PieChartContainer({
+    super.key,
+  });
 
   int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context);
     final utilities =
         budgetProvider.currentBudget?.categories[1].planToSpend ?? 0;
     final transportation =
@@ -24,16 +26,16 @@ class PieChartContainer extends StatelessWidget {
     final entertainment =
         budgetProvider.currentBudget?.categories[4].planToSpend ?? 0;
     final personalCare =
-        budgetProvider.currentBudget?.categories[7].planToSpend ?? 0;
+        budgetProvider.currentBudget?.categories[6].planToSpend ?? 0;
     final groceries =
         budgetProvider.currentBudget?.categories[3].planToSpend ?? 0;
 
     return Column(
       children: [
         SizedBox(
-          height: 300, // Increased height to make the chart bigger
+          height: 300,
           child: AspectRatio(
-            aspectRatio: 1.4, // Adjusted aspect ratio for a larger chart
+            aspectRatio: 1.4,
             child: PieChart(
               PieChartData(
                 pieTouchData: PieTouchData(
@@ -51,9 +53,15 @@ class PieChartContainer extends StatelessWidget {
                 borderData: FlBorderData(show: false),
                 sectionsSpace: 0,
                 centerSpaceRadius: 30,
-                // Adjusted for a smaller center space
-                sections: _showingSections(utilities, transportation, housing,
-                    shopping, entertainment, groceries, personalCare),
+                sections: _showingSections(
+                    utilities,
+                    transportation,
+                    housing,
+                    shopping,
+                    entertainment,
+                    groceries,
+                    personalCare,
+                    budgetProvider),
               ),
             ),
           ),
@@ -111,13 +119,12 @@ class PieChartContainer extends StatelessWidget {
       double shopping,
       double entertainment,
       double groceries,
-      double personalCare) {
-    return List.generate(7, (i) {
+      double personalCare,
+      BudgetProvider budgetProvider) {
+    return List.generate(budgetProvider.currentBudget!.categories.length, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize =
-          isTouched ? 28.0 : 18.0; // Increased font size for larger chart
-      final radius =
-          isTouched ? 80.0 : 70.0; // Increased radius for larger chart
+      final fontSize = isTouched ? 28.0 : 18.0;
+      final radius = isTouched ? 80.0 : 70.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       switch (i) {

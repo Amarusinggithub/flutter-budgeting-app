@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../provider/budget_provider.dart';
 
 class ExpenseContainer extends StatelessWidget {
-  final BudgetProvider budgetProvider;
-
-  const ExpenseContainer({super.key, required this.budgetProvider});
+  const ExpenseContainer({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context);
     return Container(
       height: 140,
       width: 170,

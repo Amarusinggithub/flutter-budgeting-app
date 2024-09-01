@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../provider/budget_provider.dart';
 
 class TotalBalanceAndExpenseContainer extends StatelessWidget {
-  final BudgetProvider budgetProvider;
-
   const TotalBalanceAndExpenseContainer({
     super.key,
-    required this.budgetProvider,
   });
 
   @override
   Widget build(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -57,7 +56,7 @@ class TotalBalanceAndExpenseContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const Text(
-                  "Total Expense",
+                  "Plan to Spend",
                   style: TextStyle(
                     color: Colors.black54,
                     fontSize: 16,
@@ -66,7 +65,7 @@ class TotalBalanceAndExpenseContainer extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   budgetProvider.numberCurrencyFormater(
-                      budgetProvider.currentBudget!.expense),
+                      budgetProvider.currentBudget!.planToSpend),
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 24,

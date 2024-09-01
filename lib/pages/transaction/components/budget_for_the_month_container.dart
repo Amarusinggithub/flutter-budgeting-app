@@ -8,12 +8,11 @@ class BudgetForTheMonthContainer extends StatelessWidget {
     return Container(
       width: 327,
       height: 104,
-      padding: EdgeInsets.all(16),
-      // Adding some padding inside the container
+      padding: const EdgeInsets.all(16),
       decoration: ShapeDecoration(
-        color: Color(0xFF3B82F6), // Blue background color
+        color: const Color(0xFF3B82F6),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // Rounded corners
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       child: Column(
@@ -23,7 +22,7 @@ class BudgetForTheMonthContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               Text(
-                'Budget for October',
+                'Budget for this Month',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13,
@@ -43,14 +42,14 @@ class BudgetForTheMonthContainer extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10), // Spacing between text and progress bar
+          const SizedBox(height: 10),
           Stack(
             children: [
               Container(
                 width: 287,
                 height: 6,
                 decoration: ShapeDecoration(
-                  color: Color(0xFF93C5FD),
+                  color: const Color(0xFF93C5FD),
                   // Lighter blue for the progress bar background
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(70),
@@ -59,10 +58,10 @@ class BudgetForTheMonthContainer extends StatelessWidget {
               ),
               Positioned(
                 child: Container(
-                  width: 166, // Adjust the width for the filled portion
+                  width: 250, // Adjust the width for the filled portion
                   height: 6,
                   decoration: ShapeDecoration(
-                    color: Color(0xFF60A5FA),
+                    color: const Color(0xFF60A5FA),
                     // Slightly darker blue for the filled portion
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(70),

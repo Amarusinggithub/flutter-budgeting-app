@@ -1,7 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
+import 'package:budgetingapp/provider/notification_provider.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:budgetingapp/services/auth_service.dart';
 import 'package:budgetingapp/services/budget_service.dart';
+import 'package:budgetingapp/services/notification_service.dart';
 import 'package:budgetingapp/services/transaction_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,8 +14,19 @@ import 'package:provider/provider.dart';
 import 'config/firebase_options.dart';
 import 'core/routes/routes.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  AwesomeNotifications().initialize(null, debug: true, [
+    NotificationChannel(
+      channelKey: "basic_channel",
+      channelName: "basic_notification",
+      channelDescription: "notification channel for basic test",
+    ),
+  ]);
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -21,67 +35,57 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const MaterialApp(
-            home: Scaffold(
-              body: Center(
-                child: Text('Error initializing Firebase'),
-              ),
-            ),
+    return MultiProvider(
+      providers: [
+        ..._serviceProviders(),
+        ..._stateProviders(),
+      ],
+      child: Consumer<AuthService>(
+        builder: (context, authService, child) {
+          return MaterialApp(
+            routes: AppRoutes.getRoutes(),
             debugShowCheckedModeBanner: false,
           );
-        }
-
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider<AuthService>(
-                create: (context) => AuthService(auth: FirebaseAuth.instance),
-              ),
-              ChangeNotifierProvider<BudgetService>(
-                create: (context) => BudgetService(auth: FirebaseAuth.instance),
-              ),
-              ChangeNotifierProvider<BudgetProvider>(
-                create: (context) => BudgetProvider(
-                  budgetService: context.read<BudgetService>(),
-                ),
-              ),
-              ChangeNotifierProvider<TransactionService>(
-                create: (context) =>
-                    TransactionService(auth: FirebaseAuth.instance),
-              ),
-              ChangeNotifierProvider<TransactionProvider>(
-                create: (context) => TransactionProvider(
-                  budgetProvider: context.read<BudgetProvider>(),
-                  transactionService: context.read<TransactionService>(),
-                ),
-              )
-            ],
-            child: Consumer<AuthService>(
-              builder: (context, authService, child) {
-                return MaterialApp(
-                  routes: AppRoutes.getRoutes(),
-                  debugShowCheckedModeBanner: false,
-                );
-              },
-            ),
-          );
-        }
-
-        return const MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-          debugShowCheckedModeBanner: false,
-        );
-      },
+        },
+      ),
     );
+  }
+
+  List<ChangeNotifierProvider> _serviceProviders() {
+    return [
+      ChangeNotifierProvider<AuthService>(
+        create: (context) => AuthService(auth: FirebaseAuth.instance),
+      ),
+      ChangeNotifierProvider<BudgetService>(
+        create: (context) => BudgetService(auth: FirebaseAuth.instance),
+      ),
+      ChangeNotifierProvider<NotificationService>(
+        create: (context) => NotificationService(auth: FirebaseAuth.instance),
+      ),
+      ChangeNotifierProvider<TransactionService>(
+        create: (context) => TransactionService(auth: FirebaseAuth.instance),
+      ),
+    ];
+  }
+
+  List<ChangeNotifierProvider> _stateProviders() {
+    return [
+      ChangeNotifierProvider<NotificationProvider>(
+        create: (context) => NotificationProvider(
+          notificationService: context.read<NotificationService>(),
+        ),
+      ),
+      ChangeNotifierProvider<BudgetProvider>(
+        create: (context) => BudgetProvider(
+          budgetService: context.read<BudgetService>(),
+        ),
+      ),
+      ChangeNotifierProvider<TransactionProvider>(
+        create: (context) => TransactionProvider(
+          budgetProvider: context.read<BudgetProvider>(),
+          transactionService: context.read<TransactionService>(),
+        ),
+      ),
+    ];
   }
 }

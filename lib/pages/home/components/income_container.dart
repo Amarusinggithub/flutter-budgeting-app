@@ -1,13 +1,13 @@
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class IncomeContainer extends StatelessWidget {
-  final BudgetProvider budgetProvider;
-
-  const IncomeContainer({super.key, required this.budgetProvider});
+  const IncomeContainer({super.key, r});
 
   @override
   Widget build(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context);
     return Container(
       height: 140,
       width: 170,

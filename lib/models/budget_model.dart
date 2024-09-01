@@ -48,8 +48,6 @@ class BudgetModel {
                   totalSpent: 0,
                   planToSpend: 0),
               CategoryModel(
-                  id: "Salary", name: "Salary", totalSpent: 0, planToSpend: 0),
-              CategoryModel(
                   id: "Personal care",
                   name: "Personal care",
                   totalSpent: 0,
@@ -74,6 +72,7 @@ class BudgetModel {
       expense: (json['expense'] ?? 0).toDouble(),
       savings: (json['savings'] ?? 0).toDouble(),
       planToSpend: (json['plan to spend'] ?? 0).toDouble(),
+      // Consistent key naming
       categories: json['categories'] != null
           ? List<CategoryModel>.from(json['categories']
               .map((category) => CategoryModel.fromJson(category)))

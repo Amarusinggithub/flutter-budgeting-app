@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../generated/assets.dart';
 import '../../../provider/budget_provider.dart';
 
 class CreditCard extends StatelessWidget {
-  final BudgetProvider budgetProvider;
-
-  const CreditCard({super.key, required this.budgetProvider});
+  const CreditCard({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context);
     return Container(
       width: 354.84,
       height: 170.0,
@@ -43,7 +45,7 @@ class CreditCard extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             budgetProvider
-                .numberCurrencyFormater(budgetProvider.totalBalanceModel),
+                .numberCurrencyFormater(budgetProvider.totalBalanceModel!),
             style: const TextStyle(
               color: Color(0xFFFFFFFF),
               // White text color
