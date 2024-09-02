@@ -9,7 +9,16 @@ class NotificationProvider extends ChangeNotifier {
   List<int> dailyLimits = [1, 2, 3, 4, 5, 6];
   int selectedLimitIndex = 2;
 
-  NotificationProvider({required this.notificationService});
+  NotificationProvider({required this.notificationService}) {
+    initialize();
+  }
+
+  Future<void> initialize() async {
+    await fetchNotificationDailyLimit();
+    notificationService
+        .scheduleNotification(notificationDailyLimitModel!.limit);
+    notifyListeners();
+  }
 
   Future<void> fetchNotificationDailyLimit() async {
     NotificationDailyLimitModel? fetchedNotificationDailyLimitModel =
@@ -22,8 +31,14 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
-  void updateSelectLimit(int updatedSelectedLimit) {
-    selectedLimitIndex = updatedSelectedLimit;
+  void updateSelectLimit(int index) {
+    selectedLimitIndex = index;
+    notificationDailyLimitModel?.limit = dailyLimits[selectedLimitIndex];
     notifyListeners();
+  }
+
+  Future<void> updateNotificationDailyLimit() async {
+    await notificationService
+        .updateNotificationDailyLimit(notificationDailyLimitModel!);
   }
 }

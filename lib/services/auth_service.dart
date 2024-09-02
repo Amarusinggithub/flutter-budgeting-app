@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService extends ChangeNotifier {
   final FirebaseAuth auth;
@@ -12,7 +12,9 @@ class AuthService extends ChangeNotifier {
       await auth.signInWithEmailAndPassword(email: email, password: password);
       notifyListeners();
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -21,13 +23,13 @@ class AuthService extends ChangeNotifier {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(auth.currentUser!.uid);
+      FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid);
 
       notifyListeners();
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 

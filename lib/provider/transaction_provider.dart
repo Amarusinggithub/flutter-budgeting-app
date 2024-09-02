@@ -1,6 +1,6 @@
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../models/daily_transaction_model.dart';
 import '../models/monthly_transaction_model.dart';
@@ -16,26 +16,29 @@ class TransactionProvider extends ChangeNotifier {
   String? transactionTitle;
   double? transactionAmount;
   int _selectedIndexForTransactionTime = 0;
-  BudgetProvider budgetProvider;
-
-  int get selectedIndexForTransactionTime => _selectedIndexForTransactionTime;
-  TransactionService transactionService;
+  final BudgetProvider budgetProvider;
+  final TransactionService transactionService;
   List<TransactionModel> transactions = [];
 
-  TransactionProvider(
-      {required this.budgetProvider, required this.transactionService}) {
+  TransactionProvider({
+    required this.budgetProvider,
+    required this.transactionService,
+  }) {
     getTransactions();
   }
 
+  int get selectedIndexForTransactionTime => _selectedIndexForTransactionTime;
+
   Future<void> getTransactions() async {
-    List<TransactionModel>? _transactions =
+    final fetchedTransactions =
         await transactionService.fetchTransactionsFromDatabase();
 
-    if (_transactions != null) {
-      final DateTime now = DateTime.now();
-      final int currentMonth = now.month;
-      final int currentYear = now.year;
-      transactions = _transactions.where((transaction) {
+    if (fetchedTransactions != null) {
+      final now = DateTime.now();
+      final currentMonth = now.month;
+      final currentYear = now.year;
+
+      transactions = fetchedTransactions.where((transaction) {
         final transactionDate =
             DateTime.fromMillisecondsSinceEpoch(transaction.date);
         return transactionDate.month == currentMonth &&
@@ -53,20 +56,24 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   Future<void> updateTheTransactionsInTheDatabase(
-      List<TransactionModel> transactions) async {
-    await transactionService.updateTransactionsInDatabase(transactions);
+      List<TransactionModel> updatedTransactions) async {
+    await transactionService.updateTransactionsInDatabase(updatedTransactions);
   }
 
   Future<void> deleteTransaction(TransactionModel transaction) async {
     transactions.remove(transaction);
+    organizeTransactionsByDate();
     await updateTheTransactionsInTheDatabase(transactions);
+    notifyListeners();
   }
 
   Future<void> editTransaction(TransactionModel transaction) async {
-    final index = transactions.indexWhere((t) => t.title == transaction.title);
+    final index = transactions.indexWhere((t) => t.date == transaction.date);
     if (index != -1) {
       transactions[index] = transaction;
+      organizeTransactionsByDate();
       await updateTheTransactionsInTheDatabase(transactions);
+      notifyListeners();
     }
   }
 
@@ -77,138 +84,142 @@ class TransactionProvider extends ChangeNotifier {
     return transactionsByDate[index];
   }
 
-  List<TransactionPoint> getTransactionPoints(
-      int selectedIndexForTransactionTime) {
-    switch (selectedIndexForTransactionTime) {
+  List<TransactionPoint> getTransactionPoints(int selectedIndex) {
+    switch (selectedIndex) {
       case 0:
-        return _groupByDay().mapIndexed((index, dailyModel) {
-          return TransactionPoint(
-              x: index.toDouble(), y: dailyModel.totalAmount);
-        }).toList();
+        return _groupByDay()
+            .mapIndexed((index, dailyModel) => TransactionPoint(
+                  x: index.toDouble(),
+                  y: dailyModel.totalAmount,
+                ))
+            .toList();
       case 1:
-        return _groupByWeek().mapIndexed((index, weeklyModel) {
-          return TransactionPoint(
-              x: index.toDouble(), y: weeklyModel.totalAmount);
-        }).toList();
+        return _groupByWeek()
+            .mapIndexed((index, weeklyModel) => TransactionPoint(
+                  x: index.toDouble(),
+                  y: weeklyModel.totalAmount,
+                ))
+            .toList();
       case 2:
-        return _groupByMonth().mapIndexed((index, monthlyModel) {
-          return TransactionPoint(
-              x: index.toDouble(), y: monthlyModel.totalAmount);
-        }).toList();
+        return _groupByMonth()
+            .mapIndexed((index, monthlyModel) => TransactionPoint(
+                  x: index.toDouble(),
+                  y: monthlyModel.totalAmount,
+                ))
+            .toList();
       default:
         return [];
     }
   }
 
   List<DailyTransactionModel> _groupByDay() {
-    final DateTime now = DateTime.now();
-    final int currentYear = now.year;
-    final int currentMonth = now.month;
+    final now = DateTime.now();
+    final currentYear = now.year;
+    final currentMonth = now.month;
 
-    final Map<DateTime, List<TransactionModel>> grouped =
-        transactions.where((transaction) {
-      final transactionDate =
-          DateTime.fromMillisecondsSinceEpoch(transaction.date);
-      return transactionDate.year == currentYear &&
-          transactionDate.month == currentMonth;
+    final grouped = transactions.where((transaction) {
+      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
+      return date.year == currentYear && date.month == currentMonth;
     }).groupListsBy(
-      (transaction) => DateTime(
-        DateTime.fromMillisecondsSinceEpoch(transaction.date).year,
-        DateTime.fromMillisecondsSinceEpoch(transaction.date).month,
-        DateTime.fromMillisecondsSinceEpoch(transaction.date).day,
-      ),
+      (transaction) {
+        final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
+        return DateTime(date.year, date.month, date.day);
+      },
     );
 
-    return grouped.entries.map((entry) {
-      return DailyTransactionModel(date: entry.key, transactions: entry.value);
-    }).toList();
+    return grouped.entries
+        .map((entry) =>
+            DailyTransactionModel(date: entry.key, transactions: entry.value))
+        .toList();
   }
 
   List<WeeklyTransactionModel> _groupByWeek() {
-    final DateTime now = DateTime.now();
-    final int currentYear = now.year;
-    final int currentMonth = now.month;
+    final now = DateTime.now();
+    final currentYear = now.year;
+    final currentMonth = now.month;
 
-    final Map<int, List<TransactionModel>> grouped =
-        transactions.where((transaction) {
-      final transactionDate =
-          DateTime.fromMillisecondsSinceEpoch(transaction.date);
-      return transactionDate.year == currentYear &&
-          transactionDate.month == currentMonth;
+    final grouped = transactions.where((transaction) {
+      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
+      return date.year == currentYear && date.month == currentMonth;
     }).groupListsBy(
       (transaction) =>
           _weekOfYear(DateTime.fromMillisecondsSinceEpoch(transaction.date)),
     );
 
-    return grouped.entries.map((entry) {
-      return WeeklyTransactionModel(
-          weekNumber: entry.key, transactions: entry.value);
-    }).toList();
+    return grouped.entries
+        .map((entry) => WeeklyTransactionModel(
+            weekNumber: entry.key, transactions: entry.value))
+        .toList();
   }
 
   List<MonthlyTransactionModel> _groupByMonth() {
-    final DateTime now = DateTime.now();
-    final int currentYear = now.year;
+    final now = DateTime.now();
+    final currentYear = now.year;
 
-    final Map<int, List<TransactionModel>> grouped =
-        transactions.where((transaction) {
-      final transactionDate =
-          DateTime.fromMillisecondsSinceEpoch(transaction.date);
-      return transactionDate.year == currentYear;
+    final grouped = transactions.where((transaction) {
+      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
+      return date.year == currentYear;
     }).groupListsBy(
       (transaction) =>
           DateTime.fromMillisecondsSinceEpoch(transaction.date).month,
     );
 
-    return grouped.entries.map((entry) {
-      return MonthlyTransactionModel(
-          month: entry.key, transactions: entry.value);
-    }).toList();
+    return grouped.entries
+        .map((entry) => MonthlyTransactionModel(
+            month: entry.key, transactions: entry.value))
+        .toList();
   }
 
   int _weekOfYear(DateTime date) {
     final firstDayOfYear = DateTime(date.year, 1, 1);
     final daysDifference = date.difference(firstDayOfYear).inDays;
-    return (daysDifference / 7).ceil();
+    return ((daysDifference + firstDayOfYear.weekday) / 7).ceil();
   }
 
   void organizeTransactionsByDate() {
-    if (transactions.isEmpty) return;
-
-    List<TransactionModel> reversedTransactions =
-        List.from(transactions.reversed);
-
-    transactionsByDate = reversedTransactions
-        .groupListsBy((transaction) =>
-            DateTime.fromMillisecondsSinceEpoch(transaction.date)
-                .toLocal()
-                .toIso8601String()
-                .substring(0, 10))
-        .values
-        .toList();
+    if (transactions.isEmpty) {
+      transactionsByDate = [];
+    } else {
+      final reversedTransactions =
+          List<TransactionModel>.from(transactions.reversed);
+      transactionsByDate = reversedTransactions
+          .groupListsBy((transaction) =>
+              DateTime.fromMillisecondsSinceEpoch(transaction.date)
+                  .toLocal()
+                  .toIso8601String()
+                  .substring(0, 10))
+          .values
+          .toList();
+    }
   }
 
   Future<void> addTransaction(TransactionModel transaction) async {
     transactions.add(transaction);
-    budgetProvider.updateCategorySpentWithTransactionAmount(transaction);
     organizeTransactionsByDate();
     await updateTheTransactionsInTheDatabase(transactions);
-    notifyListeners();
+
+    await budgetProvider.updateCategorySpentWithTransactionAmount(transaction);
   }
 
   void updateTransactionTitle(String title) {
-    transactionTitle = title;
-    notifyListeners();
+    if (transactionTitle != title) {
+      transactionTitle = title;
+      notifyListeners();
+    }
   }
 
   void updateTransactionAmount(double amount) {
-    transactionAmount = amount;
-    notifyListeners();
+    if (transactionAmount != amount) {
+      transactionAmount = amount;
+      notifyListeners();
+    }
   }
 
   void selectCategory(int categoryIndex) {
-    selectedCategory = categoryIndex;
-    notifyListeners();
+    if (selectedCategory != categoryIndex) {
+      selectedCategory = categoryIndex;
+      notifyListeners();
+    }
   }
 
   void clearTransactionInputs() {
@@ -219,7 +230,9 @@ class TransactionProvider extends ChangeNotifier {
   }
 
   void setSelectedIndexForTransactionTime(int index) {
-    _selectedIndexForTransactionTime = index;
-    notifyListeners();
+    if (_selectedIndexForTransactionTime != index) {
+      _selectedIndexForTransactionTime = index;
+      notifyListeners();
+    }
   }
 }

@@ -2,9 +2,6 @@ import 'package:budgetingapp/pages/profile/components/help_andsupport.dart';
 import 'package:budgetingapp/pages/profile/components/logoutcontainer.dart';
 import 'package:budgetingapp/pages/profile/components/notification_and_themes_container.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../services/auth_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -16,7 +13,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
     return Scaffold(
       body: Column(
         children: [

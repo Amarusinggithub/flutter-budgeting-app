@@ -50,7 +50,7 @@ class BudgetScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            TotalBalanceAndExpenseContainer(),
+            const TotalBalanceAndExpenseContainer(),
             const SizedBox(
               height: 50,
             ),
@@ -148,9 +148,8 @@ class BudgetScreen extends StatelessWidget {
                       backgroundColor: Colors.blueAccent,
                     ),
                     onPressed: () {
-                      // Update the budget history in the database
-                      budgetProvider.updateTheBudgetHistoryInTheDatabase(
-                          budgetProvider.budgetHistoryModel!);
+                      budgetProvider.calculatePlanToSpend();
+                      budgetProvider.updateTheBudgetHistoryInTheDatabase();
                       Navigator.of(context).pop();
                     },
                     child: const Text(

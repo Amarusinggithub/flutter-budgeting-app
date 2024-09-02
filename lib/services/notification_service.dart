@@ -16,7 +16,7 @@ class NotificationService extends ChangeNotifier {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 10,
-        channelKey: 'scheduled_channel',
+        channelKey: 'Budgetting_app',
         title: 'Add Today\'s Transactions',
         body: 'Please add today transactions',
       ),

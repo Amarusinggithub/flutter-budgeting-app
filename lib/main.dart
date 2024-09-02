@@ -16,14 +16,21 @@ import 'core/routes/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  AwesomeNotifications().initialize(null, debug: true, [
-    NotificationChannel(
-      channelKey: "basic_channel",
-      channelName: "basic_notification",
-      channelDescription: "notification channel for basic test",
-    ),
-  ]);
+  AwesomeNotifications().initialize(
+    null, // app icon resource
+    [
+      NotificationChannel(
+        channelKey: 'Budgetting_app',
+        channelName: 'Budgeting App',
+        channelDescription: 'Notification channel for Budgetting app',
+        defaultColor: const Color(0xFF9D50DD),
+        ledColor: Colors.white,
+        importance: NotificationImportance.High,
+        channelShowBadge: true,
+        enableVibration: true,
+      ),
+    ],
+  );
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -59,22 +66,17 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<BudgetService>(
         create: (context) => BudgetService(auth: FirebaseAuth.instance),
       ),
-      ChangeNotifierProvider<NotificationService>(
-        create: (context) => NotificationService(auth: FirebaseAuth.instance),
-      ),
       ChangeNotifierProvider<TransactionService>(
         create: (context) => TransactionService(auth: FirebaseAuth.instance),
+      ),
+      ChangeNotifierProvider<NotificationService>(
+        create: (context) => NotificationService(auth: FirebaseAuth.instance),
       ),
     ];
   }
 
   List<ChangeNotifierProvider> _stateProviders() {
     return [
-      ChangeNotifierProvider<NotificationProvider>(
-        create: (context) => NotificationProvider(
-          notificationService: context.read<NotificationService>(),
-        ),
-      ),
       ChangeNotifierProvider<BudgetProvider>(
         create: (context) => BudgetProvider(
           budgetService: context.read<BudgetService>(),
@@ -84,6 +86,11 @@ class MyApp extends StatelessWidget {
         create: (context) => TransactionProvider(
           budgetProvider: context.read<BudgetProvider>(),
           transactionService: context.read<TransactionService>(),
+        ),
+      ),
+      ChangeNotifierProvider<NotificationProvider>(
+        create: (context) => NotificationProvider(
+          notificationService: context.read<NotificationService>(),
         ),
       ),
     ];

@@ -51,8 +51,8 @@ class BudgetProvider extends ChangeNotifier {
     if (isStartOfMonth()) {
       didSavingsAddAlready = false;
     }
+
     calculatePlanToSpend();
-    notifyListeners();
   }
 
   BudgetModel? findBudgetForCurrentMonth() {
@@ -83,31 +83,49 @@ class BudgetProvider extends ChangeNotifier {
     );
     currentBudget = newBudget;
     budgetHistoryModel?.budgets.add(newBudget);
-    await updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
+    await updateTheBudgetHistoryInTheDatabase();
+    notifyListeners();
   }
 
   Future<void> getTotalBalance() async {
     if (budgetHistoryModel != null) {
       totalBalanceModel = budgetHistoryModel!.totalBalance;
-      if (kDebugMode) {
-        print("Total Balance Fetched: $totalBalanceModel");
-      }
     }
     notifyListeners();
   }
 
-  Future<void> updateTheBudgetHistoryInTheDatabase(
-      BudgetHistoryModel budgets) async {
+  Future<void> updateTheBudgetHistoryInTheDatabase() async {
     if (currentBudget != null && budgetHistoryModel != null) {
       if (isEndOfMonthAndDay() && !didSavingsAddAlready) {
         calculateSavings();
       }
-      calculatePlanToSpend();
+
       budgetHistoryModel!.budgets.last = currentBudget!;
       budgetHistoryModel?.totalBalance = totalBalanceModel!;
 
-      await budgetService.updateBudgetsInDatabase(budgets);
+      await budgetService.updateBudgetsInDatabase(budgetHistoryModel!);
     }
+  }
+
+  Future<void> updateCategorySpentWithTransactionAmount(
+      TransactionModel transaction) async {
+    if (currentBudget != null) {
+      for (int i = 0; i < currentBudget!.categories.length; i++) {
+        if (transaction.category == currentBudget?.categories[i].id) {
+          currentBudget!.categories[i].totalSpent += transaction.amount;
+          break;
+        }
+      }
+      calculateTotalExpenseForTheMonth();
+      await updateTheBudgetHistoryInTheDatabase();
+    }
+  }
+
+  void updateIncome(double newIncome) {
+    if (currentBudget != null) {
+      currentBudget!.income += newIncome;
+    }
+    notifyListeners();
   }
 
   void calculateSavings() {
@@ -118,11 +136,15 @@ class BudgetProvider extends ChangeNotifier {
     didSavingsAddAlready = true;
   }
 
-  void updateIncome(double newIncome) {
+  void calculateTotalExpenseForTheMonth() {
+    double totalExpense = 0.0;
     if (currentBudget != null) {
-      currentBudget!.income += newIncome;
+      totalExpense = currentBudget!.categories.fold(
+        0.0,
+        (sum, category) => sum + category.totalSpent,
+      );
+      currentBudget?.expense = totalExpense;
     }
-    notifyListeners();
   }
 
   void calculatePlanToSpend() {
@@ -132,37 +154,14 @@ class BudgetProvider extends ChangeNotifier {
         (sum, category) => sum + category.planToSpend,
       );
     }
-    updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
     notifyListeners();
   }
 
-  String numberCurrencyFormater(double number) {
-    final formatCurrency = NumberFormat.simpleCurrency();
-    return formatCurrency.format(number);
-  }
-
-  void calculateTotalExpenseForTheMonth() {
-    double totalExpense = 0.0;
-    if (currentBudget != null) {
-      totalExpense = currentBudget!.categories.fold(
-        0.0,
-        (sum, category) => sum + category.totalSpent,
-      );
-      currentBudget?.expense = totalExpense;
-      notifyListeners();
+  int calculatePercentageOfTotalPlanToSpend(double num) {
+    if (currentBudget!.planToSpend == 0) {
+      return 0;
     }
-  }
-
-  void updateCategorySpentWithTransactionAmount(TransactionModel transaction) {
-    for (int i = 0; i < currentBudget!.categories.length; i++) {
-      if (transaction.category == currentBudget?.categories[i].id) {
-        currentBudget!.categories[i].totalSpent += transaction.amount;
-        break;
-      }
-    }
-    calculateTotalExpenseForTheMonth();
-    updateTheBudgetHistoryInTheDatabase(budgetHistoryModel!);
-    notifyListeners();
+    return ((num / currentBudget!.planToSpend) * 100).round();
   }
 
   bool isStartOfMonth() {
@@ -170,25 +169,16 @@ class BudgetProvider extends ChangeNotifier {
     return today.day == 1;
   }
 
-  int calculatePercentageOfTotalPlanToSpend(double num) {
-    calculatePlanToSpend();
-
-    if (currentBudget!.planToSpend == 0) {
-      return 0;
-    }
-    notifyListeners();
-    return ((num / currentBudget!.planToSpend) * 100).round();
-  }
-
   bool isEndOfMonthAndDay() {
     DateTime today = DateTime.now();
-
     DateTime lastDayOfMonth = DateTime(today.year, today.month + 1, 0);
-
     bool isEndOfMonth = today.day == lastDayOfMonth.day;
-
     bool isEndOfDay = today.hour == 23 && today.minute == 59;
-
     return isEndOfMonth && isEndOfDay;
+  }
+
+  String numberCurrencyFormater(double number) {
+    final formatCurrency = NumberFormat.simpleCurrency();
+    return formatCurrency.format(number);
   }
 }

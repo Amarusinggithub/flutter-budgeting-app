@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budgetingapp/pages/home/components/credit_card.dart';
 import 'package:budgetingapp/pages/home/components/no_transaction_container.dart';
 import 'package:budgetingapp/pages/main/main_screen.dart';
@@ -12,25 +11,10 @@ import '../../provider/budget_provider.dart';
 import 'components/expense_container.dart';
 import 'components/income_container.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-      if (!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
@@ -227,8 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       // Calculate the total expenses by summing up all category expenditures
 
-                      budgetProvider.updateTheBudgetHistoryInTheDatabase(
-                          budgetProvider.budgetHistoryModel!);
+                      budgetProvider.updateTheBudgetHistoryInTheDatabase();
                       Navigator.of(context).pop();
                     },
                     child: const Text(
