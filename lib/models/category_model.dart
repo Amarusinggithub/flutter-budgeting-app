@@ -24,7 +24,7 @@ class CategoryModel {
     return CategoryModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      planToSpend: (map['plan to spend'] ?? 0).toDouble(),
+      planToSpend: (map['planToSpend'] ?? 0).toDouble(),
       totalSpent: (map['totalSpent'] ?? 0).toDouble(),
     );
   }

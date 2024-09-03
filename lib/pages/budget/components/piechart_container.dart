@@ -10,8 +10,7 @@ class PieChartContainer extends StatelessWidget {
     super.key,
   });
 
-  int touchedIndex =
-      -1; // Keep track of the touched index for pie chart interaction
+  int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +60,7 @@ class PieChartContainer extends StatelessWidget {
                   entertainment,
                   groceries,
                   personalCare,
-                  budgetProvider,
+                  context,
                 ),
               ),
             ),
@@ -122,11 +121,12 @@ class PieChartContainer extends StatelessWidget {
       double entertainment,
       double groceries,
       double personalCare,
-      BudgetProvider budgetProvider) {
+      BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context);
     return List.generate(budgetProvider.currentBudget!.categories.length, (i) {
-      final isTouched = i == touchedIndex; // Check if this section is touched
-      final fontSize = isTouched ? 28.0 : 18.0; // Change font size if touched
-      final radius = isTouched ? 80.0 : 70.0; // Change radius if touched
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 28.0 : 18.0;
+      final radius = isTouched ? 80.0 : 70.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       switch (i) {

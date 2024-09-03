@@ -210,4 +210,8 @@ class BudgetProvider extends ChangeNotifier {
     isTotalBalanceVisible = !isTotalBalanceVisible;
     notifyListeners();
   }
+
+  void makeScreenRebuild() {
+    notifyListeners();
+  }
 }

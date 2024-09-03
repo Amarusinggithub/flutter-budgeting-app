@@ -132,7 +132,7 @@ class LineChartContainer extends StatelessWidget {
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
             ),
-            spotsLine: BarAreaSpotsLine(
+            spotsLine: const BarAreaSpotsLine(
               show: false,
             ),
           ),
@@ -187,25 +187,25 @@ class LineChartContainer extends StatelessWidget {
   Text bottomTitleForDays(int value) {
     switch (value.toInt()) {
       case 0:
-        return const Text('MON',
+        return const Text('SUN',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
       case 1:
-        return const Text('TUE',
+        return const Text('MON',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
       case 2:
-        return const Text('WED',
+        return const Text('TUE',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
       case 3:
-        return const Text('THU',
+        return const Text('WED',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
       case 4:
-        return const Text('FRI',
+        return const Text('THU',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
       case 5:
-        return const Text('SAT',
+        return const Text('FRI',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
       case 6:
-        return const Text('SUN',
+        return const Text('SAT',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
       default:
         return const Text('');

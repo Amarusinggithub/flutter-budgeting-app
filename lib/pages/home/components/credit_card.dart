@@ -181,6 +181,7 @@ class CreditCard extends StatelessWidget {
                     ),
                     onPressed: () {
                       budgetProvider.updateTheBudgetHistoryInTheDatabase();
+                      budgetProvider.makeScreenRebuild();
                       Navigator.of(context).pop();
                     },
                     child: const Text(
