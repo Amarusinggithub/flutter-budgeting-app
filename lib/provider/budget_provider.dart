@@ -53,6 +53,7 @@ class BudgetProvider extends ChangeNotifier {
     if (HelperFunctions.isStartOfMonth()) {
       didSavingsAddAlready = false;
     }
+    notifyListeners();
   }
 
   BudgetModel? findBudgetForCurrentMonth() {
@@ -69,6 +70,7 @@ class BudgetProvider extends ChangeNotifier {
     if (foundBudget == null) {
       createNewBudget();
     }
+    notifyListeners();
 
     return foundBudget;
   }
@@ -119,6 +121,7 @@ class BudgetProvider extends ChangeNotifier {
       calculateTotalExpenseForTheMonth();
       await updateTheBudgetHistoryInTheDatabase();
     }
+    notifyListeners();
   }
 
   void updateIncome(double newIncome) {
@@ -146,6 +149,7 @@ class BudgetProvider extends ChangeNotifier {
       );
       currentBudget?.expense = totalExpense;
     }
+    notifyListeners();
   }
 
   void calculatePlanToSpend() {
@@ -175,6 +179,7 @@ class BudgetProvider extends ChangeNotifier {
     if (currentBudget!.planToSpend == 0) {
       return 0;
     }
+    notifyListeners();
     return ((num / currentBudget!.planToSpend) * 100).round();
   }
 
@@ -185,6 +190,7 @@ class BudgetProvider extends ChangeNotifier {
       double result = (percentage / 100) * 287;
       return result;
     }
+    notifyListeners();
     return null;
   }
 
@@ -194,6 +200,7 @@ class BudgetProvider extends ChangeNotifier {
           ((currentBudget!.expense / currentBudget!.planToSpend) * 100).toInt();
       return percentage;
     }
+    notifyListeners();
     return null;
   }
 
@@ -202,7 +209,7 @@ class BudgetProvider extends ChangeNotifier {
 
     final category =
         currentBudget!.categories.firstWhere((c) => c.name == categoryName);
-
+    notifyListeners();
     return category.planToSpend;
   }
 

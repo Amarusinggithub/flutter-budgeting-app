@@ -25,16 +25,16 @@ class ExpenseContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsetsDirectional.all(10),
+            padding: const EdgeInsetsDirectional.all(10),
             height: 50,
             width: 50,
+            decoration: BoxDecoration(
+              color: const Color(0xFFD32F2F), // Updated red color
+              borderRadius: BorderRadius.circular(15),
+            ),
             child: Image.asset(
               "assets/images/expense.png",
               fit: BoxFit.contain,
-            ),
-            decoration: BoxDecoration(
-              color: Color(0xFFD32F2F), // Updated red color
-              borderRadius: BorderRadius.circular(15),
             ),
           ),
           const SizedBox(

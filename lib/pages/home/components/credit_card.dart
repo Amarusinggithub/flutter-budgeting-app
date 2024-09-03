@@ -43,8 +43,24 @@ class CreditCard extends StatelessWidget {
                   letterSpacing: 0.10,
                 ),
               ),
-              Image.asset(Assets.imagesCreditCard),
-              Image.asset(Assets.imagesWifi),
+              const SizedBox(
+                width: 120,
+              ),
+              Image.asset(
+                Assets.imagesCreditCard,
+                fit: BoxFit.contain,
+                height: 33,
+                width: 33,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Image.asset(
+                Assets.imagesWifi,
+                fit: BoxFit.contain,
+                height: 33,
+                width: 33,
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -63,32 +79,53 @@ class CreditCard extends StatelessWidget {
                         height: 1.2,
                         letterSpacing: 0.10,
                       ))
-                  : const Text("\$***,***,**",
+                  : const Text("\$**********",
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
                         // White text color
-                        fontSize: 24,
+                        fontSize: 25,
                         fontFamily: 'Readex Pro',
                         fontWeight: FontWeight.bold,
                         height: 1.2,
                         letterSpacing: 0.10,
                       )),
+              const SizedBox(
+                width: 10,
+              ),
               budgetProvider.isTotalBalanceVisible == true
                   ? GestureDetector(
                       onTap: () {
                         budgetProvider.makeTotalBalanceVisible();
                       },
-                      child: Image.asset(Assets.imagesView))
+                      child: Image.asset(
+                        Assets.imagesView,
+                        fit: BoxFit.contain,
+                        height: 28,
+                        width: 28,
+                      ))
                   : GestureDetector(
                       onTap: () {
                         budgetProvider.makeTotalBalanceVisible();
                       },
-                      child: Image.asset(Assets.imagesHide)),
+                      child: Image.asset(
+                        Assets.imagesHide,
+                        fit: BoxFit.contain,
+                        height: 28,
+                        width: 28,
+                      )),
+              const SizedBox(
+                width: 10,
+              ),
               GestureDetector(
                   onTap: () {
                     _showBottomSheet(context, budgetProvider);
                   },
-                  child: Image.asset(Assets.imagesPencil)),
+                  child: Image.asset(
+                    Assets.imagesPencil,
+                    fit: BoxFit.contain,
+                    height: 28,
+                    width: 28,
+                  )),
             ],
           ),
           const Spacer(),

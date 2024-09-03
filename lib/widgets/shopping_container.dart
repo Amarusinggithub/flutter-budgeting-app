@@ -9,13 +9,15 @@ class ShoppingContainer extends StatelessWidget {
       padding: EdgeInsetsDirectional.all(10),
       height: 65,
       width: 65,
-      child: Image.asset(
-        "assets/images/shopping.png",
-        fit: BoxFit.contain,
-      ),
       decoration: BoxDecoration(
         color: Colors.green,
         borderRadius: BorderRadius.circular(18),
+      ),
+      child: Image.asset(
+        "assets/images/shopping.png",
+        fit: BoxFit.contain,
+        height: 35,
+        width: 35,
       ),
     );
   }

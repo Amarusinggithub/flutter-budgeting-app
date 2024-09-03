@@ -7,16 +7,18 @@ class EntertainmentContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsetsDirectional.all(10),
+      padding: const EdgeInsetsDirectional.all(10),
       height: 65,
       width: 65,
-      child: Image.asset(
-        Assets.imagesEntertainment,
-        fit: BoxFit.contain,
-      ),
       decoration: BoxDecoration(
         color: Colors.yellowAccent,
         borderRadius: BorderRadius.circular(18),
+      ),
+      child: Image.asset(
+        Assets.imagesEntertainment,
+        fit: BoxFit.contain,
+        height: 35,
+        width: 35,
       ),
     );
   }

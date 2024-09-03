@@ -147,9 +147,16 @@ class TransactionProvider extends ChangeNotifier {
     );
 
     return grouped.entries
+        .where((entry) => entry.value.isNotEmpty)
         .map((entry) => WeeklyTransactionModel(
             weekNumber: entry.key, transactions: entry.value))
         .toList();
+  }
+
+  int _weekOfYear(DateTime date) {
+    final firstDayOfYear = DateTime(date.year, 1, 1);
+    final daysSinceFirstDay = date.difference(firstDayOfYear).inDays;
+    return (daysSinceFirstDay / 7).ceil();
   }
 
   List<MonthlyTransactionModel> _groupByMonth() {
@@ -168,12 +175,6 @@ class TransactionProvider extends ChangeNotifier {
         .map((entry) => MonthlyTransactionModel(
             month: entry.key, transactions: entry.value))
         .toList();
-  }
-
-  int _weekOfYear(DateTime date) {
-    final firstDayOfYear = DateTime(date.year, 1, 1);
-    final daysDifference = date.difference(firstDayOfYear).inDays;
-    return ((daysDifference + firstDayOfYear.weekday) / 7).ceil();
   }
 
   void organizeTransactionsByDate() {
