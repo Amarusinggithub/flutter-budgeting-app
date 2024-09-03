@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/helper_functions.dart';
 import '../../../provider/budget_provider.dart';
 
 class TotalBalanceAndExpenseContainer extends StatelessWidget {
@@ -35,7 +36,7 @@ class TotalBalanceAndExpenseContainer extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  budgetProvider.numberCurrencyFormater(
+                  HelperFunctions.numberCurrencyFormatter(
                       budgetProvider.currentBudget!.income),
                   style: const TextStyle(
                     color: Colors.black,
@@ -64,7 +65,7 @@ class TotalBalanceAndExpenseContainer extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  budgetProvider.numberCurrencyFormater(
+                  HelperFunctions.numberCurrencyFormatter(
                       budgetProvider.currentBudget!.planToSpend),
                   style: const TextStyle(
                     color: Colors.black,

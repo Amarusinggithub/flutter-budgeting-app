@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/helper_functions.dart';
 import '../../../provider/budget_provider.dart';
 
 class ExpenseContainer extends StatelessWidget {
@@ -47,7 +48,7 @@ class ExpenseContainer extends StatelessWidget {
                 fontSize: 16),
           ),
           Text(
-            " ${budgetProvider.numberCurrencyFormater(budgetProvider.currentBudget!.expense)}",
+            " ${HelperFunctions.numberCurrencyFormatter(budgetProvider.currentBudget!.expense)}",
             style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),

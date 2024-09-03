@@ -19,7 +19,9 @@ class BudgetService extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      print("Error updating budgets in database: $e");
+      if (kDebugMode) {
+        print("Error updating budgets in database: $e");
+      }
     }
   }
 

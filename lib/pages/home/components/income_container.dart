@@ -2,6 +2,8 @@ import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/helper_functions.dart';
+
 class IncomeContainer extends StatelessWidget {
   const IncomeContainer({super.key, r});
 
@@ -44,8 +46,8 @@ class IncomeContainer extends StatelessWidget {
                 fontSize: 16),
           ),
           Text(
-            budgetProvider
-                .numberCurrencyFormater(budgetProvider.currentBudget!.income),
+            HelperFunctions.numberCurrencyFormatter(
+                budgetProvider.currentBudget!.income),
             style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),

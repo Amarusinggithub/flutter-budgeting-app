@@ -1,4 +1,6 @@
 import 'package:budgetingapp/models/transaction_model.dart';
+import 'package:budgetingapp/pages/budget/budget_screen.dart';
+import 'package:budgetingapp/pages/main/main_screen.dart';
 import 'package:budgetingapp/pages/transaction/components/linechart_container.dart';
 import 'package:budgetingapp/pages/transaction/components/transactions_by_date_container.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
@@ -6,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/budget_provider.dart';
-import 'components/budget_for_the_month_container.dart';
+import '../../widgets/budget_for_the_month_container.dart';
 import 'components/data_slider_container.dart';
 import 'components/select_category_container.dart';
 
@@ -73,7 +75,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                const BudgetForTheMonthContainer(),
+                GestureDetector(
+                    onTap: () {
+                      MainScreen.pushNewScreen(context, const BudgetScreen(),
+                          isNavBarItem: true, tabIndex: 2);
+                    },
+                    child: const BudgetForTheMonthContainer()),
                 const SizedBox(
                   height: 10,
                 ),

@@ -1,11 +1,12 @@
+import 'package:budgetingapp/core/utils/helper_functions.dart';
 import 'package:budgetingapp/models/budget_history_model.dart';
 import 'package:budgetingapp/models/budget_model.dart';
 import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:budgetingapp/services/budget_service.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 
 class BudgetProvider extends ChangeNotifier {
+  bool isTotalBalanceVisible = true;
   BudgetModel? currentBudget;
   double? totalBalanceModel;
   BudgetHistoryModel? budgetHistoryModel;
@@ -31,6 +32,7 @@ class BudgetProvider extends ChangeNotifier {
     if (fetchedBudgetHistory != null) {
       budgetHistoryModel = fetchedBudgetHistory;
       totalBalanceModel = budgetHistoryModel?.totalBalance;
+      notifyListeners();
     } else {
       budgetHistoryModel = BudgetHistoryModel(totalBalance: 0.0, budgets: []);
       await createNewBudget();
@@ -41,18 +43,16 @@ class BudgetProvider extends ChangeNotifier {
     if (budgetHistoryModel!.budgets.isNotEmpty) {
       currentBudget = findBudgetForCurrentMonth();
 
-      if (isEndOfMonthAndDay() && !didSavingsAddAlready) {
+      if (HelperFunctions.isEndOfMonthAndDay() && !didSavingsAddAlready) {
         calculateSavings();
       }
     } else {
       await createNewBudget();
     }
 
-    if (isStartOfMonth()) {
+    if (HelperFunctions.isStartOfMonth()) {
       didSavingsAddAlready = false;
     }
-
-    calculatePlanToSpend();
   }
 
   BudgetModel? findBudgetForCurrentMonth() {
@@ -96,7 +96,7 @@ class BudgetProvider extends ChangeNotifier {
 
   Future<void> updateTheBudgetHistoryInTheDatabase() async {
     if (currentBudget != null && budgetHistoryModel != null) {
-      if (isEndOfMonthAndDay() && !didSavingsAddAlready) {
+      if (HelperFunctions.isEndOfMonthAndDay() && !didSavingsAddAlready) {
         calculateSavings();
       }
 
@@ -131,9 +131,10 @@ class BudgetProvider extends ChangeNotifier {
   void calculateSavings() {
     if (currentBudget != null) {
       currentBudget!.savings = currentBudget!.income - currentBudget!.expense;
-      totalBalanceModel = ((totalBalanceModel)! + currentBudget!.savings);
+      totalBalanceModel = (totalBalanceModel ?? 0) + currentBudget!.savings;
     }
     didSavingsAddAlready = true;
+    notifyListeners();
   }
 
   void calculateTotalExpenseForTheMonth() {
@@ -148,11 +149,24 @@ class BudgetProvider extends ChangeNotifier {
   }
 
   void calculatePlanToSpend() {
-    if (currentBudget != null) {
-      currentBudget!.planToSpend = currentBudget!.categories.fold(
-        0.0,
-        (sum, category) => sum + category.planToSpend,
-      );
+    if (currentBudget == null || currentBudget!.categories.isEmpty) {
+      currentBudget?.planToSpend = 0;
+      return;
+    }
+
+    double totalPlanToSpend = 0.0;
+
+    for (var category in currentBudget!.categories) {
+      if (kDebugMode) {
+        print(
+            'Category ${category.name}: PlanToSpend = ${category.planToSpend}');
+      }
+      totalPlanToSpend += category.planToSpend;
+    }
+
+    currentBudget?.planToSpend = totalPlanToSpend;
+    if (kDebugMode) {
+      print('Total PlanToSpend = $totalPlanToSpend');
     }
     notifyListeners();
   }
@@ -164,21 +178,36 @@ class BudgetProvider extends ChangeNotifier {
     return ((num / currentBudget!.planToSpend) * 100).round();
   }
 
-  bool isStartOfMonth() {
-    DateTime today = DateTime.now();
-    return today.day == 1;
+  double? calculateTheBudgetPercentageForIndicator() {
+    if (currentBudget != null && currentBudget!.planToSpend != 0) {
+      double percentage =
+          (currentBudget!.expense / currentBudget!.planToSpend) * 100;
+      double result = (percentage / 100) * 287;
+      return result;
+    }
+    return null;
   }
 
-  bool isEndOfMonthAndDay() {
-    DateTime today = DateTime.now();
-    DateTime lastDayOfMonth = DateTime(today.year, today.month + 1, 0);
-    bool isEndOfMonth = today.day == lastDayOfMonth.day;
-    bool isEndOfDay = today.hour == 23 && today.minute == 59;
-    return isEndOfMonth && isEndOfDay;
+  int? calculateTheBudgetPercentage() {
+    if (currentBudget != null && currentBudget!.planToSpend != 0) {
+      int percentage =
+          ((currentBudget!.expense / currentBudget!.planToSpend) * 100).toInt();
+      return percentage;
+    }
+    return null;
   }
 
-  String numberCurrencyFormater(double number) {
-    final formatCurrency = NumberFormat.simpleCurrency();
-    return formatCurrency.format(number);
+  double getCategoryPlanToSpend(String categoryName) {
+    if (currentBudget == null) return 0;
+
+    final category =
+        currentBudget!.categories.firstWhere((c) => c.name == categoryName);
+
+    return category.planToSpend;
+  }
+
+  void makeTotalBalanceVisible() {
+    isTotalBalanceVisible = !isTotalBalanceVisible;
+    notifyListeners();
   }
 }

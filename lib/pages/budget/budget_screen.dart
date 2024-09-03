@@ -12,52 +12,56 @@ class BudgetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
 
+    if (budgetProvider.currentBudget == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-          child: SingleChildScrollView(
-              child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
+            child: Column(
               children: [
-                const Text(
-                  "Budget",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Budget",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _showBudgetBottomSheet(context, budgetProvider);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            const WidgetStatePropertyAll(Color(0xFFE0E0E0)),
+                        iconColor: const WidgetStatePropertyAll(Colors.black),
+                        iconSize: const WidgetStatePropertyAll(30),
+                        padding: const WidgetStatePropertyAll(
+                            EdgeInsetsDirectional.all(0)),
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15))),
+                      ),
+                      child: const Icon(
+                        Icons.edit,
+                        weight: 20,
+                      ),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    _showBudgetBottomSheet(context, budgetProvider);
-                  },
-                  style: ButtonStyle(
-                      backgroundColor:
-                          const WidgetStatePropertyAll(Color(0xFFE0E0E0)),
-                      iconColor: const WidgetStatePropertyAll(Colors.black),
-                      iconSize: const WidgetStatePropertyAll(30),
-                      padding: const WidgetStatePropertyAll(
-                          EdgeInsetsDirectional.all(0)),
-                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)))),
-                  child: const Icon(
-                    Icons.edit,
-                    weight: 20,
-                  ),
-                )
+                const SizedBox(height: 10),
+                const TotalBalanceAndExpenseContainer(),
+                const SizedBox(height: 50),
+                PieChartContainer(),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const TotalBalanceAndExpenseContainer(),
-            const SizedBox(
-              height: 50,
-            ),
-            PieChartContainer(),
-          ],
+          ),
         ),
-      ))),
+      ),
     );
   }
 
@@ -86,10 +90,7 @@ class BudgetScreen extends StatelessWidget {
                 const Center(
                   child: Text(
                     'Edit Budget',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 TextField(
@@ -108,6 +109,7 @@ class BudgetScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 5),
+                // Map through categories and create text fields for each
                 ...budgetProvider.currentBudget!.categories.map((category) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +137,8 @@ class BudgetScreen extends StatelessWidget {
                       ),
                     ],
                   );
-                }),
+                }).toList(),
+                // .toList() ensures that the iterable is converted to a list for rendering
                 const SizedBox(height: 10),
                 Center(
                   child: ElevatedButton(
@@ -150,7 +153,7 @@ class BudgetScreen extends StatelessWidget {
                     onPressed: () {
                       budgetProvider.calculatePlanToSpend();
                       budgetProvider.updateTheBudgetHistoryInTheDatabase();
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(); // Close the bottom sheet
                     },
                     child: const Text(
                       'Save Budget',

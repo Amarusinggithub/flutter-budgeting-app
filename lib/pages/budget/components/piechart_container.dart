@@ -10,25 +10,25 @@ class PieChartContainer extends StatelessWidget {
     super.key,
   });
 
-  int touchedIndex = -1;
+  int touchedIndex =
+      -1; // Keep track of the touched index for pie chart interaction
 
   @override
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
-    final utilities =
-        budgetProvider.currentBudget?.categories[1].planToSpend ?? 0;
+    if (budgetProvider.currentBudget == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final utilities = budgetProvider.getCategoryPlanToSpend("Utilities");
     final transportation =
-        budgetProvider.currentBudget?.categories[2].planToSpend ?? 0;
-    final housing =
-        budgetProvider.currentBudget?.categories[0].planToSpend ?? 0;
-    final shopping =
-        budgetProvider.currentBudget?.categories[5].planToSpend ?? 0;
+        budgetProvider.getCategoryPlanToSpend("Transportation");
+    final housing = budgetProvider.getCategoryPlanToSpend("Housing");
+    final shopping = budgetProvider.getCategoryPlanToSpend("Shopping");
     final entertainment =
-        budgetProvider.currentBudget?.categories[4].planToSpend ?? 0;
-    final personalCare =
-        budgetProvider.currentBudget?.categories[6].planToSpend ?? 0;
-    final groceries =
-        budgetProvider.currentBudget?.categories[3].planToSpend ?? 0;
+        budgetProvider.getCategoryPlanToSpend("Entertainment");
+    final personalCare = budgetProvider.getCategoryPlanToSpend("Personal care");
+    final groceries = budgetProvider.getCategoryPlanToSpend("Groceries");
 
     return Column(
       children: [
@@ -54,19 +54,21 @@ class PieChartContainer extends StatelessWidget {
                 sectionsSpace: 0,
                 centerSpaceRadius: 30,
                 sections: _showingSections(
-                    utilities,
-                    transportation,
-                    housing,
-                    shopping,
-                    entertainment,
-                    groceries,
-                    personalCare,
-                    budgetProvider),
+                  utilities,
+                  transportation,
+                  housing,
+                  shopping,
+                  entertainment,
+                  groceries,
+                  personalCare,
+                  budgetProvider,
+                ),
               ),
             ),
           ),
         ),
         const SizedBox(height: 30),
+        // Indicators for the pie chart sections
         const Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -122,9 +124,9 @@ class PieChartContainer extends StatelessWidget {
       double personalCare,
       BudgetProvider budgetProvider) {
     return List.generate(budgetProvider.currentBudget!.categories.length, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 28.0 : 18.0;
-      final radius = isTouched ? 80.0 : 70.0;
+      final isTouched = i == touchedIndex; // Check if this section is touched
+      final fontSize = isTouched ? 28.0 : 18.0; // Change font size if touched
+      final radius = isTouched ? 80.0 : 70.0; // Change radius if touched
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       switch (i) {

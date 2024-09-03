@@ -1,3 +1,4 @@
+import 'package:budgetingapp/core/utils/helper_functions.dart';
 import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:budgetingapp/widgets/entertainment_container.dart';
@@ -8,7 +9,6 @@ import 'package:budgetingapp/widgets/shopping_container.dart';
 import 'package:budgetingapp/widgets/transportation_container.dart';
 import 'package:budgetingapp/widgets/utilities_container.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class TransactionContainer extends StatelessWidget {
   final int index;
@@ -38,7 +38,7 @@ class TransactionContainer extends StatelessWidget {
           color: Colors.white24,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Center(
+        child: const Center(
           child: Text(
             "No transaction available",
             style: TextStyle(
@@ -76,7 +76,7 @@ class TransactionContainer extends StatelessWidget {
                   transaction.category,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
+                    fontSize: 14, // Adjusted font size for consistency
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Inter',
                   ),
@@ -86,7 +86,7 @@ class TransactionContainer extends StatelessWidget {
                   transaction.title,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 12,
+                    fontSize: 14, // Adjusted font size for consistency
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Inter',
                   ),
@@ -99,20 +99,20 @@ class TransactionContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "${transaction.amount}",
+                "-${HelperFunctions.numberCurrencyFormatter(transaction.amount)}",
+                // Assuming `amount` is a property of `TransactionModel`
                 style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14, // Adjusted font size for consistency
+                  color: Colors.red,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
-                formatTime(transaction.date),
+                HelperFunctions.formatTime(transaction.date),
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 12,
+                  fontSize: 14, // Adjusted font size for consistency
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Inter',
                 ),
@@ -127,33 +127,21 @@ class TransactionContainer extends StatelessWidget {
   Widget getCategoryIcon(TransactionModel transaction) {
     switch (transaction.category) {
       case "Housing":
-        return HousingContainer();
+        return const HousingContainer();
       case "Utilities":
-        return UtilitiesContainer();
+        return const UtilitiesContainer();
       case "Transportation":
-        return TransportationContainer();
+        return const TransportationContainer();
       case "Groceries":
-        return GroceriesContainer();
+        return const GroceriesContainer();
       case "Entertainment":
-        return EntertainmentContainer();
+        return const EntertainmentContainer();
       case "Shopping":
-        return ShoppingContainer();
+        return const ShoppingContainer();
       case "Personal care":
-        return HealthcareContainer();
+        return const HealthcareContainer();
       default:
-        return Container(); // You can define a default container or return a placeholder widget
+        return Container();
     }
-  }
-
-  String formatTime(int epochMillis) {
-    // Convert the epoch time to a DateTime object
-    final DateTime parsedTime =
-        DateTime.fromMillisecondsSinceEpoch(epochMillis);
-
-    // Format the time to include hour, minute, and AM/PM without leading zeros for the hour
-    final String formattedTime =
-        DateFormat('h:m a', 'en_US').format(parsedTime);
-
-    return formattedTime;
   }
 }

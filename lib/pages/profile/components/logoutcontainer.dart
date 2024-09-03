@@ -20,20 +20,45 @@ class LogoutContainer extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          authService.logout();
+          _showLogoutDialog(context, authService);
         },
-        child: Container(
-          child: const Row(
-            children: [
-              Icon(Icons.logout),
-              SizedBox(
-                width: 8,
-              ),
-              Text("Logout"),
-            ],
-          ),
+        child: const Row(
+          children: [
+            Icon(Icons.logout),
+            SizedBox(
+              width: 8,
+            ),
+            Text("Logout"),
+          ],
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context, AuthService authService) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Logout"),
+          content: const Text("Are you sure you want to log out?"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Yes"),
+              onPressed: () {
+                authService.logout();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

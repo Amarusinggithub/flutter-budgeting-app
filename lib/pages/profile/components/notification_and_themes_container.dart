@@ -12,7 +12,7 @@ class NotificationAndThemesContainer extends StatelessWidget {
     return Container(
       padding:
           const EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
-      height: 150,
+      height: 100,
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadiusDirectional.circular(15),
@@ -25,10 +25,10 @@ class NotificationAndThemesContainer extends StatelessWidget {
               _showBottomSheet(context, notificationProvider);
             },
             child: Container(
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       Icon(Icons.notifications_none_rounded),
                       SizedBox(
@@ -37,7 +37,9 @@ class NotificationAndThemesContainer extends StatelessWidget {
                       Text("Notifications"),
                     ],
                   ),
-                  Text("On")
+                  notificationProvider.selectedLimitIndex == 0
+                      ? const Text("Off")
+                      : const Text("On")
                 ],
               ),
             ),
@@ -60,7 +62,7 @@ class NotificationAndThemesContainer extends StatelessWidget {
                       Text("Theme"),
                     ],
                   ),
-                  Text("Ligth Mode")
+                  Text("Light Mode")
                 ],
               ),
             ),
@@ -117,6 +119,7 @@ void _showBottomSheet(
                     backgroundColor: Colors.blueAccent,
                   ),
                   onPressed: () {
+                    notificationProvider.updateNotificationDailyLimit();
                     Navigator.of(context).pop();
                   },
                   child: const Text(

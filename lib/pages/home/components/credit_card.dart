@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/helper_functions.dart';
 import '../../../generated/assets.dart';
 import '../../../provider/budget_provider.dart';
 
@@ -14,9 +15,8 @@ class CreditCard extends StatelessWidget {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     return Container(
       width: 354.84,
-      height: 170.0,
+      height: 180.0,
       padding: const EdgeInsets.all(20),
-      // Add padding to the container
       decoration: ShapeDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFF42A5F5), Color(0xFF64B5F6)],
@@ -30,31 +30,66 @@ class CreditCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Total Balance',
-            style: TextStyle(
-              color: Color(0xFFFFFFFF),
-              // White text color
-              fontSize: 16,
-              fontFamily: 'Readex Pro',
-              fontWeight: FontWeight.w500,
-              height: 1.5,
-              letterSpacing: 0.10,
-            ),
+          Row(
+            children: [
+              const Text(
+                'Total Balance',
+                style: TextStyle(
+                  color: Color(0xFFFFFFFF),
+                  fontSize: 16,
+                  fontFamily: 'Readex Pro',
+                  fontWeight: FontWeight.w500,
+                  height: 1.5,
+                  letterSpacing: 0.10,
+                ),
+              ),
+              Image.asset(Assets.imagesCreditCard),
+              Image.asset(Assets.imagesWifi),
+            ],
           ),
           const SizedBox(height: 20),
-          Text(
-            budgetProvider
-                .numberCurrencyFormater(budgetProvider.totalBalanceModel!),
-            style: const TextStyle(
-              color: Color(0xFFFFFFFF),
-              // White text color
-              fontSize: 24,
-              fontFamily: 'Readex Pro',
-              fontWeight: FontWeight.bold,
-              height: 1.2,
-              letterSpacing: 0.10,
-            ),
+          Row(
+            children: [
+              budgetProvider.isTotalBalanceVisible == true
+                  ? Text(
+                      HelperFunctions.numberCurrencyFormatter(
+                          budgetProvider.totalBalanceModel!),
+                      style: const TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        // White text color
+                        fontSize: 24,
+                        fontFamily: 'Readex Pro',
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                        letterSpacing: 0.10,
+                      ))
+                  : const Text("\$***,***,**",
+                      style: TextStyle(
+                        color: Color(0xFFFFFFFF),
+                        // White text color
+                        fontSize: 24,
+                        fontFamily: 'Readex Pro',
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                        letterSpacing: 0.10,
+                      )),
+              budgetProvider.isTotalBalanceVisible == true
+                  ? GestureDetector(
+                      onTap: () {
+                        budgetProvider.makeTotalBalanceVisible();
+                      },
+                      child: Image.asset(Assets.imagesView))
+                  : GestureDetector(
+                      onTap: () {
+                        budgetProvider.makeTotalBalanceVisible();
+                      },
+                      child: Image.asset(Assets.imagesHide)),
+              GestureDetector(
+                  onTap: () {
+                    _showBottomSheet(context, budgetProvider);
+                  },
+                  child: Image.asset(Assets.imagesPencil)),
+            ],
           ),
           const Spacer(),
           Row(
@@ -65,7 +100,7 @@ class CreditCard extends StatelessWidget {
                 style: TextStyle(
                   color: Color(0xFFE3F2FD),
                   // Light blue-grey text color
-                  fontSize: 16,
+                  fontSize: 18,
                   fontFamily: 'Readex Pro',
                   fontWeight: FontWeight.w500,
                   height: 1.5,
@@ -82,6 +117,87 @@ class CreditCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showBottomSheet(BuildContext context, BudgetProvider budgetProvider) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    'Edit Balances ',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    labelText: 'Total Balance',
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
+                  onSubmitted: (value) {
+                    budgetProvider.totalBalanceModel =
+                        double.tryParse(value) ?? 0;
+                  },
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 14, horizontal: 120),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: Colors.blueAccent,
+                    ),
+                    onPressed: () {
+                      budgetProvider.updateTheBudgetHistoryInTheDatabase();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Save Balances',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

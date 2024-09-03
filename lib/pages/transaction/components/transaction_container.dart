@@ -1,5 +1,5 @@
+import 'package:budgetingapp/core/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../models/transaction_model.dart';
 import '../../../widgets/entertainment_container.dart';
@@ -43,16 +43,15 @@ class TransactionContainer extends StatelessWidget {
                     transaction.category,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 17,
+                      fontSize: 15, // Adjusted font size for consistency
                     ),
                   ),
                   const SizedBox(height: 5),
                   Text(
                     transaction.title,
-                    // Assuming `title` is a property of `TransactionModel`
                     style: const TextStyle(
                       fontWeight: FontWeight.normal,
-                      fontSize: 15,
+                      fontSize: 15, // Adjusted font size for consistency
                     ),
                   ),
                 ],
@@ -65,20 +64,18 @@ class TransactionContainer extends StatelessWidget {
             children: [
               Text(
                 "-\$${transaction.amount}",
-                // Assuming `amount` is a property of `TransactionModel`
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 17,
+                  fontSize: 15, // Adjusted font size for consistency
                   color: Colors.red,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Text(
-                formatTime(transaction.date),
-                // Assuming `time` is a property of `TransactionModel`
+                HelperFunctions.formatTime(transaction.date),
                 style: const TextStyle(
                   fontWeight: FontWeight.normal,
-                  fontSize: 15,
+                  fontSize: 15, // Adjusted font size for consistency
                 ),
               ),
             ],
@@ -105,19 +102,7 @@ class TransactionContainer extends StatelessWidget {
       case "Personal care":
         return const HealthcareContainer();
       default:
-        return Container(); // You can define a default container or return a placeholder widget
+        return Container();
     }
-  }
-
-  String formatTime(int epochMillis) {
-    // Convert the epoch time to a DateTime object
-    final DateTime parsedTime =
-        DateTime.fromMillisecondsSinceEpoch(epochMillis);
-
-    // Format the time to include hour, minute, and AM/PM without leading zeros for the hour
-    final String formattedTime =
-        DateFormat('h:m a', 'en_US').format(parsedTime);
-
-    return formattedTime;
   }
 }

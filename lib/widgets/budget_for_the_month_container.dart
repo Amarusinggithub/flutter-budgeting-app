@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../core/utils/helper_functions.dart';
+import '../provider/budget_provider.dart';
 
 class BudgetForTheMonthContainer extends StatelessWidget {
   const BudgetForTheMonthContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context);
+    final width = budgetProvider.calculateTheBudgetPercentageForIndicator();
     return Container(
       width: 327,
       height: 104,
@@ -20,8 +26,8 @@ class BudgetForTheMonthContainer extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 'Budget for this Month',
                 style: TextStyle(
                   color: Colors.white,
@@ -31,9 +37,10 @@ class BudgetForTheMonthContainer extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$2,478',
+                HelperFunctions.numberCurrencyFormatter(
+                    budgetProvider.currentBudget!.planToSpend),
                 textAlign: TextAlign.right,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 21,
                   fontFamily: 'Inter',
@@ -58,7 +65,7 @@ class BudgetForTheMonthContainer extends StatelessWidget {
               ),
               Positioned(
                 child: Container(
-                  width: 250, // Adjust the width for the filled portion
+                  width: width ?? 250,
                   height: 6,
                   decoration: ShapeDecoration(
                     color: const Color(0xFF60A5FA),
@@ -70,6 +77,18 @@ class BudgetForTheMonthContainer extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Text(
+            'You have spend ${budgetProvider.calculateTheBudgetPercentage()}%',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),

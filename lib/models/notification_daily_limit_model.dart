@@ -9,7 +9,7 @@ class NotificationDailyLimitModel {
 
   factory NotificationDailyLimitModel.fromJson(Map<String, dynamic> map) {
     return NotificationDailyLimitModel(
-      limit: (map['limit'] ?? 0).toDouble(),
+      limit: map['limit'] != null ? map['limit'] as int : 0,
     );
   }
 }

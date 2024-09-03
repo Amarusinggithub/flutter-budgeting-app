@@ -13,19 +13,48 @@ class NotificationService extends ChangeNotifier {
   });
 
   void scheduleNotification(int num) {
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 10,
-        channelKey: 'Budgetting_app',
-        title: 'Add Today\'s Transactions',
-        body: 'Please add today transactions',
-      ),
-      schedule: NotificationInterval(
-        interval: num * 60 * 60,
-        timeZone: AwesomeNotifications.localTimeZoneIdentifier,
-        repeats: true,
-      ),
-    );
+    try {
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 10,
+          channelKey: 'Budgeting_app',
+          title: 'Add Today\'s Transactions',
+          body: 'Please add today transactions',
+        ),
+        schedule: NotificationInterval(
+          interval: num * 60 * 60,
+          timeZone: AwesomeNotifications.localTimeZoneIdentifier,
+          repeats: true,
+        ),
+      );
+      if (kDebugMode) {
+        print(" scheduling notification");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error scheduling notification: $e");
+      }
+    }
+  }
+
+  void immediateNotification() {
+    try {
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 10,
+          channelKey: 'Budgeting_app',
+          title: 'Add Today\'s Transactions',
+          body: 'Please add today transactions',
+        ),
+      );
+      if (kDebugMode) {
+        print(" creating immediate notification");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error creating immediate notification: $e");
+      }
+    }
   }
 
   Future<void> updateNotificationDailyLimit(
