@@ -110,8 +110,8 @@ class HomeScreen extends StatelessWidget {
                             isNavBarItem: true, tabIndex: 1);
                       },
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           color: Colors.white24,
                           borderRadius: BorderRadius.circular(15),

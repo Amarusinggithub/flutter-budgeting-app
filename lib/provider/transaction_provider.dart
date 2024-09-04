@@ -1,3 +1,4 @@
+import 'package:budgetingapp/core/utils/helper_functions.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -117,16 +118,26 @@ class TransactionProvider extends ChangeNotifier {
     final currentYear = now.year;
     final currentMonth = now.month;
 
-    final grouped = transactions.where((transaction) {
-      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
-      return date.year == currentYear && date.month == currentMonth;
-    }).groupListsBy(
-      (transaction) {
-        final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
-        return DateTime(date.year, date.month, date.day);
-      },
-    );
+    // Create a map that will hold the grouped transactions
+    final Map<DateTime, List<TransactionModel>> grouped = {};
 
+    // Populate the map with all days of the current week that days that have passed month, even if no transactions exist
+    for (int day = 1; day <= HelperFunctions.daysPassedInCurrentWeek(); day++) {
+      final date = DateTime(currentYear, currentMonth, day);
+      grouped[date] = []; // Initialize with an empty list
+    }
+
+    // Group existing transactions by day
+    for (var transaction in transactions) {
+      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
+
+      if (date.year == currentYear && date.month == currentMonth) {
+        final dayKey = DateTime(date.year, date.month, date.day);
+        grouped[dayKey]?.add(transaction);
+      }
+    }
+
+    // Convert the map entries to the list of DailyTransactionModel
     return grouped.entries
         .map((entry) =>
             DailyTransactionModel(date: entry.key, transactions: entry.value))
@@ -142,8 +153,8 @@ class TransactionProvider extends ChangeNotifier {
       final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
       return date.year == currentYear && date.month == currentMonth;
     }).groupListsBy(
-      (transaction) =>
-          _weekOfYear(DateTime.fromMillisecondsSinceEpoch(transaction.date)),
+      (transaction) => HelperFunctions.weekOfYear(
+          DateTime.fromMillisecondsSinceEpoch(transaction.date)),
     );
 
     return grouped.entries
@@ -151,12 +162,6 @@ class TransactionProvider extends ChangeNotifier {
         .map((entry) => WeeklyTransactionModel(
             weekNumber: entry.key, transactions: entry.value))
         .toList();
-  }
-
-  int _weekOfYear(DateTime date) {
-    final firstDayOfYear = DateTime(date.year, 1, 1);
-    final daysSinceFirstDay = date.difference(firstDayOfYear).inDays;
-    return (daysSinceFirstDay / 7).ceil();
   }
 
   List<MonthlyTransactionModel> _groupByMonth() {

@@ -111,6 +111,8 @@ class LineChartContainer extends StatelessWidget {
       maxY: maxY,
       lineBarsData: [
         LineChartBarData(
+          preventCurveOvershootingThreshold: 15,
+          preventCurveOverShooting: true,
           spots: points.map((point) => FlSpot(point.x, point.y)).toList(),
           isCurved: true,
           gradient: LinearGradient(

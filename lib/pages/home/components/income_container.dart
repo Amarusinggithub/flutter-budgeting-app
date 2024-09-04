@@ -1,3 +1,4 @@
+import 'package:budgetingapp/generated/assets.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,19 +24,19 @@ class IncomeContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsetsDirectional.all(10),
+            padding: const EdgeInsetsDirectional.all(10),
             height: 50,
             width: 50,
-            child: Image.asset(
-              "assets/images/income.png",
-              fit: BoxFit.contain,
-            ),
             decoration: BoxDecoration(
-              color: Color(0xFF388E3C), // Updated green color
+              color: const Color(0xFF388E3C), // Updated green color
               borderRadius: BorderRadius.circular(15),
             ),
+            child: Image.asset(
+              Assets.imagesIncome,
+              fit: BoxFit.contain,
+            ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text(

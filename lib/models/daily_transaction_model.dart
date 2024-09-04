@@ -10,5 +10,5 @@ class DailyTransactionModel {
   });
 
   double get totalAmount =>
-      transactions.fold(0, (sum, item) => sum + item.amount);
+      transactions.fold(0, (sum, item) => sum! + item.amount) ?? 0;
 }

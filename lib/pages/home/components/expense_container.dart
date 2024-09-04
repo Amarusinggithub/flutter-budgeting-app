@@ -1,3 +1,4 @@
+import 'package:budgetingapp/generated/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +34,7 @@ class ExpenseContainer extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Image.asset(
-              "assets/images/expense.png",
+              Assets.imagesExpense,
               fit: BoxFit.contain,
             ),
           ),
