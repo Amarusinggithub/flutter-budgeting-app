@@ -31,7 +31,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
         bottom: false,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -65,7 +65,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   ],
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 const DataSliderContainer(),
                 const SizedBox(
@@ -73,7 +73,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
                 const LineChartContainer(),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 GestureDetector(
                     onTap: () {
@@ -82,7 +82,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     },
                     child: const BudgetForTheMonthContainer()),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Column(
                   children: List.generate(

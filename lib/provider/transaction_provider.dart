@@ -144,6 +144,40 @@ class TransactionProvider extends ChangeNotifier {
         .toList();
   }
 
+  List<MonthlyTransactionModel> _groupByMonth() {
+    final now = DateTime.now();
+    final currentYear = now.year;
+
+    // Create a map that will hold the grouped transactions
+    final Map<DateTime, List<TransactionModel>> grouped = {};
+
+    // Populate the map with all months of the current year, even if no transactions exist
+    for (int month = 1; month <= now.month; month++) {
+      final date = DateTime(currentYear, month); // Up to the current month
+      grouped[date] = []; // Initialize with an empty list
+    }
+
+    // Group existing transactions by month within the current year
+    for (var transaction in transactions) {
+      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
+
+      // Only include transactions from the current year
+      if (date.year == currentYear) {
+        final monthKey = DateTime(date.year, date.month);
+        grouped[monthKey]
+            ?.add(transaction); // Add transaction to the appropriate month
+      }
+    }
+
+    // Convert the map entries into a list of MonthlyTransactionModel
+    return grouped.entries
+        .map((entry) => MonthlyTransactionModel(
+              month: entry.key,
+              transactions: entry.value,
+            ))
+        .toList();
+  }
+
   List<WeeklyTransactionModel> _groupByWeek() {
     final now = DateTime.now();
     final currentYear = now.year;
@@ -161,24 +195,6 @@ class TransactionProvider extends ChangeNotifier {
         .where((entry) => entry.value.isNotEmpty)
         .map((entry) => WeeklyTransactionModel(
             weekNumber: entry.key, transactions: entry.value))
-        .toList();
-  }
-
-  List<MonthlyTransactionModel> _groupByMonth() {
-    final now = DateTime.now();
-    final currentYear = now.year;
-
-    final grouped = transactions.where((transaction) {
-      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
-      return date.year == currentYear;
-    }).groupListsBy(
-      (transaction) =>
-          DateTime.fromMillisecondsSinceEpoch(transaction.date).month,
-    );
-
-    return grouped.entries
-        .map((entry) => MonthlyTransactionModel(
-            month: entry.key, transactions: entry.value))
         .toList();
   }
 

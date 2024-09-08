@@ -31,12 +31,20 @@ class TransactionContainer extends StatelessWidget {
         index < 0 ||
         index >= transactionsByDate.length) {
       return Container(
-        width: 370,
-        height: 79,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        margin: const EdgeInsets.only(bottom: 10),
+        height: 85,
+        width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white24,
-          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(2, 4),
+            ),
+          ],
         ),
         child: const Center(
           child: Text(
@@ -57,16 +65,25 @@ class TransactionContainer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       width: 370,
-      height: 79,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      height: 90,
+      // Increased height for better layout
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      // Adjusted padding for balance
       decoration: BoxDecoration(
-        color: Colors.white24,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(2, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
           getCategoryIcon(transaction),
-          const SizedBox(width: 16),
+          const SizedBox(width: 16), // Adequate space between icon and text
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,43 +93,44 @@ class TransactionContainer extends StatelessWidget {
                   transaction.category,
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 14, // Adjusted font size for consistency
-                    fontWeight: FontWeight.w600,
+                    fontSize: 16, // Increased font size for category
+                    fontWeight: FontWeight.bold, // Bold for emphasis
                     fontFamily: 'Inter',
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4), // More compact spacing
                 Text(
                   transaction.title,
                   style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14, // Adjusted font size for consistency
-                    fontWeight: FontWeight.w400,
+                    color: Colors.black54,
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    // Regular font weight for less emphasis
                     fontFamily: 'Inter',
                   ),
                 ),
               ],
             ),
           ),
+          const SizedBox(width: 10), // Space between text and amount
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "-${HelperFunctions.numberCurrencyFormatter(transaction.amount)}",
-                // Assuming `amount` is a property of `TransactionModel`
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 14, // Adjusted font size for consistency
-                  color: Colors.red,
+                  fontSize: 16, // Slightly larger font for the amount
+                  color: Colors.red, // Red for negative amounts
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 4), // More compact spacing
               Text(
                 HelperFunctions.formatTime(transaction.date),
                 style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14, // Adjusted font size for consistency
+                  color: Colors.black54, // Lighter color for time
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Inter',
                 ),

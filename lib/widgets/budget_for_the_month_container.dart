@@ -11,10 +11,10 @@ class BudgetForTheMonthContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     final width = budgetProvider.calculateTheBudgetPercentageForIndicator();
+
     return Container(
-      width: 327,
-      height: 104,
-      padding: const EdgeInsets.all(16),
+      width: double.infinity,
+      padding: const EdgeInsets.all(15),
       decoration: ShapeDecoration(
         color: const Color(0xFF3B82F6),
         shape: RoundedRectangleBorder(
@@ -31,33 +31,35 @@ class BudgetForTheMonthContainer extends StatelessWidget {
                 'Budget for this Month',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 13,
+                  fontSize: 14,
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Text(
-                HelperFunctions.numberCurrencyFormatter(
-                    budgetProvider.currentBudget!.planToSpend),
-                textAlign: TextAlign.right,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 21,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                // Use Expanded here to avoid overflow
+                child: Text(
+                  HelperFunctions.numberCurrencyFormatter(
+                      budgetProvider.currentBudget!.planToSpend),
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Stack(
             children: [
               Container(
-                width: 287,
-                height: 6,
+                width: 330,
+                height: 8,
                 decoration: ShapeDecoration(
                   color: const Color(0xFF93C5FD),
-                  // Lighter blue for the progress bar background
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(70),
                   ),
@@ -66,10 +68,9 @@ class BudgetForTheMonthContainer extends StatelessWidget {
               Positioned(
                 child: Container(
                   width: width ?? 250,
-                  height: 6,
+                  height: 8,
                   decoration: ShapeDecoration(
                     color: const Color(0xFF60A5FA),
-                    // Slightly darker blue for the filled portion
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(70),
                     ),
@@ -78,17 +79,33 @@ class BudgetForTheMonthContainer extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(
-            height: 7,
-          ),
-          Text(
-            'You have spend ${budgetProvider.calculateTheBudgetPercentage()}%',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w600,
-            ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'You have spent ${budgetProvider.calculateTheBudgetPercentage()}%',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Text(
+                HelperFunctions.numberCurrencyFormatter(
+                    budgetProvider.currentBudget!.expense),
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
           ),
         ],
       ),

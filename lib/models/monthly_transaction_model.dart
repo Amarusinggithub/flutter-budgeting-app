@@ -1,7 +1,7 @@
 import 'package:budgetingapp/models/transaction_model.dart';
 
 class MonthlyTransactionModel {
-  int month;
+  DateTime month;
   List<TransactionModel> transactions;
 
   MonthlyTransactionModel({

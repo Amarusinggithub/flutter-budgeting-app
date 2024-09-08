@@ -2,10 +2,12 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:budgetingapp/provider/notification_provider.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
+import 'package:budgetingapp/provider/user_data_provider.dart';
 import 'package:budgetingapp/services/auth_service.dart';
 import 'package:budgetingapp/services/budget_service.dart';
 import 'package:budgetingapp/services/notification_service.dart';
 import 'package:budgetingapp/services/transaction_service.dart';
+import 'package:budgetingapp/services/user_data_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,9 @@ class MyApp extends StatelessWidget {
 
   List<ChangeNotifierProvider> _serviceProviders() {
     return [
+      ChangeNotifierProvider<UserDataService>(
+        create: (context) => UserDataService(auth: FirebaseAuth.instance),
+      ),
       ChangeNotifierProvider<AuthService>(
         create: (context) => AuthService(auth: FirebaseAuth.instance),
       ),
@@ -77,6 +82,11 @@ class MyApp extends StatelessWidget {
 
   List<ChangeNotifierProvider> _stateProviders() {
     return [
+      ChangeNotifierProvider<UserDataProvider>(
+        create: (context) => UserDataProvider(
+          userDataService: context.read<UserDataService>(),
+        ),
+      ),
       ChangeNotifierProvider<NotificationProvider>(
         create: (context) => NotificationProvider(
           notificationService: context.read<NotificationService>(),

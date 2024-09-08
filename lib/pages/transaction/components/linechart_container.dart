@@ -144,45 +144,28 @@ class LineChartContainer extends StatelessWidget {
   }
 
   Text bottomTitleForMonths(int value) {
-    switch (value.toInt()) {
-      case 0:
-        return const Text('JAN',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 1:
-        return const Text('FEB',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 2:
-        return const Text('MAR',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 3:
-        return const Text('APR',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 4:
-        return const Text('MAY',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 5:
-        return const Text('JUN',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 6:
-        return const Text('JUL',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 7:
-        return const Text('AUG',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 8:
-        return const Text('SEP',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 9:
-        return const Text('OCT',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 10:
-        return const Text('NOV',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      case 11:
-        return const Text('DEC',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16));
-      default:
-        return const Text('');
+    final months = [
+      'JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MAY',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OCT',
+      'NOV',
+      'DEC'
+    ];
+
+    if (value >= 0 && value < months.length) {
+      return Text(
+        months[value],
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      );
+    } else {
+      return const Text('');
     }
   }
 

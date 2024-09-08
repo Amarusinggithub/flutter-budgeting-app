@@ -14,19 +14,31 @@ class TransactionContainer extends StatelessWidget {
   final int index;
   final List<dynamic>? transactionsByDate;
 
-  const TransactionContainer(
-      {super.key, required this.index, required this.transactionsByDate});
+  const TransactionContainer({
+    super.key,
+    required this.index,
+    required this.transactionsByDate,
+  });
 
   @override
   Widget build(BuildContext context) {
     final transaction = transactionsByDate![index];
 
     return Container(
-      padding: const EdgeInsetsDirectional.all(5),
-      height: 75,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      margin: const EdgeInsets.only(bottom: 10),
+      height: 85,
       width: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(2, 4),
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,7 +46,7 @@ class TransactionContainer extends StatelessWidget {
           Row(
             children: [
               getCategoryIcon(transaction),
-              const SizedBox(width: 10),
+              const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -43,15 +55,17 @@ class TransactionContainer extends StatelessWidget {
                     transaction.category,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15, // Adjusted font size for consistency
+                      fontSize: 16,
+                      color: Colors.black87,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 6),
                   Text(
                     transaction.title,
                     style: const TextStyle(
                       fontWeight: FontWeight.normal,
-                      fontSize: 15, // Adjusted font size for consistency
+                      fontSize: 15,
+                      color: Colors.black54,
                     ),
                   ),
                 ],
@@ -66,20 +80,21 @@ class TransactionContainer extends StatelessWidget {
                 "-\$${transaction.amount}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15, // Adjusted font size for consistency
+                  fontSize: 16,
                   color: Colors.red,
                 ),
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               Text(
                 HelperFunctions.formatTime(transaction.date),
                 style: const TextStyle(
                   fontWeight: FontWeight.normal,
-                  fontSize: 15, // Adjusted font size for consistency
+                  fontSize: 14,
+                  color: Colors.black54,
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

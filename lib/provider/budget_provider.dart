@@ -6,6 +6,7 @@ import 'package:budgetingapp/services/budget_service.dart';
 import 'package:flutter/foundation.dart';
 
 class BudgetProvider extends ChangeNotifier {
+  double userIncomeInput = 0;
   bool isTotalBalanceVisible = true;
   BudgetModel? currentBudget;
   double? totalBalanceModel;
@@ -124,9 +125,16 @@ class BudgetProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateIncome(double newIncome) {
+  void addNewIncome() {
     if (currentBudget != null) {
-      currentBudget!.income += newIncome;
+      currentBudget!.income += userIncomeInput;
+    }
+    notifyListeners();
+  }
+
+  void editIncome() {
+    if (currentBudget != null) {
+      currentBudget!.income = userIncomeInput;
     }
     notifyListeners();
   }
@@ -179,7 +187,6 @@ class BudgetProvider extends ChangeNotifier {
     if (currentBudget!.planToSpend == 0) {
       return 0;
     }
-    notifyListeners();
     return ((num / currentBudget!.planToSpend) * 100).round();
   }
 
@@ -187,10 +194,9 @@ class BudgetProvider extends ChangeNotifier {
     if (currentBudget != null && currentBudget!.planToSpend != 0) {
       double percentage =
           (currentBudget!.expense / currentBudget!.planToSpend) * 100;
-      double result = (percentage / 100) * 287;
+      double result = (percentage / 100) * 330;
       return result;
     }
-    notifyListeners();
     return null;
   }
 
@@ -200,7 +206,6 @@ class BudgetProvider extends ChangeNotifier {
           ((currentBudget!.expense / currentBudget!.planToSpend) * 100).toInt();
       return percentage;
     }
-    notifyListeners();
     return null;
   }
 
@@ -209,7 +214,6 @@ class BudgetProvider extends ChangeNotifier {
 
     final category =
         currentBudget!.categories.firstWhere((c) => c.name == categoryName);
-    notifyListeners();
     return category.planToSpend;
   }
 

@@ -1,9 +1,11 @@
+import 'package:budgetingapp/widgets/budget_for_the_month_container.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/budget_provider.dart';
+import 'components/indicator.dart';
 import 'components/piechart_container.dart';
-import 'components/total_balance_and_expense_container.dart';
+import 'components/total_income_and_plan_to_spend_container.dart';
 
 class BudgetScreen extends StatelessWidget {
   const BudgetScreen({super.key});
@@ -21,7 +23,7 @@ class BudgetScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
             child: Column(
               children: [
                 Row(
@@ -54,9 +56,67 @@ class BudgetScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                const TotalBalanceAndExpenseContainer(),
-                const SizedBox(height: 50),
+                const TotalIncomeAndPlanTOSpendContainer(),
+                const SizedBox(height: 30),
                 PieChartContainer(),
+                const SizedBox(
+                  height: 30,
+                ),
+                const BudgetForTheMonthContainer(),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Indicator(
+                            color: Colors.blue,
+                            text: 'Transportation',
+                            isSquare: false),
+                        SizedBox(height: 20),
+                        Indicator(
+                            color: Colors.orange,
+                            text: 'Utilities',
+                            isSquare: false),
+                        SizedBox(height: 20),
+                        Indicator(
+                            color: Colors.purple,
+                            text: 'Housing',
+                            isSquare: false),
+                        SizedBox(height: 20),
+                        Indicator(
+                            color: Colors.green,
+                            text: 'Shopping',
+                            isSquare: false),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Indicator(
+                            color: Colors.yellow,
+                            text: 'Entertainment',
+                            isSquare: false),
+                        SizedBox(height: 20),
+                        Indicator(
+                            color: Colors.red,
+                            text: 'Groceries',
+                            isSquare: false),
+                        SizedBox(height: 20),
+                        Indicator(
+                            color: Colors.pink,
+                            text: 'Personal care',
+                            isSquare: false),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -93,21 +153,6 @@ class BudgetScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    labelText: 'Income',
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                  ),
-                  onSubmitted: (value) {
-                    budgetProvider.updateIncome(double.tryParse(value) ?? 0);
-                  },
-                ),
                 const SizedBox(height: 5),
                 // Map through categories and create text fields for each
                 ...budgetProvider.currentBudget!.categories.map((category) {
@@ -137,8 +182,8 @@ class BudgetScreen extends StatelessWidget {
                       ),
                     ],
                   );
-                }).toList(),
-                // .toList() ensures that the iterable is converted to a list for rendering
+                }),
+
                 const SizedBox(height: 10),
                 Center(
                   child: ElevatedButton(

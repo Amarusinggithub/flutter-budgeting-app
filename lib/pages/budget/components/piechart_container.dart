@@ -3,12 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'indicator.dart';
-
 class PieChartContainer extends StatelessWidget {
-  PieChartContainer({
-    super.key,
-  });
+  PieChartContainer({super.key});
 
   int touchedIndex = -1;
 
@@ -29,87 +25,71 @@ class PieChartContainer extends StatelessWidget {
     final personalCare = budgetProvider.getCategoryPlanToSpend("Personal care");
     final groceries = budgetProvider.getCategoryPlanToSpend("Groceries");
 
-    return Column(
-      children: [
-        SizedBox(
-          height: 300,
-          child: AspectRatio(
-            aspectRatio: 1.4,
-            child: PieChart(
-              PieChartData(
-                pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                    if (!event.isInterestedForInteractions ||
-                        pieTouchResponse == null ||
-                        pieTouchResponse.touchedSection == null) {
-                      touchedIndex = -1;
-                      return;
-                    }
-                    touchedIndex =
-                        pieTouchResponse.touchedSection!.touchedSectionIndex;
-                  },
+    return Container(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 260, // Increased the size to reduce fuzziness
+            width: 260,
+            child: Stack(
+              children: [
+                PieChart(
+                  PieChartData(
+                    pieTouchData: PieTouchData(
+                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      },
+                    ),
+                    borderData: FlBorderData(show: false),
+                    sectionsSpace: 5,
+                    centerSpaceRadius: 75,
+                    // Increased center space
+                    sections: _showingSections(
+                      utilities,
+                      transportation,
+                      housing,
+                      shopping,
+                      entertainment,
+                      groceries,
+                      personalCare,
+                      context,
+                    ),
+                  ),
                 ),
-                borderData: FlBorderData(show: false),
-                sectionsSpace: 0,
-                centerSpaceRadius: 30,
-                sections: _showingSections(
-                  utilities,
-                  transportation,
-                  housing,
-                  shopping,
-                  entertainment,
-                  groceries,
-                  personalCare,
-                  context,
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Expense',
+                        style: TextStyle(
+                          fontSize: 20, // Adjusted text size
+                          color: Colors.white54,
+                        ),
+                      ),
+                      Text(
+                        '\$${budgetProvider.currentBudget!.expense}',
+                        style: const TextStyle(
+                          fontSize: 24, // Adjusted text size
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-        ),
-        const SizedBox(height: 30),
-        // Indicators for the pie chart sections
-        const Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Indicator(
-                    color: Colors.blue,
-                    text: 'Transportation',
-                    isSquare: false),
-                SizedBox(height: 20),
-                Indicator(
-                    color: Colors.orange, text: 'Utilities', isSquare: false),
-                SizedBox(height: 20),
-                Indicator(
-                    color: Colors.purple, text: 'Housing', isSquare: false),
-                SizedBox(height: 20),
-                Indicator(
-                    color: Colors.green, text: 'Shopping', isSquare: false),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Indicator(
-                    color: Colors.yellow,
-                    text: 'Entertainment',
-                    isSquare: false),
-                SizedBox(height: 20),
-                Indicator(
-                    color: Colors.red, text: 'Groceries', isSquare: false),
-                SizedBox(height: 20),
-                Indicator(
-                    color: Colors.pink, text: 'Personal care', isSquare: false),
-              ],
-            ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -125,8 +105,9 @@ class PieChartContainer extends StatelessWidget {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     return List.generate(budgetProvider.currentBudget!.categories.length, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 28.0 : 18.0;
-      final radius = isTouched ? 80.0 : 70.0;
+      final fontSize =
+          isTouched ? 24.0 : 18.0; // Increased font size for clarity
+      final radius = isTouched ? 85.0 : 70.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       switch (i) {
@@ -143,6 +124,10 @@ class PieChartContainer extends StatelessWidget {
               color: Colors.white,
               shadows: shadows,
             ),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.6),
+              width: isTouched ? 4 : 2,
+            ),
           );
         case 1:
           return PieChartSectionData(
@@ -156,6 +141,10 @@ class PieChartContainer extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Colors.white,
               shadows: shadows,
+            ),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.6),
+              width: isTouched ? 4 : 2,
             ),
           );
         case 2:
@@ -171,6 +160,10 @@ class PieChartContainer extends StatelessWidget {
               color: Colors.white,
               shadows: shadows,
             ),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.6),
+              width: isTouched ? 4 : 2,
+            ),
           );
         case 3:
           return PieChartSectionData(
@@ -184,6 +177,10 @@ class PieChartContainer extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Colors.white,
               shadows: shadows,
+            ),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.6),
+              width: isTouched ? 4 : 2,
             ),
           );
         case 4:
@@ -199,6 +196,10 @@ class PieChartContainer extends StatelessWidget {
               color: Colors.white,
               shadows: shadows,
             ),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.6),
+              width: isTouched ? 4 : 2,
+            ),
           );
         case 5:
           return PieChartSectionData(
@@ -213,6 +214,10 @@ class PieChartContainer extends StatelessWidget {
               color: Colors.white,
               shadows: shadows,
             ),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.6),
+              width: isTouched ? 4 : 2,
+            ),
           );
         case 6:
           return PieChartSectionData(
@@ -226,6 +231,10 @@ class PieChartContainer extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Colors.white,
               shadows: shadows,
+            ),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.6),
+              width: isTouched ? 4 : 2,
             ),
           );
         default:

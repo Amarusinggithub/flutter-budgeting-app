@@ -9,14 +9,6 @@ class HelpSupportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Help & Support',
-          style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.white, fontSize: 24),
-        ),
-        backgroundColor: Colors.blueAccent,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

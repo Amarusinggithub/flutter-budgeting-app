@@ -15,17 +15,27 @@ class CreditCard extends StatelessWidget {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     return Container(
       width: 354.84,
-      height: 180.0,
+      height: 190.0,
       padding: const EdgeInsets.all(20),
-      decoration: ShapeDecoration(
+      decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF42A5F5), Color(0xFF64B5F6)],
+          colors: [
+            Color(0xFF42A5F5),
+            Color(0xFF64B5F6),
+            Color(0xFF1976D2),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
+          stops: [0.0, 0.4, 1.0],
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            offset: const Offset(5, 5),
+            blurRadius: 10,
+          ),
+        ],
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,66 +43,63 @@ class CreditCard extends StatelessWidget {
           Row(
             children: [
               const Text(
-                'Total Balance',
+                'Available Balance',
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
-                  fontSize: 16,
+                  fontSize: 18,
+
                   fontFamily: 'Readex Pro',
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
+                  // More weight for the title
                   height: 1.5,
-                  letterSpacing: 0.10,
+                  letterSpacing: 0.5,
                 ),
               ),
-              const SizedBox(
-                width: 120,
-              ),
+              const Spacer(),
               Image.asset(
                 Assets.imagesCreditCard,
                 fit: BoxFit.contain,
-                height: 33,
-                width: 33,
+                height: 30,
+                width: 30,
               ),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               Image.asset(
                 Assets.imagesWifi,
                 fit: BoxFit.contain,
-                height: 33,
-                width: 33,
+                height: 30,
+                width: 30,
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
           Row(
             children: [
-              budgetProvider.isTotalBalanceVisible == true
+              budgetProvider.isTotalBalanceVisible
                   ? Text(
                       HelperFunctions.numberCurrencyFormatter(
                           budgetProvider.totalBalanceModel!),
                       style: const TextStyle(
                         color: Color(0xFFFFFFFF),
-                        // White text color
-                        fontSize: 24,
+                        fontSize: 26,
                         fontFamily: 'Readex Pro',
                         fontWeight: FontWeight.bold,
                         height: 1.2,
-                        letterSpacing: 0.10,
-                      ))
-                  : const Text("\$**********",
+                        letterSpacing: 0.5,
+                      ),
+                    )
+                  : const Text(
+                      "\$**********",
                       style: TextStyle(
                         color: Color(0xFFFFFFFF),
-                        // White text color
-                        fontSize: 25,
+                        fontSize: 26,
                         fontFamily: 'Readex Pro',
                         fontWeight: FontWeight.bold,
                         height: 1.2,
-                        letterSpacing: 0.10,
-                      )),
-              const SizedBox(
-                width: 10,
-              ),
-              budgetProvider.isTotalBalanceVisible == true
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+              const SizedBox(width: 10),
+              budgetProvider.isTotalBalanceVisible
                   ? GestureDetector(
                       onTap: () {
                         budgetProvider.makeTotalBalanceVisible();
@@ -100,9 +107,10 @@ class CreditCard extends StatelessWidget {
                       child: Image.asset(
                         Assets.imagesView,
                         fit: BoxFit.contain,
-                        height: 28,
-                        width: 28,
-                      ))
+                        height: 22,
+                        width: 22,
+                      ),
+                    )
                   : GestureDetector(
                       onTap: () {
                         budgetProvider.makeTotalBalanceVisible();
@@ -110,22 +118,21 @@ class CreditCard extends StatelessWidget {
                       child: Image.asset(
                         Assets.imagesHide,
                         fit: BoxFit.contain,
-                        height: 28,
-                        width: 28,
+                        height: 22,
+                        width: 22,
                       )),
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
               GestureDetector(
-                  onTap: () {
-                    _showBottomSheet(context, budgetProvider);
-                  },
-                  child: Image.asset(
-                    Assets.imagesPencil,
-                    fit: BoxFit.contain,
-                    height: 28,
-                    width: 28,
-                  )),
+                onTap: () {
+                  _showBottomSheet(context, budgetProvider);
+                },
+                child: Image.asset(
+                  Assets.imagesPencil,
+                  fit: BoxFit.contain,
+                  height: 22,
+                  width: 22,
+                ),
+              ),
             ],
           ),
           const Spacer(),
@@ -136,12 +143,12 @@ class CreditCard extends StatelessWidget {
                 '**** **** **** 1234',
                 style: TextStyle(
                   color: Color(0xFFE3F2FD),
-                  // Light blue-grey text color
-                  fontSize: 18,
+                  fontSize: 22,
+                  // Reduced font size for secondary info
                   fontFamily: 'Readex Pro',
                   fontWeight: FontWeight.w500,
                   height: 1.5,
-                  letterSpacing: 0.10,
+                  letterSpacing: 0.5,
                 ),
               ),
               Image.asset(
@@ -180,7 +187,7 @@ class CreditCard extends StatelessWidget {
               children: [
                 const Center(
                   child: Text(
-                    'Edit Balances ',
+                    'Edit Balances',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -195,7 +202,7 @@ class CreditCard extends StatelessWidget {
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    labelText: 'Total Balance',
+                    labelText: 'Balance',
                     filled: true,
                     fillColor: Colors.grey[200],
                   ),

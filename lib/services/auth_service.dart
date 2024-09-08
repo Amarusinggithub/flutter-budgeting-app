@@ -5,17 +5,19 @@ import 'package:flutter/foundation.dart';
 class AuthService extends ChangeNotifier {
   final FirebaseAuth auth;
 
-  AuthService({required this.auth});
+  AuthService({
+    required this.auth,
+  });
 
   Future<void> login(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
-      notifyListeners();
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
     }
+    notifyListeners();
   }
 
   Future<void> signUp(String email, String password) async {
@@ -24,13 +26,12 @@ class AuthService extends ChangeNotifier {
           email: email, password: password);
 
       FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid);
-
-      notifyListeners();
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
     }
+    notifyListeners();
   }
 
   Future<void> logout() async {
