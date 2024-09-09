@@ -3,6 +3,8 @@ class Assets {
   Assets._();
 
   static const String imagesBudget = 'assets/images/budget.png';
+  static const String imagesClipManSavingBitcoinInPiggyBank =
+      'assets/images/clip-man-saving-bitcoin-in-piggy-bank.png';
   static const String imagesCreditCard = 'assets/images/credit-card.png';
   static const String imagesEntertainment = 'assets/images/entertainment.png';
   static const String imagesExpense = 'assets/images/expense.png';
@@ -19,5 +21,7 @@ class Assets {
   static const String imagesTransportation = 'assets/images/transportation.png';
   static const String imagesUtilities = 'assets/images/utilities.png';
   static const String imagesView = 'assets/images/view.png';
+  static const String imagesWalletMobileApp =
+      'assets/images/wallet-mobile-app.png';
   static const String imagesWifi = 'assets/images/wifi.png';
 }

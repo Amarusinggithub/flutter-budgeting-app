@@ -1,3 +1,4 @@
+import 'package:budgetingapp/pages/onboarding/get_started_screen.dart';
 import 'package:budgetingapp/pages/transaction/transaction_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import '../../core/routes/routes.dart';
 import '../../services/auth_service.dart';
-import '../authentication/login_screen.dart';
 import '../budget/budget_screen.dart';
 import '../home/home_screen.dart';
 import '../profile/profile_screen.dart';
@@ -71,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     return authService.auth.currentUser == null
-        ? const LoginScreen()
+        ? const GetStartedScreen()
         : PersistentTabView(
             context,
             controller: _controller,

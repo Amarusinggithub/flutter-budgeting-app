@@ -1,3 +1,7 @@
+import 'package:budgetingapp/provider/budget_provider.dart';
+import 'package:budgetingapp/provider/notification_provider.dart';
+import 'package:budgetingapp/provider/transaction_provider.dart';
+import 'package:budgetingapp/provider/user_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +12,6 @@ class LogoutContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
     return Container(
       padding:
           const EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
@@ -20,7 +23,7 @@ class LogoutContainer extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          _showLogoutDialog(context, authService);
+          _showLogoutDialog(context);
         },
         child: const Row(
           children: [
@@ -35,7 +38,15 @@ class LogoutContainer extends StatelessWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context, AuthService authService) {
+  void _showLogoutDialog(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final budgetProvider = Provider.of<BudgetProvider>(context, listen: false);
+    final transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
+    final notificationProvider =
+        Provider.of<NotificationProvider>(context, listen: false);
+    final userDataProvider =
+        Provider.of<UserDataProvider>(context, listen: false);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -52,6 +63,10 @@ class LogoutContainer extends StatelessWidget {
             TextButton(
               child: const Text("Yes"),
               onPressed: () {
+                budgetProvider.updateTheBudgetHistoryInTheDatabase();
+                transactionProvider.updateTheTransactionsInTheDatabase();
+                notificationProvider.updateNotificationDailyLimit();
+                userDataProvider.updateUserData();
                 authService.logout();
                 Navigator.of(context).pop();
               },

@@ -85,6 +85,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<UserDataProvider>(
         create: (context) => UserDataProvider(
           userDataService: context.read<UserDataService>(),
+          authService: context.read<AuthService>(),
         ),
       ),
       ChangeNotifierProvider<NotificationProvider>(

@@ -56,15 +56,14 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateTheTransactionsInTheDatabase(
-      List<TransactionModel> updatedTransactions) async {
-    await transactionService.updateTransactionsInDatabase(updatedTransactions);
+  Future<void> updateTheTransactionsInTheDatabase() async {
+    await transactionService.updateTransactionsInDatabase(transactions);
   }
 
   Future<void> deleteTransaction(TransactionModel transaction) async {
     transactions.remove(transaction);
     organizeTransactionsByDate();
-    await updateTheTransactionsInTheDatabase(transactions);
+    await updateTheTransactionsInTheDatabase();
     notifyListeners();
   }
 
@@ -73,7 +72,7 @@ class TransactionProvider extends ChangeNotifier {
     if (index != -1) {
       transactions[index] = transaction;
       organizeTransactionsByDate();
-      await updateTheTransactionsInTheDatabase(transactions);
+      await updateTheTransactionsInTheDatabase();
       notifyListeners();
     }
   }
@@ -218,7 +217,7 @@ class TransactionProvider extends ChangeNotifier {
   Future<void> addTransaction(TransactionModel transaction) async {
     transactions.add(transaction);
     organizeTransactionsByDate();
-    await updateTheTransactionsInTheDatabase(transactions);
+    await updateTheTransactionsInTheDatabase();
 
     await budgetProvider.updateCategorySpentWithTransactionAmount(transaction);
   }
