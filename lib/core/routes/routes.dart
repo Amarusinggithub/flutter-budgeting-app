@@ -8,6 +8,7 @@ import '../../pages/authentication/login_screen.dart';
 import '../../pages/authentication/register_screen.dart';
 import '../../pages/main/main_screen.dart';
 import '../../pages/notification/notification_screen.dart';
+import '../../pages/onboarding/get_started_screen.dart';
 import '../../pages/profile/profile_screen.dart';
 
 class AppRoutes {
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String termsAndConditions = "/termsAndConditions";
   static const String setUpBudget = "/setUpBudget";
   static const String finishOnboarding = "/finishOnboarding";
+  static const String getStartedPage = "/getStartedPage";
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -33,6 +35,7 @@ class AppRoutes {
       whyChooseAppPage: (context) => const WhyDidYouChooseThisApp(),
       setUpBudget: (context) => const SetUpInitialBudgetOnboardingScreen(),
       finishOnboarding: (context) => const FinishOnboardingProcessScreen(),
+      getStartedPage: (context) => const GetStartedScreen(),
     };
   }
 }

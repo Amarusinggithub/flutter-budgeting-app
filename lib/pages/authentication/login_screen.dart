@@ -144,7 +144,7 @@ class LoginScreen extends StatelessWidget {
 
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.register);
+                    Navigator.pushNamed(context, AppRoutes.getStartedPage);
                   },
                   child: const Text(
                     "Not yet Registered? Sign Up Now",

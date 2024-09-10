@@ -18,8 +18,8 @@ class FinishOnboardingProcessScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xFF1976D2), // Soft blue
-              Color(0xFFF1F8E9), // Light greenish white
+              Color(0xFF1976D2),
+              Color(0xFFF1F8E9),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -31,7 +31,7 @@ class FinishOnboardingProcessScreen extends StatelessWidget {
           children: [
             // Success icon
             Image.asset(
-              Assets.imagesTick, // Success tick image
+              Assets.imagesTick,
               width: 180,
               height: 180,
               fit: BoxFit.contain,
@@ -42,7 +42,7 @@ class FinishOnboardingProcessScreen extends StatelessWidget {
             const Text(
               "Congratulations!",
               style: TextStyle(
-                fontSize: 28, // Larger size for emphasis
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -66,7 +66,6 @@ class FinishOnboardingProcessScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 userDataProvider.toggleDidUserFinishOnboarding();
-                // Close onboarding
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
