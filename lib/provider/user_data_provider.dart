@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import '../core/utils/validators.dart';
 
 class UserDataProvider extends ChangeNotifier {
+  bool didUserFinishOnboarding = false;
   UserDataModel? userDataModel;
   UserDataService userDataService;
   AuthService authService;
@@ -19,12 +20,21 @@ class UserDataProvider extends ChangeNotifier {
   String _username = "";
   String _email = "";
   String _password = "";
+  String _confirmPassword = "";
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   String get username => _username;
 
   String get email => _email;
 
   String get password => _password;
+
+  String get confirmPassword => _confirmPassword;
+
+  bool get isPasswordVisible => _isPasswordVisible;
+
+  bool get isConfirmPasswordVisible => _isConfirmPasswordVisible;
 
   UserDataProvider({
     required this.userDataService,
@@ -54,9 +64,11 @@ class UserDataProvider extends ChangeNotifier {
   Future<void> createNewUserData() async {
     UserDataModel newUserData = UserDataModel(username: '', email: '');
     userDataModel = newUserData;
-    if (kDebugMode) {
-      print("Created new userdata: ${userDataModel?.email}");
-    }
+    notifyListeners();
+  }
+
+  Future<void> updateUserData() async {
+    await userDataService.updateUserDataInDatabase(userDataModel!);
     notifyListeners();
   }
 
@@ -75,21 +87,44 @@ class UserDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateUserData() async {
-    await userDataService.updateUserDataInDatabase(userDataModel!);
+  void setConfirmPassword(String confirmPassword) {
+    _confirmPassword = confirmPassword;
     notifyListeners();
   }
 
+  void togglePasswordVisibility() {
+    _isPasswordVisible = !_isPasswordVisible;
+    notifyListeners();
+  }
+
+  void toggleConfirmPasswordVisibility() {
+    _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+    notifyListeners();
+  }
+
+  bool validateFields() {
+    return _username.isNotEmpty &&
+        _email.isNotEmpty &&
+        _password.isNotEmpty &&
+        _confirmPassword.isNotEmpty &&
+        _password == _confirmPassword;
+  }
+
   Future<void> register() async {
-    await authService.signUp(email, password);
-    userDataModel?.username = _username;
-    userDataModel?.email = authService.auth.currentUser?.email ?? '';
-    await budgetProvider.updateTheBudgetHistoryInTheDatabase();
-    await transactionProvider.updateTheTransactionsInTheDatabase();
-    await notificationProvider.updateNotificationDailyLimit();
-    await updateUserData();
-    if (Validators.validateEmail(email) &&
-        Validators.validatePassword(password)) {}
+    // Check if all fields are valid
+    if (validateFields()) {
+      await authService.signUp(email, password);
+      userDataModel?.username = _username;
+      userDataModel?.email = authService.auth.currentUser?.email ?? '';
+      await budgetProvider.updateTheBudgetHistoryInTheDatabase();
+      await transactionProvider.updateTheTransactionsInTheDatabase();
+      await notificationProvider.updateNotificationDailyLimit();
+      await updateUserData();
+      if (Validators.validateEmail(email) &&
+          Validators.validatePassword(email)) {}
+    } else {
+      throw Exception("All fields must be filled, and passwords must match.");
+    }
   }
 
   Future<void> login() async {
@@ -101,5 +136,10 @@ class UserDataProvider extends ChangeNotifier {
 
     if (Validators.validateEmail(email) &&
         Validators.validatePassword(email)) {}
+  }
+
+  void toggleDidUserFinishOnboarding() {
+    didUserFinishOnboarding = !didUserFinishOnboarding;
+    notifyListeners();
   }
 }

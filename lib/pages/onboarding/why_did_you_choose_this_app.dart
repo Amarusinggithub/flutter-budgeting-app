@@ -164,18 +164,20 @@ class WhyDidYouChooseThisApp extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: userSelectionProvider.selectedOptions.isNotEmpty
                       ? () {
-                          Navigator.pushNamed(context, AppRoutes.setUpBudget);
+                          Navigator.pushNamed(context, AppRoutes.register);
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    minimumSize: const Size.fromHeight(60),
+                    elevation: 5,
                     backgroundColor:
                         userSelectionProvider.selectedOptions.isNotEmpty
                             ? Colors.blueAccent
                             : Colors.grey[400],
+                    fixedSize: const Size(360, 55),
                   ),
                   child: const Text(
                     "Continue",

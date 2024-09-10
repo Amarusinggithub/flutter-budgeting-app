@@ -11,116 +11,137 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userDataProvider = Provider.of<UserDataProvider>(context);
+
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF1976D2),
-                Color(0xFFF1F8E9),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+      resizeToAvoidBottomInset: true,
+      body: Stack(
+        children: [
+          // Background gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF1976D2),
+                  Color(0xFFF1F8E9),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 60),
+          Positioned(
+            top: 40,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Image.asset(
+                Assets.imagesWalletMobileApp,
+                fit: BoxFit.contain,
+                height: 220,
+                width: 220,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 270,
+            left: 20,
+            right: 20,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const Text(
                   "Login",
                   style: TextStyle(
-                    color: Color(0xFF6D77FB),
+                    color: Color(0xFFBBDEFB),
                     fontWeight: FontWeight.bold,
-                    fontSize: 60,
+                    fontSize: 32,
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
 
-                Image.asset(
-                  Assets.imagesWalletMobileApp,
-                  fit: BoxFit.contain,
-                  height: 250,
-                  width: 250,
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
+                // Email Field
                 TextField(
                   onChanged: (value) {
-                    // Update email in the provider
                     userDataProvider.setEmail(value);
                   },
                   decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.person,
-                        color: Colors.blueAccent,
-                      ),
-                      hintText: "Email",
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.4)),
-                  style: const TextStyle(fontSize: 18),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.person,
+                      color: Colors.blueAccent,
+                    ),
+                    hintText: "Email",
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.4),
+                  ),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 25),
-                // Adjusted spacing
+                const SizedBox(height: 16),
 
+                // Password Field
                 TextField(
                   onChanged: (value) {
                     userDataProvider.setPassword(value);
                   },
-                  obscureText: true,
+                  obscureText: !userDataProvider.isPasswordVisible,
                   decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.lock,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.blueAccent,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        userDataProvider.isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                         color: Colors.blueAccent,
                       ),
-                      hintText: "Password",
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.4)),
-                  style: const TextStyle(fontSize: 18),
+                      onPressed: () {
+                        userDataProvider.togglePasswordVisibility();
+                      },
+                    ),
+                    hintText: "Password",
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.4),
+                  ),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
 
-                // Sign In Button
                 ElevatedButton(
                   onPressed: () {
                     userDataProvider.login();
+                    userDataProvider.toggleDidUserFinishOnboarding();
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                     elevation: 5,
                     backgroundColor: Colors.blueAccent,
-                    fixedSize: const Size(360, 60), // Standardized button size
+                    fixedSize: const Size(360, 55),
                   ),
                   child: const Text(
                     "Sign In",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
-                      fontSize: 22, // Clean and bold font
+                      fontSize: 18,
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Adjusted space after the button
 
-                // Sign Up Text
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.register);
@@ -129,7 +150,7 @@ class LoginScreen extends StatelessWidget {
                     "Not yet Registered? Sign Up Now",
                     style: TextStyle(
                       color: Color(0xFF6D77FB),
-                      fontSize: 16, // Increased font size for readability
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -137,7 +158,7 @@ class LoginScreen extends StatelessWidget {
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

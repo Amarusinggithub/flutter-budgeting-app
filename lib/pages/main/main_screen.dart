@@ -1,5 +1,6 @@
 import 'package:budgetingapp/pages/onboarding/get_started_screen.dart';
 import 'package:budgetingapp/pages/transaction/transaction_screen.dart';
+import 'package:budgetingapp/provider/user_data_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -70,7 +71,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-    return authService.auth.currentUser == null
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+    return authService.auth.currentUser == null &&
+            userDataProvider.didUserFinishOnboarding == false
         ? const GetStartedScreen()
         : PersistentTabView(
             context,

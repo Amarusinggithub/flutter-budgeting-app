@@ -5,6 +5,7 @@ import 'package:budgetingapp/provider/user_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../provider/terms_and_condition_provider.dart';
 import '../../../services/auth_service.dart';
 import '../../main/main_screen.dart';
 
@@ -48,6 +49,8 @@ class LogoutContainer extends StatelessWidget {
         Provider.of<NotificationProvider>(context, listen: false);
     final userDataProvider =
         Provider.of<UserDataProvider>(context, listen: false);
+    final termsProvider =
+        Provider.of<TermsAndConditionsProvider>(context, listen: false);
 
     showDialog(
       context: context,
@@ -88,7 +91,8 @@ class LogoutContainer extends StatelessWidget {
                     await transactionProvider.createTransactions();
                     await notificationProvider.createNewNotificationLimit();
                     await userDataProvider.createNewUserData();
-
+                    userDataProvider.toggleDidUserFinishOnboarding();
+                    termsProvider.selectAll(!termsProvider.areBothAgreed);
                     // Perform logout
                     await authService.logout();
 

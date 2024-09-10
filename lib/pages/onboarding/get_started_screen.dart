@@ -92,12 +92,13 @@ class GetStartedScreen extends StatelessWidget {
                   Navigator.pushNamed(context, AppRoutes.termsAndConditions);
                 },
                 style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   elevation: 5,
                   backgroundColor: Colors.blueAccent,
-                  fixedSize: const Size(360, 60),
+                  fixedSize: const Size(360, 55),
                 ),
                 child: const Text(
                   "Get Started",

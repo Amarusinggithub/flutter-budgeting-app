@@ -1,4 +1,5 @@
-import 'package:budgetingapp/pages/onboarding/add_income_and_total_balance_and_make_budget_screen.dart';
+import 'package:budgetingapp/pages/onboarding/finish_onboarding_process_screen.dart';
+import 'package:budgetingapp/pages/onboarding/set_up_initial_budget_onboarding_screen.dart';
 import 'package:budgetingapp/pages/onboarding/terms_and_conditions_screen.dart';
 import 'package:budgetingapp/pages/onboarding/why_did_you_choose_this_app.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String account = "/account";
   static const String termsAndConditions = "/termsAndConditions";
   static const String setUpBudget = "/setUpBudget";
+  static const String finishOnboarding = "/finishOnboarding";
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -29,8 +31,8 @@ class AppRoutes {
       account: (context) => const ProfileScreen(),
       termsAndConditions: (context) => const TermsAndConditionsScreen(),
       whyChooseAppPage: (context) => const WhyDidYouChooseThisApp(),
-      setUpBudget: (context) =>
-          const AddIncomeAndTotalBalanceAndMakeBudgetScreen(),
+      setUpBudget: (context) => const SetUpInitialBudgetOnboardingScreen(),
+      finishOnboarding: (context) => const FinishOnboardingProcessScreen(),
     };
   }
 }

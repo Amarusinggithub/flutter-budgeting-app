@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          "Welcome Back!",
+                          "Welcome!",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 17,

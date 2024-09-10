@@ -13,40 +13,50 @@ class RegisterScreen extends StatelessWidget {
     final userDataProvider = Provider.of<UserDataProvider>(context);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF1976D2),
-                Color(0xFFF1F8E9),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+      resizeToAvoidBottomInset: true,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF1976D2),
+                  Color(0xFFF1F8E9),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 60),
+          Positioned(
+            top: 40,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Image.asset(
+                Assets.imagesClipManSavingBitcoinInPiggyBank,
+                fit: BoxFit.contain,
+                height: 180,
+                width: 180,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 230,
+            left: 20,
+            right: 20,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const Text(
                   "Sign Up",
                   style: TextStyle(
-                    color: Color(0xFF6D77FB),
+                    color: Color(0xFFBBDEFB),
                     fontWeight: FontWeight.bold,
-                    fontSize: 38,
+                    fontSize: 32,
                   ),
                 ),
-                const SizedBox(height: 40),
-                Image.asset(
-                  Assets.imagesClipManSavingBitcoinInPiggyBank,
-                  fit: BoxFit.contain,
-                  height: 220,
-                  width: 220,
-                ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 20),
 
                 // Username Field
                 TextField(
@@ -54,7 +64,7 @@ class RegisterScreen extends StatelessWidget {
                     userDataProvider.setUsername(value);
                   },
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
@@ -67,9 +77,9 @@ class RegisterScreen extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.4),
                   ),
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 16),
 
                 // Email Field
                 TextField(
@@ -77,72 +87,127 @@ class RegisterScreen extends StatelessWidget {
                     userDataProvider.setEmail(value);
                   },
                   decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.email,
-                        color: Colors.blueAccent,
-                      ),
-                      hintText: "Email",
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.4)),
-                  style: const TextStyle(fontSize: 18),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.email,
+                      color: Colors.blueAccent,
+                    ),
+                    hintText: "Email",
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.4),
+                  ),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 16),
 
                 // Password Field
                 TextField(
                   onChanged: (value) {
-                    // Update password in the provider
                     userDataProvider.setPassword(value);
                   },
-                  obscureText: true,
+                  obscureText: !userDataProvider.isPasswordVisible,
                   decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                      prefixIcon: const Icon(
-                        Icons.lock,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.blueAccent,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        userDataProvider.isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                         color: Colors.blueAccent,
                       ),
-                      hintText: "Password",
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.4)),
-                  style: const TextStyle(fontSize: 18),
+                      onPressed: () {
+                        userDataProvider.togglePasswordVisibility();
+                      },
+                    ),
+                    hintText: "Password",
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.4),
+                  ),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 16),
 
-                // Sign Up Button
+                // Confirm Password Field
+                TextField(
+                  onChanged: (value) {
+                    userDataProvider.setConfirmPassword(value);
+                  },
+                  obscureText: !userDataProvider.isConfirmPasswordVisible,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Colors.blueAccent,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        userDataProvider.isConfirmPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.blueAccent,
+                      ),
+                      onPressed: () {
+                        userDataProvider.toggleConfirmPasswordVisibility();
+                      },
+                    ),
+                    hintText: "Confirm Password",
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.4),
+                  ),
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 30),
+
                 ElevatedButton(
                   onPressed: () {
-                    userDataProvider.register();
+                    if (userDataProvider.validateFields()) {
+                      userDataProvider.register();
+                      Navigator.pushNamed(context, AppRoutes.setUpBudget);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              "All fields are required, and passwords must match!"),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                     elevation: 5,
                     backgroundColor: Colors.blueAccent,
-                    fixedSize: const Size(360, 60),
+                    fixedSize: const Size(360, 55),
                   ),
                   child: const Text(
                     "Sign Up",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
-                      fontSize: 22,
+                      fontSize: 18,
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                // Navigate to Login
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.login);
@@ -151,7 +216,7 @@ class RegisterScreen extends StatelessWidget {
                     "Already have an account? Login Now",
                     style: TextStyle(
                       color: Color(0xFF6D77FB),
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -159,7 +224,7 @@ class RegisterScreen extends StatelessWidget {
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }

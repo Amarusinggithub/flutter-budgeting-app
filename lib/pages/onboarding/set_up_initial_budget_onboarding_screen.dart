@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/routes/routes.dart';
 import '../../models/category_model.dart';
 import '../../provider/budget_provider.dart';
 import '../../provider/notification_provider.dart';
 
-class AddIncomeAndTotalBalanceAndMakeBudgetScreen extends StatefulWidget {
-  const AddIncomeAndTotalBalanceAndMakeBudgetScreen({super.key});
+class SetUpInitialBudgetOnboardingScreen extends StatelessWidget {
+  const SetUpInitialBudgetOnboardingScreen({super.key});
 
-  @override
-  _AddIncomeAndTotalBalanceAndMakeBudgetScreenState createState() =>
-      _AddIncomeAndTotalBalanceAndMakeBudgetScreenState();
-}
-
-class _AddIncomeAndTotalBalanceAndMakeBudgetScreenState
-    extends State<AddIncomeAndTotalBalanceAndMakeBudgetScreen> {
   @override
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
@@ -101,7 +95,7 @@ class _AddIncomeAndTotalBalanceAndMakeBudgetScreenState
                 onPressed: () {
                   budgetProvider.updateTheBudgetHistoryInTheDatabase();
                   notificationProvider.updateNotificationDailyLimit();
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, AppRoutes.finishOnboarding);
                 },
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -110,7 +104,7 @@ class _AddIncomeAndTotalBalanceAndMakeBudgetScreenState
                       borderRadius: BorderRadius.circular(10),
                     ),
                     backgroundColor: Colors.blueAccent,
-                    fixedSize: Size(350, 55)),
+                    fixedSize: const Size(350, 55)),
                 child: const Text(
                   'Continue',
                   style: TextStyle(
@@ -190,9 +184,7 @@ class _AddIncomeAndTotalBalanceAndMakeBudgetScreenState
             fillColor: Colors.white.withOpacity(0.4),
           ),
           onChanged: (value) {
-            setState(() {
-              category.planToSpend = double.tryParse(value) ?? 0.0;
-            });
+            category.planToSpend = double.tryParse(value) ?? 0.0;
             budgetProvider.calculatePlanToSpend();
           },
         ),
@@ -216,9 +208,7 @@ class _AddIncomeAndTotalBalanceAndMakeBudgetScreenState
         Switch(
           value: notificationProvider.selectedLimitIndex > 0,
           onChanged: (value) {
-            setState(() {
-              notificationProvider.updateSelectLimit(value ? 3 : 0);
-            });
+            notificationProvider.updateSelectLimit(value ? 3 : 0);
           },
           activeColor: Colors.blueAccent,
         ),

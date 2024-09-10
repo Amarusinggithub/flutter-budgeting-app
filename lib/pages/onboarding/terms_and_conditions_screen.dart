@@ -198,15 +198,16 @@ class TermsAndConditionsScreen extends StatelessWidget {
                             Navigator.pushNamed(
                                 context, AppRoutes.whyChooseAppPage);
                           }
-                        : null, // Disable if not both agreed
+                        : null,
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
+                      elevation: 5,
                       backgroundColor: termsProvider.areBothAgreed
                           ? Colors.blueAccent
-                          : Colors.grey,
+                          : Colors.grey[400],
                       fixedSize: const Size(140, 55),
                     ),
                     child: const Text(
