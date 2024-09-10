@@ -31,7 +31,7 @@ class GetStartedScreen extends StatelessWidget {
                     height: 50,
                   ),
                   Text(
-                    "Welcome to Budgetize",
+                    "Welcome to BudgetWise",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 30,

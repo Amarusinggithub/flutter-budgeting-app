@@ -48,26 +48,7 @@ class WhyDidYouChooseThisApp extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.black,
-                    ),
-                  ),
-                  GestureDetector(
-                      onTap: () {},
-                      child: const Text("Skip",
-                          style: TextStyle(color: Colors.white))),
-                ],
-              ),
               const SizedBox(height: 20),
-
               // Title Text
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -162,21 +143,16 @@ class WhyDidYouChooseThisApp extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
-                  onPressed: userSelectionProvider.selectedOptions.isNotEmpty
-                      ? () {
-                          Navigator.pushNamed(context, AppRoutes.register);
-                        }
-                      : null,
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.register);
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
                     elevation: 5,
-                    backgroundColor:
-                        userSelectionProvider.selectedOptions.isNotEmpty
-                            ? Colors.blueAccent
-                            : Colors.grey[400],
+                    backgroundColor: Colors.blueAccent,
                     fixedSize: const Size(360, 55),
                   ),
                   child: const Text(

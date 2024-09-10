@@ -111,7 +111,6 @@ class UserDataProvider extends ChangeNotifier {
   }
 
   Future<void> register() async {
-    // Check if all fields are valid
     if (validateFields()) {
       await authService.signUp(email, password);
       userDataModel?.username = _username;

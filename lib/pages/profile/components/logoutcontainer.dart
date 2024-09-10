@@ -68,42 +68,39 @@ class LogoutContainer extends StatelessWidget {
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
-                // Close dialog first
                 Navigator.of(context).pop();
 
-                // Defer navigation until the next frame
-                WidgetsBinding.instance.addPostFrameCallback((_) async {
-                  // Ensure the widget is still mounted before accessing context
-                  if (context.mounted) {
-                    // Navigate back to the initial screen
-                    await MainScreen.popUntilFirstScreenOnSelectedTabScreen(
-                        context);
+                try {
+                  // Ensure the main screen pops to the first screen
+                  await MainScreen.popUntilFirstScreenOnSelectedTabScreen(
+                      context);
 
-                    // Perform the actions after navigation
-                    await budgetProvider.updateTheBudgetHistoryInTheDatabase();
-                    await transactionProvider
-                        .updateTheTransactionsInTheDatabase();
-                    await notificationProvider.updateNotificationDailyLimit();
-                    await userDataProvider.updateUserData();
+                  // Perform critical updates before logout
+                  await Future.wait([
+                    budgetProvider.updateTheBudgetHistoryInTheDatabase(),
+                    transactionProvider.updateTheTransactionsInTheDatabase(),
+                    notificationProvider.updateNotificationDailyLimit(),
+                    userDataProvider.updateUserData(),
+                  ]);
 
-                    // Reset states (if necessary)
-                    await budgetProvider.createNewBudgetHistoryModel();
-                    await transactionProvider.createTransactions();
-                    await notificationProvider.createNewNotificationLimit();
-                    await userDataProvider.createNewUserData();
-                    userDataProvider.toggleDidUserFinishOnboarding();
-                    termsProvider.selectAll(!termsProvider.areBothAgreed);
-                    // Perform logout
-                    await authService.logout();
+                  // Logout after all tasks are completed successfully
+                  await authService.logout();
+                  // Reset all necessary states after saving data
+                  await Future.wait([
+                    budgetProvider.createNewBudgetHistoryModel(),
+                    transactionProvider.createTransactions(),
+                    notificationProvider.createNewNotificationLimit(),
+                    userDataProvider.createNewUserData(),
+                  ]);
 
-                    // Ensure the widget is still mounted before accessing context again
-                    if (context.mounted) {
-                      // Navigate back to the initial screen again (if necessary)
-                      await MainScreen.popUntilFirstScreenOnSelectedTabScreen(
-                          context);
-                    }
-                  }
-                });
+                  userDataProvider.toggleDidUserFinishOnboarding();
+                  termsProvider.selectAll(!termsProvider.areBothAgreed);
+                } catch (error) {
+                  // Handle any errors during the process
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error during logout: $error')),
+                  );
+                }
               },
             ),
           ],
