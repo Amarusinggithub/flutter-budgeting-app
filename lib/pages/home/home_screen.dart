@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
     final budget = budgetProvider.currentBudget;
     final transactionProvider = Provider.of<TransactionProvider>(context);
 
-    if (budget == null) {
+    if (budget == null && userDataProvider.userDataModel == null) {
       return const Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -244,7 +244,7 @@ class HomeScreen extends StatelessWidget {
                     onPressed: () {
                       budgetProvider.editIncome();
                       budgetProvider.updateTheBudgetHistoryInTheDatabase();
-                      Navigator.of(context).pop(); // Close the bottom sheet
+                      Navigator.of(context).pop();
                     },
                     child: const Text(
                       "Edit Income",

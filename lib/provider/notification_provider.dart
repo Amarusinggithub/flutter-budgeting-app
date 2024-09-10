@@ -1,6 +1,6 @@
 import 'package:budgetingapp/models/notification_daily_limit_model.dart';
 import 'package:budgetingapp/services/notification_service.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class NotificationProvider extends ChangeNotifier {
   NotificationDailyLimitModel? notificationDailyLimitModel;
@@ -27,8 +27,19 @@ class NotificationProvider extends ChangeNotifier {
       selectedLimitIndex =
           dailyLimits.indexOf(notificationDailyLimitModel!.limit);
     } else {
-      notificationDailyLimitModel = NotificationDailyLimitModel(limit: 3);
+      await createNewNotificationLimit();
     }
+  }
+
+  Future<void> createNewNotificationLimit() async {
+    NotificationDailyLimitModel newNotificationDailyLimitModel =
+        NotificationDailyLimitModel(limit: 3);
+    notificationDailyLimitModel = newNotificationDailyLimitModel;
+    if (kDebugMode) {
+      print(
+          "Created new notificationlimitmodel: ${notificationDailyLimitModel?.limit}");
+    }
+    notifyListeners();
   }
 
   void updateSelectLimit(int index) {

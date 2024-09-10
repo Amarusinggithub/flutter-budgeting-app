@@ -6,13 +6,12 @@ import '../../../generated/assets.dart';
 import '../../../provider/budget_provider.dart';
 
 class CreditCard extends StatelessWidget {
-  const CreditCard({
-    super.key,
-  });
+  const CreditCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
+
     return Container(
       width: 354.84,
       height: 190.0,
@@ -47,10 +46,8 @@ class CreditCard extends StatelessWidget {
                 style: TextStyle(
                   color: Color(0xFFFFFFFF),
                   fontSize: 18,
-
                   fontFamily: 'Readex Pro',
                   fontWeight: FontWeight.w600,
-                  // More weight for the title
                   height: 1.5,
                   letterSpacing: 0.5,
                 ),
@@ -76,8 +73,10 @@ class CreditCard extends StatelessWidget {
             children: [
               budgetProvider.isTotalBalanceVisible
                   ? Text(
-                      HelperFunctions.numberCurrencyFormatter(
-                          budgetProvider.totalBalanceModel!),
+                      budgetProvider.totalBalance != null
+                          ? HelperFunctions.numberCurrencyFormatter(
+                              budgetProvider.totalBalance!)
+                          : "Loading...", // Handle null case
                       style: const TextStyle(
                         color: Color(0xFFFFFFFF),
                         fontSize: 26,
@@ -99,28 +98,19 @@ class CreditCard extends StatelessWidget {
                       ),
                     ),
               const SizedBox(width: 10),
-              budgetProvider.isTotalBalanceVisible
-                  ? GestureDetector(
-                      onTap: () {
-                        budgetProvider.makeTotalBalanceVisible();
-                      },
-                      child: Image.asset(
-                        Assets.imagesView,
-                        fit: BoxFit.contain,
-                        height: 22,
-                        width: 22,
-                      ),
-                    )
-                  : GestureDetector(
-                      onTap: () {
-                        budgetProvider.makeTotalBalanceVisible();
-                      },
-                      child: Image.asset(
-                        Assets.imagesHide,
-                        fit: BoxFit.contain,
-                        height: 22,
-                        width: 22,
-                      )),
+              GestureDetector(
+                onTap: () {
+                  budgetProvider.makeTotalBalanceVisible();
+                },
+                child: Image.asset(
+                  budgetProvider.isTotalBalanceVisible
+                      ? Assets.imagesView
+                      : Assets.imagesHide,
+                  fit: BoxFit.contain,
+                  height: 22,
+                  width: 22,
+                ),
+              ),
               const SizedBox(width: 10),
               GestureDetector(
                 onTap: () {
@@ -144,7 +134,6 @@ class CreditCard extends StatelessWidget {
                 style: TextStyle(
                   color: Color(0xFFE3F2FD),
                   fontSize: 22,
-                  // Reduced font size for secondary info
                   fontFamily: 'Readex Pro',
                   fontWeight: FontWeight.w500,
                   height: 1.5,
@@ -207,8 +196,7 @@ class CreditCard extends StatelessWidget {
                     fillColor: Colors.grey[200],
                   ),
                   onSubmitted: (value) {
-                    budgetProvider.totalBalanceModel =
-                        double.tryParse(value) ?? 0;
+                    budgetProvider.totalBalance = double.tryParse(value) ?? 0;
                   },
                 ),
                 const SizedBox(height: 20),

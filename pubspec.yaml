@@ -42,10 +42,10 @@ dependencies:
   firebase_analytics: ^11.3.0
   firebase_crashlytics: ^4.1.0
   firebase_core: ^3.4.0
-  syncfusion_flutter_charts: ^26.2.11
+  syncfusion_flutter_charts: ^26.2.13
   google_fonts: ^6.2.1
   fl_chart: ^0.69.0
-  cloud_firestore: ^5.3.0
+  cloud_firestore: ^5.4.0
   photo_view: ^0.15.0
   carousel_slider: ^5.0.0
   font_awesome_flutter: ^10.7.0
@@ -57,6 +57,7 @@ dependencies:
   percent_indicator: ^4.2.3
   flutter_local_notifications: ^17.2.2
   awesome_notifications: ^0.9.3+1
+  syncfusion_flutter_sliders: ^26.2.13
 
 
 

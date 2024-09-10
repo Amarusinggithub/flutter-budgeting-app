@@ -1,7 +1,7 @@
 import 'package:budgetingapp/core/utils/helper_functions.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../models/daily_transaction_model.dart';
 import '../models/monthly_transaction_model.dart';
@@ -12,7 +12,6 @@ import '../services/transaction_service.dart';
 
 class TransactionProvider extends ChangeNotifier {
   int? selectedCategory;
-  double? totalBalanceModel;
   List<List<TransactionModel>> transactionsByDate = [];
   String? transactionTitle;
   double? transactionAmount;
@@ -48,11 +47,18 @@ class TransactionProvider extends ChangeNotifier {
 
       organizeTransactionsByDate();
     } else {
-      transactions = [];
-      organizeTransactionsByDate();
-      await transactionService.updateTransactionsInDatabase(transactions);
+      await createTransactions();
     }
 
+    notifyListeners();
+  }
+
+  Future<void> createTransactions() async {
+    List<TransactionModel> newTRransactions = [];
+    transactions = newTRransactions;
+    if (kDebugMode) {
+      print("Created new transactions: ${transactions.length}");
+    }
     notifyListeners();
   }
 

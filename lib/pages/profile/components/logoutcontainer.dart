@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../services/auth_service.dart';
+import '../../main/main_screen.dart';
 
 class LogoutContainer extends StatelessWidget {
   const LogoutContainer({super.key});
@@ -47,6 +48,7 @@ class LogoutContainer extends StatelessWidget {
         Provider.of<NotificationProvider>(context, listen: false);
     final userDataProvider =
         Provider.of<UserDataProvider>(context, listen: false);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -62,13 +64,42 @@ class LogoutContainer extends StatelessWidget {
             ),
             TextButton(
               child: const Text("Yes"),
-              onPressed: () {
-                budgetProvider.updateTheBudgetHistoryInTheDatabase();
-                transactionProvider.updateTheTransactionsInTheDatabase();
-                notificationProvider.updateNotificationDailyLimit();
-                userDataProvider.updateUserData();
-                authService.logout();
+              onPressed: () async {
+                // Close dialog first
                 Navigator.of(context).pop();
+
+                // Defer navigation until the next frame
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  // Ensure the widget is still mounted before accessing context
+                  if (context.mounted) {
+                    // Navigate back to the initial screen
+                    await MainScreen.popUntilFirstScreenOnSelectedTabScreen(
+                        context);
+
+                    // Perform the actions after navigation
+                    await budgetProvider.updateTheBudgetHistoryInTheDatabase();
+                    await transactionProvider
+                        .updateTheTransactionsInTheDatabase();
+                    await notificationProvider.updateNotificationDailyLimit();
+                    await userDataProvider.updateUserData();
+
+                    // Reset states (if necessary)
+                    await budgetProvider.createNewBudgetHistoryModel();
+                    await transactionProvider.createTransactions();
+                    await notificationProvider.createNewNotificationLimit();
+                    await userDataProvider.createNewUserData();
+
+                    // Perform logout
+                    await authService.logout();
+
+                    // Ensure the widget is still mounted before accessing context again
+                    if (context.mounted) {
+                      // Navigate back to the initial screen again (if necessary)
+                      await MainScreen.popUntilFirstScreenOnSelectedTabScreen(
+                          context);
+                    }
+                  }
+                });
               },
             ),
           ],

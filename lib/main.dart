@@ -1,8 +1,10 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:budgetingapp/provider/notification_provider.dart';
+import 'package:budgetingapp/provider/terms_and_condition_provider.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:budgetingapp/provider/user_data_provider.dart';
+import 'package:budgetingapp/provider/user_selection_provider.dart';
 import 'package:budgetingapp/services/auth_service.dart';
 import 'package:budgetingapp/services/budget_service.dart';
 import 'package:budgetingapp/services/notification_service.dart';
@@ -82,12 +84,6 @@ class MyApp extends StatelessWidget {
 
   List<ChangeNotifierProvider> _stateProviders() {
     return [
-      ChangeNotifierProvider<UserDataProvider>(
-        create: (context) => UserDataProvider(
-          userDataService: context.read<UserDataService>(),
-          authService: context.read<AuthService>(),
-        ),
-      ),
       ChangeNotifierProvider<NotificationProvider>(
         create: (context) => NotificationProvider(
           notificationService: context.read<NotificationService>(),
@@ -102,6 +98,21 @@ class MyApp extends StatelessWidget {
         create: (context) => TransactionProvider(
           budgetProvider: context.read<BudgetProvider>(),
           transactionService: context.read<TransactionService>(),
+        ),
+      ),
+      ChangeNotifierProvider<UserSelectionProvider>(
+        create: (context) => UserSelectionProvider(),
+      ),
+      ChangeNotifierProvider<TermsAndConditionsProvider>(
+        create: (context) => TermsAndConditionsProvider(),
+      ),
+      ChangeNotifierProvider<UserDataProvider>(
+        create: (context) => UserDataProvider(
+          userDataService: context.read<UserDataService>(),
+          authService: context.read<AuthService>(),
+          budgetProvider: context.read<BudgetProvider>(),
+          transactionProvider: context.read<TransactionProvider>(),
+          notificationProvider: context.read<NotificationProvider>(),
         ),
       ),
     ];

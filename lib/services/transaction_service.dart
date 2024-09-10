@@ -58,6 +58,11 @@ class TransactionService extends ChangeNotifier {
         "transactions": transactionsJson,
       });
 
+      if (kDebugMode) {
+        print(
+            "Fetched notification limit model from database: $transactionsJson");
+      }
+
       notifyListeners();
     } catch (e) {
       if (kDebugMode) {

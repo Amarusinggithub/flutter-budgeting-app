@@ -16,6 +16,9 @@ class BudgetService extends ChangeNotifier {
       await firestore.collection('users').doc(userId).update({
         "budgets": budgets.toJson(),
       });
+      if (kDebugMode) {
+        print("Update budgetHistoryModel in database: ${budgets.toJson()}");
+      }
 
       notifyListeners();
     } catch (e) {

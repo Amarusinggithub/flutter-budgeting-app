@@ -2,6 +2,8 @@
 class Assets {
   Assets._();
 
+  static const String assetsImagesWalletMobileApp =
+      'assets/images/wallet-mobile-app.png';
   static const String imagesBudget = 'assets/images/budget.png';
   static const String imagesClipManSavingBitcoinInPiggyBank =
       'assets/images/clip-man-saving-bitcoin-in-piggy-bank.png';
@@ -18,6 +20,8 @@ class Assets {
   static const String imagesMoney = 'assets/images/money.png';
   static const String imagesPencil = 'assets/images/pencil.png';
   static const String imagesShopping = 'assets/images/shopping.png';
+  static const String imagesTermsAndConditions =
+      'assets/images/terms-and-conditions.png';
   static const String imagesTransportation = 'assets/images/transportation.png';
   static const String imagesUtilities = 'assets/images/utilities.png';
   static const String imagesView = 'assets/images/view.png';

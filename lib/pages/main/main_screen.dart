@@ -39,8 +39,8 @@ class MainScreen extends StatefulWidget {
     }
   }
 
-  static dynamic popUntilFirstScreenOnSelectedTabScreen(
-      BuildContext context, String route) {
+  static Future<dynamic> popUntilFirstScreenOnSelectedTabScreen(
+      BuildContext context) async {
     PersistentNavBarNavigator.popUntilFirstScreenOnSelectedTabScreen(
       context,
       routeName: AppRoutes.home,

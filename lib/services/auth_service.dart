@@ -12,9 +12,12 @@ class AuthService extends ChangeNotifier {
   Future<void> login(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
+      if (kDebugMode) {
+        print('User document created successfully in Firestore with UID');
+      }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        print("Error signing in user : $e");
       }
     }
     notifyListeners();
@@ -25,10 +28,16 @@ class AuthService extends ChangeNotifier {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid);
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .set({});
+      if (kDebugMode) {
+        print('User document created successfully in Firestore with UID');
+      }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        print("Error Signing up and creating Firestore document: $e");
       }
     }
     notifyListeners();

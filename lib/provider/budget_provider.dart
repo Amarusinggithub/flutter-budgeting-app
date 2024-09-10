@@ -9,7 +9,7 @@ class BudgetProvider extends ChangeNotifier {
   double userIncomeInput = 0;
   bool isTotalBalanceVisible = true;
   BudgetModel? currentBudget;
-  double? totalBalanceModel;
+  double? totalBalance;
   BudgetHistoryModel? budgetHistoryModel;
 
   final BudgetService budgetService;
@@ -32,12 +32,24 @@ class BudgetProvider extends ChangeNotifier {
 
     if (fetchedBudgetHistory != null) {
       budgetHistoryModel = fetchedBudgetHistory;
-      totalBalanceModel = budgetHistoryModel?.totalBalance;
+      totalBalance = budgetHistoryModel?.totalBalance;
       notifyListeners();
     } else {
-      budgetHistoryModel = BudgetHistoryModel(totalBalance: 0.0, budgets: []);
-      await createNewBudget();
+      await createNewBudgetHistoryModel();
     }
+  }
+
+  Future<void> createNewBudgetHistoryModel() async {
+    BudgetHistoryModel newBudgetHistoryModel =
+        BudgetHistoryModel(totalBalance: 0.0, budgets: []);
+    budgetHistoryModel = newBudgetHistoryModel;
+    totalBalance = budgetHistoryModel?.totalBalance;
+    if (kDebugMode) {
+      print(
+          "Created new BudgetHistoryModel: ${budgetHistoryModel?.totalBalance}");
+    }
+    await createNewBudget();
+    notifyListeners();
   }
 
   Future<void> getCurrentBudget() async {
@@ -86,13 +98,15 @@ class BudgetProvider extends ChangeNotifier {
     );
     currentBudget = newBudget;
     budgetHistoryModel?.budgets.add(newBudget);
-    await updateTheBudgetHistoryInTheDatabase();
     notifyListeners();
   }
 
   Future<void> getTotalBalance() async {
     if (budgetHistoryModel != null) {
-      totalBalanceModel = budgetHistoryModel!.totalBalance;
+      totalBalance = budgetHistoryModel?.totalBalance;
+    } else {
+      totalBalance = 0.0;
+      budgetHistoryModel?.totalBalance = totalBalance!;
     }
     notifyListeners();
   }
@@ -104,7 +118,7 @@ class BudgetProvider extends ChangeNotifier {
       }
 
       budgetHistoryModel!.budgets.last = currentBudget!;
-      budgetHistoryModel?.totalBalance = totalBalanceModel!;
+      budgetHistoryModel?.totalBalance = totalBalance!;
 
       await budgetService.updateBudgetsInDatabase(budgetHistoryModel!);
     }
@@ -142,7 +156,7 @@ class BudgetProvider extends ChangeNotifier {
   void calculateSavings() {
     if (currentBudget != null) {
       currentBudget!.savings = currentBudget!.income - currentBudget!.expense;
-      totalBalanceModel = (totalBalanceModel ?? 0) + currentBudget!.savings;
+      totalBalance = (totalBalance ?? 0) + currentBudget!.savings;
     }
     didSavingsAddAlready = true;
     notifyListeners();

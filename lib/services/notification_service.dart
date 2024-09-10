@@ -68,6 +68,10 @@ class NotificationService extends ChangeNotifier {
       await firestore.collection('users').doc(userId).update({
         'Notification daily Limit': notificationLimitJson,
       });
+
+      if (kDebugMode) {
+        print("Update notificationLimit in database: $notificationLimitJson");
+      }
     } catch (e) {
       if (kDebugMode) {
         print("Error updating notification daily limit in database: $e");

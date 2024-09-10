@@ -65,7 +65,7 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     hintText: "Username",
                     filled: true,
-                    fillColor: Colors.grey[200],
+                    fillColor: Colors.white.withOpacity(0.4),
                   ),
                   style: const TextStyle(fontSize: 18),
                 ),
@@ -77,19 +77,18 @@ class RegisterScreen extends StatelessWidget {
                     userDataProvider.setEmail(value);
                   },
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    prefixIcon: const Icon(
-                      Icons.email,
-                      color: Colors.blueAccent,
-                    ),
-                    hintText: "Email",
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                  ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.email,
+                        color: Colors.blueAccent,
+                      ),
+                      hintText: "Email",
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.4)),
                   style: const TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 25),
@@ -102,19 +101,18 @@ class RegisterScreen extends StatelessWidget {
                   },
                   obscureText: true,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    prefixIcon: const Icon(
-                      Icons.lock,
-                      color: Colors.blueAccent,
-                    ),
-                    hintText: "Password",
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                  ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.lock,
+                        color: Colors.blueAccent,
+                      ),
+                      hintText: "Password",
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.4)),
                   style: const TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 40),
