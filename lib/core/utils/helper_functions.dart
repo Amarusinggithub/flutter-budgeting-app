@@ -47,34 +47,27 @@ class HelperFunctions {
   }
 
   static int daysPassedInCurrentWeek() {
-    // Get the current date and time
     final now = DateTime.now();
 
-    // Get the current week of the month using your existing function
-    final currentWeek = getCurrentWeekOfMonth();
+    // Find the most recent Sunday (start of the current week)
+    final firstDayOfWeek = now.subtract(Duration(days: now.weekday % 7));
 
-    // Get the first day of the current month
-    final firstDayOfMonth = DateTime(now.year, now.month, 1);
+    // Calculate how many days have passed since Sunday
+    final daysPassed = now.difference(firstDayOfWeek).inDays;
 
-    // Calculate which day of the month the first day of the current week is
-    final firstDayOfWeek =
-        firstDayOfMonth.add(Duration(days: (currentWeek - 1) * 7));
-
-    // If today's date is earlier than the first day of the current week, return the difference
-    if (now.isBefore(firstDayOfWeek)) {
-      return 0;
-    }
-
-    // Calculate how many days have passed since the first day of the current week
-    final daysPassed = now.difference(firstDayOfWeek).inDays + 1;
-
-    return daysPassed;
+    return daysPassed; // This will be the number of days that have passed this week, including today
   }
 
-  static int weekOfYear(DateTime date) {
-    final firstDayOfYear = DateTime(date.year, 1, 1);
-    final daysSinceFirstDay = date.difference(firstDayOfYear).inDays;
-    return (daysSinceFirstDay / 7).ceil();
+  static int weekOfMonth(DateTime date) {
+    // Get the first day of the current month
+    final firstDayOfMonth = DateTime(date.year, date.month, 1);
+
+    // Calculate the difference in days between the date and the first day of the month
+    final daysSinceFirstDay = date.difference(firstDayOfMonth).inDays;
+
+    // Calculate which week it is (ceil to account for incomplete weeks)
+    return (daysSinceFirstDay / 7).ceil() +
+        1; // Adding 1 to make the first week "Week 1"
   }
 
   static String capitalizeFirstLetterOfEachWord(String text) {

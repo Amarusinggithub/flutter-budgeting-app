@@ -118,7 +118,7 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-  List<DailyTransactionModel> _groupByDay() {
+  /*List<DailyTransactionModel> _groupByDay() {
     final now = DateTime.now();
     final currentYear = now.year;
     final currentMonth = now.month;
@@ -137,6 +137,49 @@ class TransactionProvider extends ChangeNotifier {
       final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
 
       if (date.year == currentYear && date.month == currentMonth) {
+        final dayKey = DateTime(date.year, date.month, date.day);
+        grouped[dayKey]?.add(transaction);
+      }
+    }
+
+    // Convert the map entries to the list of DailyTransactionModel
+    return grouped.entries
+        .map((entry) =>
+            DailyTransactionModel(date: entry.key, transactions: entry.value))
+        .toList();
+  }
+*/
+  List<DailyTransactionModel> _groupByDay() {
+    final now = DateTime.now();
+    final currentYear = now.year;
+    final currentMonth = now.month;
+
+    // Get the current week of the month
+    final currentWeek = HelperFunctions.getCurrentWeekOfMonth();
+
+    // Get the first day of the current week
+    final firstDayOfWeek = DateTime(currentYear, currentMonth, 1)
+        .add(Duration(days: (currentWeek - 1) * 7));
+
+    // Get the last day of the current week
+    final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
+
+    // Create a map that will hold the grouped transactions for the current week
+    final Map<DateTime, List<TransactionModel>> grouped = {};
+
+    // Initialize the map with empty lists for each day of the current week
+    for (int i = 0; i <= HelperFunctions.daysPassedInCurrentWeek(); i++) {
+      final date = firstDayOfWeek.add(Duration(days: i));
+      grouped[date] = [];
+    }
+
+    // Group existing transactions by day, but only for the current week
+    for (var transaction in transactions) {
+      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
+
+      // Only include transactions that fall within the current week
+      if (date.isAfter(firstDayOfWeek.subtract(const Duration(days: 1))) &&
+          date.isBefore(lastDayOfWeek.add(const Duration(days: 1)))) {
         final dayKey = DateTime(date.year, date.month, date.day);
         grouped[dayKey]?.add(transaction);
       }
@@ -192,7 +235,7 @@ class TransactionProvider extends ChangeNotifier {
       final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
       return date.year == currentYear && date.month == currentMonth;
     }).groupListsBy(
-      (transaction) => HelperFunctions.weekOfYear(
+      (transaction) => HelperFunctions.weekOfMonth(
           DateTime.fromMillisecondsSinceEpoch(transaction.date)),
     );
 
@@ -223,9 +266,8 @@ class TransactionProvider extends ChangeNotifier {
   Future<void> addTransaction(TransactionModel transaction) async {
     transactions.add(transaction);
     organizeTransactionsByDate();
-    await updateTheTransactionsInTheDatabase();
-
     await budgetProvider.updateCategorySpentWithTransactionAmount(transaction);
+    await updateTheTransactionsInTheDatabase();
   }
 
   void updateTransactionTitle(String title) {
