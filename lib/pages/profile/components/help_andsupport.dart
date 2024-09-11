@@ -11,12 +11,10 @@ class HelpAndSupport extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding:
-          const EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
-      height: 100,
-      width: double.infinity,
+          const EdgeInsetsDirectional.symmetric(vertical: 12, horizontal: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadiusDirectional.circular(15),
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.4),
       ),
       child: Column(
         children: [
@@ -24,45 +22,57 @@ class HelpAndSupport extends StatelessWidget {
             onTap: () {
               MainScreen.pushNewScreen(context, const HelpSupportPage());
             },
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.account_balance_wallet_rounded),
-                    SizedBox(
-                      width: 8,
+                    const Icon(Icons.help_outline,
+                        size: 24, color: Colors.white),
+                    // Updated icon
+                    const SizedBox(width: 12),
+                    const Text(
+                      "Help and Support",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white), // Typography improvements
                     ),
-                    Text("Help and Support"),
                   ],
                 ),
-                Icon(Icons.arrow_forward_ios, size: 16),
+                const Icon(Icons.arrow_forward_ios,
+                    size: 18, color: Colors.white),
               ],
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           GestureDetector(
             onTap: () {
               MainScreen.pushNewScreen(context, const PrivacyPolicyPage());
             },
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.account_balance_wallet_rounded),
-                    SizedBox(
-                      width: 8,
+                    const Icon(Icons.policy_outlined,
+                        size: 24, color: Colors.white),
+                    // Updated icon
+                    const SizedBox(width: 12),
+                    const Text(
+                      "Privacy Policy",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
                     ),
-                    Text("Privacy Policy"),
                   ],
                 ),
-                Icon(Icons.arrow_forward_ios, size: 16),
+                const Icon(Icons.arrow_forward_ios,
+                    size: 18, color: Colors.white),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

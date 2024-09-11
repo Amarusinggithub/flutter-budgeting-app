@@ -26,91 +26,122 @@ class _TransactionScreenState extends State<TransactionScreen> {
     final transactionProvider = Provider.of<TransactionProvider>(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        bottom: false,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Transactions",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _showTransactionBottomSheet(
-                            context, budgetProvider, transactionProvider);
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              const WidgetStatePropertyAll(Color(0xFFE0E0E0)),
-                          iconColor: const WidgetStatePropertyAll(Colors.black),
-                          iconSize: const WidgetStatePropertyAll(30),
-                          padding: const WidgetStatePropertyAll(
-                              EdgeInsetsDirectional.all(0)),
-                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)))),
-                      child: const Icon(
-                        Icons.add,
-                        weight: 20,
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const DataSliderContainer(),
-                const SizedBox(
-                  height: 10,
-                ),
-                const LineChartContainer(),
-                const SizedBox(
-                  height: 20,
-                ),
-                GestureDetector(
-                    onTap: () {
-                      MainScreen.pushNewScreen(context, const BudgetScreen(),
-                          isNavBarItem: true, tabIndex: 2);
-                    },
-                    child: const BudgetForTheMonthContainer()),
-                const SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  children: List.generate(
-                    transactionProvider.transactionsByDate.length,
-                    (index) => TransactionsByDateContainer(
-                      index: index,
-                    ),
-                  ),
-                )
-              ],
+      body: Stack(
+        children: [
+          // Background gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF1976D2),
+                  Color(0xFFF1F8E9),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ),
-        ),
+          SafeArea(
+            bottom: false,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Transactions",
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            _showTransactionBottomSheet(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const DataSliderContainer(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const LineChartContainer(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          MainScreen.pushNewScreen(
+                              context, const BudgetScreen(),
+                              isNavBarItem: true, tabIndex: 2);
+                        },
+                        child: const BudgetForTheMonthContainer()),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      children: List.generate(
+                        transactionProvider.transactionsByDate.length,
+                        (index) => TransactionsByDateContainer(
+                          index: index,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  void _showTransactionBottomSheet(BuildContext context,
-      BudgetProvider budgetProvider, TransactionProvider transactionProvider) {
+  void _showTransactionBottomSheet(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context, listen: false);
+    final transactionProvider =
+        Provider.of<TransactionProvider>(context, listen: false);
     showModalBottomSheet(
-      backgroundColor: Colors.white,
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (context) {
-        return Padding(
+        return Container(
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF1976D2),
+                Color(0xFFF1F8E9),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
           padding: EdgeInsets.only(
             left: 20,
             right: 20,
@@ -123,19 +154,30 @@ class _TransactionScreenState extends State<TransactionScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
+                const Text(
+                  'Add Transaction',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 20),
                 TextField(
                   onChanged: (value) {
                     transactionProvider.updateTransactionTitle(value);
                   },
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
                     labelText: 'Title',
+                    labelStyle: const TextStyle(color: Colors.black87),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
                     filled: true,
-                    fillColor: Colors.grey[200],
+                    fillColor: Colors.white.withOpacity(0.4),
                   ),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 15),
                 TextField(
@@ -143,16 +185,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     transactionProvider
                         .updateTransactionAmount(double.tryParse(value) ?? 0);
                   },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    labelText: 'Amount',
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                  ),
                   keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Amount',
+                    labelStyle: const TextStyle(color: Colors.black87),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.4),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 const SelectCategoryContainer(),
@@ -160,12 +203,13 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 14, horizontal: 120),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(15),
                       ),
+                      elevation: 5,
                       backgroundColor: Colors.blueAccent,
+                      fixedSize: const Size(360, 55),
                     ),
                     onPressed: () {
                       final newTransaction = TransactionModel(
@@ -185,8 +229,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       'Add Expense',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
                       ),
                     ),
                   ),

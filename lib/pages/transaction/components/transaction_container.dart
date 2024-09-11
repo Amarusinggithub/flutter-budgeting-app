@@ -30,7 +30,7 @@ class TransactionContainer extends StatelessWidget {
       height: 85,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.4),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(

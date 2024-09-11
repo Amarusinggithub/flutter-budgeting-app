@@ -17,14 +17,15 @@ class LineChartContainer extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.4),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
           color: Colors.white,
           width: 0.5,
         ),
       ),
-      padding: const EdgeInsetsDirectional.all(10),
+      padding:
+          const EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 20),
       child: Stack(
         children: [
           AspectRatio(
@@ -47,7 +48,7 @@ class LineChartContainer extends StatelessWidget {
         : points.map((p) => p.y).reduce((a, b) => a > b ? a : b) + 1;
 
     return LineChartData(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       gridData: FlGridData(
         show: false,
         drawVerticalLine: true,

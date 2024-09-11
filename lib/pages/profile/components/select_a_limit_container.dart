@@ -15,12 +15,27 @@ class SelectALimitContainer extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Notification Limit',
+            const Text(
+              'Enable Notifications',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            Switch(
+              value: notificationProvider.selectedLimitIndex > 0,
+              onChanged: (value) {
+                notificationProvider.updateSelectLimit(value ? 3 : 0);
+              },
+              activeColor: Colors.blueAccent.shade400,
+            ),
+            const Text(
+              'Choose Notification Limit',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[700],
+                color: Colors.white,
               ),
             ),
             const SizedBox(height: 10),
@@ -30,6 +45,7 @@ class SelectALimitContainer extends StatelessWidget {
               children: List.generate(limits.length, (index) {
                 final limit = limits[index];
                 return ChoiceChip(
+                  selectedColor: Colors.blueAccent,
                   label: Text("$limit"),
                   selected: index == selectedLimit,
                   onSelected: (selected) {
@@ -37,13 +53,15 @@ class SelectALimitContainer extends StatelessWidget {
                       notificationProvider.updateSelectLimit(index);
                     }
                   },
-                  selectedColor: Colors.blueAccent,
-                  labelStyle: TextStyle(
-                    color: index == selectedLimit
-                        ? Colors.white
-                        : Colors.grey[700],
-                  ),
-                  backgroundColor: Colors.grey[200],
+                  elevation: 4,
+                  checkmarkColor: Colors.white,
+                  side: const BorderSide(style: BorderStyle.none),
+                  avatarBorder:
+                      const OutlineInputBorder(borderSide: BorderSide.none),
+                  chipAnimationStyle: ChipAnimationStyle(
+                      selectAnimation: AnimationStyle(
+                          duration: const Duration(milliseconds: 1000))),
+                  backgroundColor: Colors.white.withOpacity(0.4),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

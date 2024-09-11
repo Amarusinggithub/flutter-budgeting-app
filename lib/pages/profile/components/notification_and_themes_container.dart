@@ -11,60 +11,74 @@ class NotificationAndThemesContainer extends StatelessWidget {
     final notificationProvider = Provider.of<NotificationProvider>(context);
     return Container(
       padding:
-          const EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
-      height: 100,
-      width: double.infinity,
+          const EdgeInsetsDirectional.symmetric(vertical: 12, horizontal: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadiusDirectional.circular(15),
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.4),
       ),
       child: Column(
         children: [
           GestureDetector(
             onTap: () {
-              _showBottomSheet(context, notificationProvider);
+              _showBottomSheet(context);
             },
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.notifications_none_rounded),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text("Notifications"),
-                    ],
-                  ),
-                  notificationProvider.selectedLimitIndex == 0
-                      ? const Text("Off")
-                      : const Text("On")
-                ],
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.notifications_outlined,
+                        size: 24, color: Colors.white), // Updated icon
+                    SizedBox(width: 12),
+                    Text(
+                      "Notifications",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+                Text(
+                  notificationProvider.selectedLimitIndex == 0 ? "Off" : "On",
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+              ],
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           GestureDetector(
-            onTap: () {},
-            child: Container(
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.format_paint_outlined),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text("Theme"),
-                    ],
-                  ),
-                  Text("Light Mode")
-                ],
-              ),
+            onTap: () {
+              // Theme toggle functionality
+            },
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.brightness_6_outlined,
+                        size: 24, color: Colors.white), // Updated icon
+                    SizedBox(width: 12),
+                    Text(
+                      "Theme",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+                Text(
+                  "Light Mode",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white),
+                ),
+              ],
             ),
           ),
         ],
@@ -73,17 +87,30 @@ class NotificationAndThemesContainer extends StatelessWidget {
   }
 }
 
-void _showBottomSheet(
-    BuildContext context, NotificationProvider notificationProvider) {
+void _showBottomSheet(BuildContext context) {
+  final notificationProvider =
+      Provider.of<NotificationProvider>(context, listen: false);
   showModalBottomSheet(
-    backgroundColor: Colors.white,
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
     ),
     builder: (context) {
-      return Padding(
+      return Container(
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF1976D2),
+              Color(0xFFF1F8E9),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         padding: EdgeInsets.only(
           left: 20,
           right: 20,
@@ -97,26 +124,28 @@ void _showBottomSheet(
             children: [
               const Center(
                 child: Text(
-                  'Edit Notifications ',
+                  'Edit Notifications',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white, // To ensure visibility on gradient
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               const SelectALimitContainer(),
+              // Assuming this widget is already styled
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 120),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(15),
                     ),
+                    elevation: 5,
                     backgroundColor: Colors.blueAccent,
+                    fixedSize: const Size(360, 55),
                   ),
                   onPressed: () {
                     notificationProvider.updateNotificationDailyLimit();
@@ -126,8 +155,8 @@ void _showBottomSheet(
                     'Save Settings',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
                     ),
                   ),
                 ),

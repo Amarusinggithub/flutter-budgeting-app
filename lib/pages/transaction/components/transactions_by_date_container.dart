@@ -26,26 +26,29 @@ class TransactionsByDateContainer extends StatelessWidget {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "${getDate(transactionsByDate)}",
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        ListView.builder(
-          padding: const EdgeInsets.only(bottom: 10, top: 10),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          // Prevent nested scrolling
-          itemCount: transactionsByDate.length,
-          itemBuilder: (context, transactionIndex) => TransactionContainer(
-            index: transactionIndex,
-            transactionsByDate: transactionsByDate,
+    return Container(
+      color: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${getDate(transactionsByDate)}",
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-        ),
-        const SizedBox(height: 10),
-      ],
+          ListView.builder(
+            padding: const EdgeInsets.only(bottom: 10, top: 10),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            // Prevent nested scrolling
+            itemCount: transactionsByDate.length,
+            itemBuilder: (context, transactionIndex) => TransactionContainer(
+              index: transactionIndex,
+              transactionsByDate: transactionsByDate,
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
+      ),
     );
   }
 

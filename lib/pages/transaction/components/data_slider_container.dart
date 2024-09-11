@@ -13,7 +13,7 @@ class DataSliderContainer extends StatelessWidget {
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
       decoration: ShapeDecoration(
-        color: Color(0xFFE0E0E0),
+        color: Colors.white.withOpacity(0.4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
@@ -42,8 +42,8 @@ class DataSliderContainer extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: ShapeDecoration(
             color: transactionProvider.selectedIndexForTransactionTime == index
-                ? Color(0xFF323232)
-                : Color(0xFFE0E0E0),
+                ? Colors.blueAccent
+                : Colors.transparent,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:budgetingapp/pages/profile/components/help_andsupport.dart';
 import 'package:budgetingapp/pages/profile/components/logoutcontainer.dart';
 import 'package:budgetingapp/pages/profile/components/notification_and_themes_container.dart';
@@ -18,110 +16,94 @@ class ProfileScreen extends StatelessWidget {
     final username = userDataProvider.userDataModel?.username;
     final email = userDataProvider.userDataModel?.email;
     return Scaffold(
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 320,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF42A5F5),
-                      Color(0xFF1976D2),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF1976D2),
+              Color(0xFFF1F8E9),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Container(
+                  height: 320,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
                   ),
                 ),
-              ),
-              Positioned.fill(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                  // Reduced blur
-                  child: Container(
-                    color: Colors.black.withOpacity(0),
-                  ),
-                ),
-              ),
-              Positioned.fill(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.white,
-                          child: CircleAvatar(
-                            radius: 45,
-                            backgroundColor: Colors.blueAccent,
-                            // Dummy profile color
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: CircleAvatar(
+                Positioned.fill(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const CircleAvatar(
+                            radius: 80,
                             backgroundColor: Colors.white,
-                            radius: 15,
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.black,
-                              size: 15,
+                            child: CircleAvatar(
+                              radius: 77,
+                              backgroundColor: Colors.blueAccent,
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 50,
+                              ),
                             ),
                           ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        HelperFunctions.capitalizeFirstLetterOfEachWord(
+                            username!),
+                        style: const TextStyle(
+                          fontSize: 24,
+                          // Updated typography for better readability
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      HelperFunctions.capitalizeFirstLetterOfEachWord(
-                          username!),
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
                       ),
-                    ),
-                    Text(
-                      email!,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
+                      Text(
+                        email!,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white70,
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                child: const Column(
+                  children: [
+                    NotificationAndThemesContainer(),
+                    SizedBox(
+                      height: 20, // Improved spacing between elements
                     ),
+                    HelpAndSupport(),
+                    SizedBox(
+                      height: 20, // More space before logout button
+                    ),
+                    LogoutContainer(),
                   ],
                 ),
               ),
-            ],
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-              child: const Column(
-                children: [
-                  NotificationAndThemesContainer(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  HelpAndSupport(),
-                  SizedBox(
-                    height: 27,
-                  ),
-                  LogoutContainer(),
-                ],
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

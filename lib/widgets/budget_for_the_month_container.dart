@@ -16,7 +16,7 @@ class BudgetForTheMonthContainer extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(15),
       decoration: ShapeDecoration(
-        color: const Color(0xFF3B82F6),
+        color: Colors.blueAccent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),

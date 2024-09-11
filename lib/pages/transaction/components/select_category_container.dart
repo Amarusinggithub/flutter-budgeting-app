@@ -19,12 +19,12 @@ class SelectCategoryContainer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Select a Category',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.grey[700],
+            color: Colors.white,
           ),
         ),
         const SizedBox(height: 10),
@@ -34,12 +34,14 @@ class SelectCategoryContainer extends StatelessWidget {
           children: List.generate(categories.length, (index) {
             final category = categories[index];
             return ChoiceChip(
+              elevation: 4,
+              checkmarkColor: Colors.white,
               side: const BorderSide(style: BorderStyle.none),
               avatarBorder:
                   const OutlineInputBorder(borderSide: BorderSide.none),
               chipAnimationStyle: ChipAnimationStyle(
                   selectAnimation: AnimationStyle(
-                      duration: const Duration(milliseconds: 2000))),
+                      duration: const Duration(milliseconds: 1000))),
               label: Text(category.name),
               selected: index == selectedCategoryIndex,
               onSelected: (selected) {
@@ -53,7 +55,7 @@ class SelectCategoryContainer extends StatelessWidget {
                     ? Colors.white
                     : Colors.grey[700],
               ),
-              backgroundColor: Colors.grey[200],
+              backgroundColor: Colors.white.withOpacity(0.4),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),

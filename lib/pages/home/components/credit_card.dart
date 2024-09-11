@@ -114,7 +114,7 @@ class CreditCard extends StatelessWidget {
               const SizedBox(width: 10),
               GestureDetector(
                 onTap: () {
-                  _showBottomSheet(context, budgetProvider);
+                  _showBottomSheet(context);
                 },
                 child: Image.asset(
                   Assets.imagesPencil,
@@ -153,16 +153,30 @@ class CreditCard extends StatelessWidget {
     );
   }
 
-  void _showBottomSheet(BuildContext context, BudgetProvider budgetProvider) {
+  void _showBottomSheet(BuildContext context) {
+    final budgetProvider = Provider.of<BudgetProvider>(context, listen: false);
+
     showModalBottomSheet(
-      backgroundColor: Colors.white,
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (context) {
-        return Padding(
+        return Container(
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF1976D2),
+                Color(0xFFF1F8E9),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
           padding: EdgeInsets.only(
             left: 20,
             right: 20,
@@ -180,6 +194,7 @@ class CreditCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -187,13 +202,15 @@ class CreditCard extends StatelessWidget {
                 TextField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
                     labelText: 'Balance',
+                    labelStyle: const TextStyle(color: Colors.black87),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
                     filled: true,
-                    fillColor: Colors.grey[200],
+                    fillColor: Colors.white.withOpacity(
+                        0.4), // Matches the overall text field style
                   ),
                   onSubmitted: (value) {
                     budgetProvider.totalBalance = double.tryParse(value) ?? 0;
@@ -203,13 +220,13 @@ class CreditCard extends StatelessWidget {
                 Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 14, horizontal: 120),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(15),
                       ),
+                      elevation: 5,
                       backgroundColor: Colors.blueAccent,
+                      fixedSize: const Size(360, 55),
                     ),
                     onPressed: () {
                       budgetProvider.updateTheBudgetHistoryInTheDatabase();
@@ -220,8 +237,8 @@ class CreditCard extends StatelessWidget {
                       'Save Balances',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
                       ),
                     ),
                   ),

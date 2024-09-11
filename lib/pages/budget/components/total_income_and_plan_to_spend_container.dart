@@ -15,7 +15,7 @@ class TotalIncomeAndPlanTOSpendContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: Colors.blueAccent,
         borderRadius: BorderRadius.circular(15),
       ),
       height: 100,
@@ -31,7 +31,7 @@ class TotalIncomeAndPlanTOSpendContainer extends StatelessWidget {
                 const Text(
                   "Total Income",
                   style: TextStyle(
-                    color: Colors.black54,
+                    color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
@@ -41,7 +41,7 @@ class TotalIncomeAndPlanTOSpendContainer extends StatelessWidget {
                   HelperFunctions.numberCurrencyFormatter(
                       budgetProvider.currentBudget!.income),
                   style: const TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -50,7 +50,7 @@ class TotalIncomeAndPlanTOSpendContainer extends StatelessWidget {
             ),
           ),
           const VerticalDivider(
-            color: Colors.black54,
+            color: Colors.white,
             thickness: 1,
             width: 30,
           ),
@@ -65,7 +65,7 @@ class TotalIncomeAndPlanTOSpendContainer extends StatelessWidget {
                 const Text(
                   "Plan to Spend",
                   style: TextStyle(
-                    color: Colors.black54,
+                    color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
@@ -75,7 +75,7 @@ class TotalIncomeAndPlanTOSpendContainer extends StatelessWidget {
                   HelperFunctions.numberCurrencyFormatter(
                       budgetProvider.currentBudget!.planToSpend),
                   style: const TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),

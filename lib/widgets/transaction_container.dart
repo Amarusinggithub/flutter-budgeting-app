@@ -70,7 +70,7 @@ class TransactionContainer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       // Adjusted padding for balance
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.4),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(

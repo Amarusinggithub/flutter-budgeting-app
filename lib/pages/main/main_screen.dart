@@ -86,11 +86,11 @@ class _MainScreenState extends State<MainScreen> {
             hideNavigationBarWhenKeyboardAppears: true,
             popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
             padding: const EdgeInsets.only(top: 8, bottom: 8),
-            backgroundColor: Colors.white,
+            backgroundColor: const Color(0xFFF1F8E9),
             isVisible: true,
             animationSettings: const NavBarAnimationSettings(
               navBarItemAnimation: ItemAnimationSettings(
-                duration: Duration(milliseconds: 400),
+                duration: Duration(milliseconds: 700),
                 curve: Curves.ease,
               ),
               screenTransitionAnimation: ScreenTransitionAnimationSettings(
@@ -123,8 +123,8 @@ class _MainScreenState extends State<MainScreen> {
         ),
         icon: const Icon(CupertinoIcons.house_fill),
         title: ("Home"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.blue.withOpacity(0.7),
+        activeColorPrimary: Colors.blueAccent,
+        inactiveColorPrimary: Colors.blueAccent.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
         onPressed: MainScreen.popUntil(
@@ -132,8 +132,8 @@ class _MainScreenState extends State<MainScreen> {
         ),
         icon: const Icon(CupertinoIcons.creditcard_fill),
         title: ("Transactions"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.blue.withOpacity(0.7),
+        activeColorPrimary: Colors.blueAccent,
+        inactiveColorPrimary: Colors.blueAccent.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
         onPressed: MainScreen.popUntil(
@@ -141,14 +141,14 @@ class _MainScreenState extends State<MainScreen> {
         ),
         icon: const Icon(CupertinoIcons.money_dollar_circle_fill),
         title: ("Budget"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.blue.withOpacity(0.7),
+        activeColorPrimary: Colors.blueAccent,
+        inactiveColorPrimary: Colors.blueAccent.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.person_fill),
         title: ("Profile"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.blue.withOpacity(0.7),
+        activeColorPrimary: Colors.blueAccent,
+        inactiveColorPrimary: Colors.blueAccent.withOpacity(0.7),
       ),
     ];
   }

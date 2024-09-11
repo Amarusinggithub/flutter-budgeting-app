@@ -16,24 +16,27 @@ class LogoutContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding:
-          const EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
-      height: 60,
-      width: double.infinity,
+          const EdgeInsetsDirectional.symmetric(vertical: 12, horizontal: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadiusDirectional.circular(15),
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.4),
       ),
       child: GestureDetector(
         onTap: () {
           _showLogoutDialog(context);
         },
-        child: const Row(
+        child: Row(
           children: [
-            Icon(Icons.logout),
-            SizedBox(
-              width: 8,
+            const Icon(Icons.exit_to_app, size: 24, color: Colors.white),
+            // Updated icon
+            const SizedBox(width: 12),
+            const Text(
+              "Logout",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white), // Typography improvements
             ),
-            Text("Logout"),
           ],
         ),
       ),

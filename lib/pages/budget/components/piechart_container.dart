@@ -3,6 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/utils/helper_functions.dart';
+
 class PieChartContainer extends StatelessWidget {
   PieChartContainer({super.key});
 
@@ -25,71 +27,68 @@ class PieChartContainer extends StatelessWidget {
     final personalCare = budgetProvider.getCategoryPlanToSpend("Personal care");
     final groceries = budgetProvider.getCategoryPlanToSpend("Groceries");
 
-    return Container(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 260, // Increased the size to reduce fuzziness
-            width: 260,
-            child: Stack(
-              children: [
-                PieChart(
-                  PieChartData(
-                    pieTouchData: PieTouchData(
-                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      },
-                    ),
-                    borderData: FlBorderData(show: false),
-                    sectionsSpace: 5,
-                    centerSpaceRadius: 75,
-                    // Increased center space
-                    sections: _showingSections(
-                      utilities,
-                      transportation,
-                      housing,
-                      shopping,
-                      entertainment,
-                      groceries,
-                      personalCare,
-                      context,
-                    ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 260,
+          width: 260,
+          child: Stack(
+            children: [
+              PieChart(
+                PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      if (!event.isInterestedForInteractions ||
+                          pieTouchResponse == null ||
+                          pieTouchResponse.touchedSection == null) {
+                        touchedIndex = -1;
+                        return;
+                      }
+                      touchedIndex =
+                          pieTouchResponse.touchedSection!.touchedSectionIndex;
+                    },
+                  ),
+                  borderData: FlBorderData(show: false),
+                  centerSpaceRadius: 75,
+                  sections: _showingSections(
+                    utilities,
+                    transportation,
+                    housing,
+                    shopping,
+                    entertainment,
+                    groceries,
+                    personalCare,
+                    context,
                   ),
                 ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Expense',
-                        style: TextStyle(
-                          fontSize: 20, // Adjusted text size
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Expense',
+                      style: TextStyle(
+                          fontSize: 20,
                           color: Colors.white54,
-                        ),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      HelperFunctions.numberCurrencyFormatter(
+                          budgetProvider.currentBudget!.expense),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
-                      Text(
-                        '\$${budgetProvider.currentBudget!.expense}',
-                        style: const TextStyle(
-                          fontSize: 24, // Adjusted text size
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -105,8 +104,7 @@ class PieChartContainer extends StatelessWidget {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     return List.generate(budgetProvider.currentBudget!.categories.length, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize =
-          isTouched ? 24.0 : 18.0; // Increased font size for clarity
+      final fontSize = isTouched ? 24.0 : 18.0;
       final radius = isTouched ? 85.0 : 70.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
