@@ -119,8 +119,17 @@ class LoginScreen extends StatelessWidget {
 
                 ElevatedButton(
                   onPressed: () {
-                    userDataProvider.login();
-                    userDataProvider.toggleDidUserFinishOnboarding();
+                    if (userDataProvider.validateFieldsForSignIn()) {
+                      userDataProvider.login();
+                      userDataProvider.toggleDidUserFinishOnboarding();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              "All fields are required, and passwords must match!"),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),

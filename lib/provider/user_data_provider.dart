@@ -102,7 +102,7 @@ class UserDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool validateFields() {
+  bool validateFieldsForSignUp() {
     return _username.isNotEmpty &&
         _email.isNotEmpty &&
         _password.isNotEmpty &&
@@ -110,8 +110,12 @@ class UserDataProvider extends ChangeNotifier {
         _password == _confirmPassword;
   }
 
+  bool validateFieldsForSignIn() {
+    return _email.isNotEmpty && _password.isNotEmpty;
+  }
+
   Future<void> register() async {
-    if (validateFields()) {
+    if (validateFieldsForSignUp()) {
       await authService.signUp(email, password);
       userDataModel?.username = _username;
       userDataModel?.email = authService.auth.currentUser?.email ?? '';

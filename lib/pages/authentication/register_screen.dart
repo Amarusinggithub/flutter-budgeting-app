@@ -176,7 +176,7 @@ class RegisterScreen extends StatelessWidget {
 
                 ElevatedButton(
                   onPressed: () {
-                    if (userDataProvider.validateFields()) {
+                    if (userDataProvider.validateFieldsForSignUp()) {
                       userDataProvider.register();
                       Navigator.pushNamed(context, AppRoutes.setUpBudget);
                     } else {

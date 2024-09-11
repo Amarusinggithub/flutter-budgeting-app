@@ -26,6 +26,8 @@ class PieChartContainer extends StatelessWidget {
         budgetProvider.getCategoryPlanToSpend("Entertainment");
     final personalCare = budgetProvider.getCategoryPlanToSpend("Personal care");
     final groceries = budgetProvider.getCategoryPlanToSpend("Groceries");
+    final miscellaneous =
+        budgetProvider.getCategoryPlanToSpend("Miscellaneous");
 
     return Column(
       children: [
@@ -58,6 +60,7 @@ class PieChartContainer extends StatelessWidget {
                     entertainment,
                     groceries,
                     personalCare,
+                    miscellaneous,
                     context,
                   ),
                 ),
@@ -100,6 +103,7 @@ class PieChartContainer extends StatelessWidget {
       double entertainment,
       double groceries,
       double personalCare,
+      double miscellaneous,
       BuildContext context) {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     return List.generate(budgetProvider.currentBudget!.categories.length, (i) {
@@ -223,6 +227,24 @@ class PieChartContainer extends StatelessWidget {
             value: personalCare,
             title:
                 '${budgetProvider.calculatePercentageOfTotalPlanToSpend(personalCare)}%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: shadows,
+            ),
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0.6),
+              width: isTouched ? 4 : 2,
+            ),
+          );
+        case 7:
+          return PieChartSectionData(
+            color: Colors.cyan,
+            value: personalCare,
+            title:
+                '${budgetProvider.calculatePercentageOfTotalPlanToSpend(miscellaneous)}%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,

@@ -8,8 +8,8 @@ class TransportationContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsetsDirectional.all(10),
-      height: 65,
-      width: 65,
+      height: 60,
+      width: 60,
       decoration: BoxDecoration(
         color: Colors.blue,
         borderRadius: BorderRadius.circular(18),
@@ -17,8 +17,6 @@ class TransportationContainer extends StatelessWidget {
       child: Image.asset(
         Assets.imagesTransportation,
         fit: BoxFit.contain,
-        height: 35,
-        width: 35,
       ),
     );
   }

@@ -52,6 +52,11 @@ class BudgetModel {
                   name: "Personal care",
                   totalSpent: 0,
                   planToSpend: 0),
+              CategoryModel(
+                  id: "Miscellaneous",
+                  name: "Miscellaneous",
+                  totalSpent: 0,
+                  planToSpend: 0),
             ];
 
   Map<String, dynamic> toJson() {

@@ -125,6 +125,11 @@ class BudgetScreen extends StatelessWidget {
                                 color: Colors.pink,
                                 text: 'Personal care',
                                 isSquare: false),
+                            SizedBox(height: 20),
+                            Indicator(
+                                color: Colors.cyan,
+                                text: 'Miscellaneous',
+                                isSquare: false),
                           ],
                         ),
                       ],

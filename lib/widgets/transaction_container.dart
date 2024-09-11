@@ -5,6 +5,7 @@ import 'package:budgetingapp/widgets/entertainment_container.dart';
 import 'package:budgetingapp/widgets/groceries_container.dart';
 import 'package:budgetingapp/widgets/healthcare_container.dart';
 import 'package:budgetingapp/widgets/housing_container.dart';
+import 'package:budgetingapp/widgets/miscellaneous_container.dart';
 import 'package:budgetingapp/widgets/shopping_container.dart';
 import 'package:budgetingapp/widgets/transportation_container.dart';
 import 'package:budgetingapp/widgets/utilities_container.dart';
@@ -67,7 +68,9 @@ class TransactionContainer extends StatelessWidget {
     final transaction = transactionsByDate[index];
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        _showEditTransactionBottomSheet(context, transaction);
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         width: 370,
@@ -95,30 +98,37 @@ class TransactionContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    transaction.category,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16, // Increased font size for category
-                      fontWeight: FontWeight.bold, // Bold for emphasis
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                  const SizedBox(height: 4), // More compact spacing
-                  Text(
-                    transaction.title,
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      // Regular font weight for less emphasis
-                      fontFamily: 'Inter',
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          transaction.title,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Inter',
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          transaction.category,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Inter',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 10), // Space between text and amount
+            const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -127,15 +137,15 @@ class TransactionContainer extends StatelessWidget {
                   "-${HelperFunctions.numberCurrencyFormatter(transaction.amount)}",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16, // Slightly larger font for the amount
-                    color: Colors.red, // Red for negative amounts
+                    fontSize: 16,
+                    color: Colors.red,
                   ),
                 ),
-                const SizedBox(height: 4), // More compact spacing
+                const SizedBox(height: 4),
                 Text(
                   HelperFunctions.formatTime(transaction.date),
                   style: const TextStyle(
-                    color: Colors.black54, // Lighter color for time
+                    color: Colors.black54,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Inter',
@@ -165,6 +175,8 @@ class TransactionContainer extends StatelessWidget {
         return const ShoppingContainer();
       case "Personal care":
         return const HealthcareContainer();
+      case " Miscellaneous":
+        return const MiscellaneousContainer();
       default:
         return Container();
     }
@@ -178,13 +190,11 @@ class TransactionContainer extends StatelessWidget {
     final transactionProvider =
         Provider.of<TransactionProvider>(context, listen: false);
 
-    // Create controllers for title and amount fields
     TextEditingController titleController =
         TextEditingController(text: transaction.title);
     TextEditingController amountController =
         TextEditingController(text: transaction.amount.toString());
 
-    // Keep track of the original category and amount
     String originalCategory = transaction.category;
     double originalAmount = transaction.amount;
 
@@ -230,7 +240,6 @@ class TransactionContainer extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Title Field
                 TextField(
                   controller: titleController,
                   onChanged: (value) {
@@ -249,7 +258,6 @@ class TransactionContainer extends StatelessWidget {
                   style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 15),
-                // Amount Field
                 TextField(
                   controller: amountController,
                   onChanged: (value) {
@@ -269,10 +277,8 @@ class TransactionContainer extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Category Selector
                 const SelectCategoryContainer(),
                 const SizedBox(height: 20),
-                // Save Changes Button
                 Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -293,14 +299,12 @@ class TransactionContainer extends StatelessWidget {
                           transactionProvider.transactionAmount ??
                               transaction.amount;
 
-                      // Adjust the expenses for the old category if it has changed
                       if (newCategory != originalCategory) {
                         await budgetProvider.decreaseCategorySpent(
                             originalCategory, originalAmount);
                         await budgetProvider.increaseCategorySpent(
                             newCategory, newAmount);
                       } else {
-                        // If the category hasn't changed but the amount has, adjust the original category's spent amount
                         if (newAmount != originalAmount) {
                           double amountDifference = newAmount - originalAmount;
                           if (amountDifference > 0) {
@@ -313,18 +317,16 @@ class TransactionContainer extends StatelessWidget {
                         }
                       }
 
-                      // Update the transaction with new values
                       TransactionModel updatedTransaction = TransactionModel(
                         title: transactionProvider.transactionTitle ??
                             transaction.title,
                         amount: newAmount,
-                        date: transaction.date, // keep the original date
+                        date: transaction.date,
                         category: newCategory,
                       );
                       await transactionProvider
                           .editTransaction(updatedTransaction);
 
-                      // Clear inputs and close the sheet
                       transactionProvider.clearTransactionInputs();
                       Navigator.of(context).pop();
                     },
