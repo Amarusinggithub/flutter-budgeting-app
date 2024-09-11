@@ -17,6 +17,7 @@ class Assets {
   static const String imagesIncome = 'assets/images/income.png';
   static const String imagesMastercardLogo =
       'assets/images/mastercard-logo.png';
+  static const String imagesMiscellaneous = 'assets/images/miscellaneous.png';
   static const String imagesMoney = 'assets/images/money.png';
   static const String imagesPencil = 'assets/images/pencil.png';
   static const String imagesShopping = 'assets/images/shopping.png';

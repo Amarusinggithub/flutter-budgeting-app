@@ -5,7 +5,6 @@ import 'package:budgetingapp/widgets/entertainment_container.dart';
 import 'package:budgetingapp/widgets/groceries_container.dart';
 import 'package:budgetingapp/widgets/healthcare_container.dart';
 import 'package:budgetingapp/widgets/housing_container.dart';
-import 'package:budgetingapp/widgets/miscellaneous_container.dart';
 import 'package:budgetingapp/widgets/shopping_container.dart';
 import 'package:budgetingapp/widgets/transportation_container.dart';
 import 'package:budgetingapp/widgets/utilities_container.dart';
@@ -14,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../pages/transaction/components/select_category_container.dart';
 import '../provider/budget_provider.dart';
+import 'miscellaneous_container.dart';
 
 class TransactionContainer extends StatelessWidget {
   final int index;
@@ -175,7 +175,7 @@ class TransactionContainer extends StatelessWidget {
         return const ShoppingContainer();
       case "Personal care":
         return const HealthcareContainer();
-      case " Miscellaneous":
+      case "Miscellaneous":
         return const MiscellaneousContainer();
       default:
         return Container();

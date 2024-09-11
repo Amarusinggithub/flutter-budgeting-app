@@ -33,7 +33,10 @@ class TransactionsByDateContainer extends StatelessWidget {
         children: [
           Text(
             "${getDate(transactionsByDate)}",
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           ListView.builder(
             padding: const EdgeInsets.only(bottom: 10, top: 10),
