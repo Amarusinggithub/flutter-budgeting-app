@@ -262,4 +262,53 @@ class TransactionProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // Adjust category spending when editing a transaction
+  Future<void> adjustCategorySpending(TransactionModel originalTransaction,
+      TransactionModel updatedTransaction) async {
+    // Check if category or amount has changed
+    if (originalTransaction.category != updatedTransaction.category) {
+      // Decrease the spent amount from the original category
+      await budgetProvider.decreaseCategorySpent(
+          originalTransaction.category, originalTransaction.amount);
+
+      // Increase the spent amount for the new category
+      await budgetProvider.increaseCategorySpent(
+          updatedTransaction.category, updatedTransaction.amount);
+    } else if (originalTransaction.amount != updatedTransaction.amount) {
+      // If only the amount changed within the same category, adjust the spent amount
+      double difference =
+          updatedTransaction.amount - originalTransaction.amount;
+
+      if (difference > 0) {
+        await budgetProvider.increaseCategorySpent(
+            updatedTransaction.category, difference);
+      } else {
+        await budgetProvider.decreaseCategorySpent(
+            updatedTransaction.category, difference.abs());
+      }
+    }
+
+    // Update the current budget accordingly
+    await budgetProvider
+        .updateCategorySpentWithTransactionAmount(updatedTransaction);
+  }
+
+  // Edit an existing transaction
+  Future<void> edit_Transaction(TransactionModel updatedTransaction,
+      TransactionModel originalTransaction) async {
+    // Find the index of the original transaction
+    final index =
+        transactions.indexWhere((t) => t.date == originalTransaction.date);
+    if (index != -1) {
+      // Adjust category spending before updating
+      await adjustCategorySpending(originalTransaction, updatedTransaction);
+
+      // Update the transaction
+      transactions[index] = updatedTransaction;
+      organizeTransactionsByDate();
+      await updateTheTransactionsInTheDatabase();
+      notifyListeners();
+    }
+  }
 }

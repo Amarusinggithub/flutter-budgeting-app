@@ -239,4 +239,28 @@ class BudgetProvider extends ChangeNotifier {
   void makeScreenRebuild() {
     notifyListeners();
   }
+
+  // Adjusts to increase the spent amount for a category
+  Future<void> increaseCategorySpent(String categoryName, double amount) async {
+    final category = currentBudget?.categories
+        .firstWhere((category) => category.name == categoryName);
+
+    if (category != null) {
+      category.totalSpent += amount;
+      await updateTheBudgetHistoryInTheDatabase();
+      notifyListeners();
+    }
+  }
+
+  // Adjusts to decrease the spent amount for a category
+  Future<void> decreaseCategorySpent(String categoryName, double amount) async {
+    final category = currentBudget?.categories
+        .firstWhere((category) => category.name == categoryName);
+
+    if (category != null) {
+      category.totalSpent -= amount;
+      await updateTheBudgetHistoryInTheDatabase();
+      notifyListeners();
+    }
+  }
 }
