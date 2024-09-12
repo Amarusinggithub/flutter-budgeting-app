@@ -5,6 +5,7 @@ import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:budgetingapp/services/auth_service.dart';
 import 'package:budgetingapp/services/user_data_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../core/utils/validators.dart';
 
@@ -16,6 +17,15 @@ class UserDataProvider extends ChangeNotifier {
   BudgetProvider budgetProvider;
   TransactionProvider transactionProvider;
   NotificationProvider notificationProvider;
+
+  final Uri emailUri = Uri(
+    scheme: 'mailto',
+    path: 'email@gmail.com',
+    queryParameters: {
+      'subject': "Costumer Support",
+      'body': "",
+    },
+  );
 
   String _username = "";
   String _email = "";
@@ -144,5 +154,25 @@ class UserDataProvider extends ChangeNotifier {
   void toggleDidUserFinishOnboarding() {
     didUserFinishOnboarding = !didUserFinishOnboarding;
     notifyListeners();
+  }
+
+  Future<void> _openUrl(String url) async {
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> callSupport() async {
+    await _openUrl('tel:${917600896744}');
+  }
+
+  Future<void> emailSupport() async {
+    await _openUrl(emailUri.toString());
+  }
+
+  Future<void> smsSupport() async {
+    _openUrl('sms:${917600896744}');
   }
 }

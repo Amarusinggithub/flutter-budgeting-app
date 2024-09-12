@@ -1,6 +1,8 @@
 import 'package:budgetingapp/pages/main/main_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../provider/user_data_provider.dart';
 import 'help_detail_page.dart';
 
 class HelpSupportPage extends StatelessWidget {
@@ -122,6 +124,9 @@ class HelpSupportPage extends StatelessWidget {
   }
 
   void _showContactSupportBottomSheet(BuildContext context) {
+    final userDataProvider =
+        Provider.of<UserDataProvider>(context, listen: false);
+
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -165,9 +170,11 @@ class HelpSupportPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
+
+                // Email Support Button
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Handle email support action
+                    userDataProvider.emailSupport();
                   },
                   icon: const Icon(Icons.email, color: Colors.white),
                   label: const Text(
@@ -189,13 +196,41 @@ class HelpSupportPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
+
+                // Call Support Button
                 ElevatedButton.icon(
                   onPressed: () {
-                    // Handle call support action
+                    userDataProvider.callSupport();
                   },
                   icon: const Icon(Icons.phone, color: Colors.white),
                   label: const Text(
                     'Call Support',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 5,
+                    backgroundColor: Colors.blueAccent,
+                    fixedSize: const Size(360, 55),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // SMS Support Button
+                ElevatedButton.icon(
+                  onPressed: () {
+                    userDataProvider.smsSupport();
+                  },
+                  icon: const Icon(Icons.sms, color: Colors.white),
+                  label: const Text(
+                    'SMS Support',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
