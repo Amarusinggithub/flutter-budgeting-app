@@ -5,6 +5,7 @@ import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:budgetingapp/services/auth_service.dart';
 import 'package:budgetingapp/services/user_data_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../core/utils/validators.dart';
@@ -57,7 +58,9 @@ class UserDataProvider extends ChangeNotifier {
   }
 
   Future<void> initialize() async {
+    await _loadOnboardingStatus();
     await fetchUserData();
+
     notifyListeners();
   }
 
@@ -151,9 +154,25 @@ class UserDataProvider extends ChangeNotifier {
         Validators.validatePassword(password)) {}
   }
 
-  void toggleDidUserFinishOnboarding() {
-    didUserFinishOnboarding = !didUserFinishOnboarding;
-    print("didUserFinishOnboarding :$didUserFinishOnboarding");
+  Future<void> _loadOnboardingStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    didUserFinishOnboarding = prefs.getBool('didUserFinishOnboarding') ?? false;
+  }
+
+  void toggleToTrueDidUserFinishOnboarding() async {
+    didUserFinishOnboarding = true;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('didUserFinishOnboarding', didUserFinishOnboarding);
+    if (kDebugMode) {
+      print('didUserFinishOnboarding: $didUserFinishOnboarding');
+    }
+    notifyListeners();
+  }
+
+  Future<void> resetDidUserFinishOnboardingToFalse() async {
+    didUserFinishOnboarding = false;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('didUserFinishOnboarding', didUserFinishOnboarding);
     notifyListeners();
   }
 

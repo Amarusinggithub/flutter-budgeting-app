@@ -113,21 +113,18 @@ class _MainScreenState extends State<MainScreen> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        onPressed: MainScreen.popUntil(context),
         icon: const Icon(CupertinoIcons.house_fill),
         title: ("Home"),
         activeColorPrimary: Colors.blueAccent,
         inactiveColorPrimary: Colors.blueAccent.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
-        onPressed: MainScreen.popUntil(context),
         icon: const Icon(CupertinoIcons.creditcard_fill),
         title: ("Transactions"),
         activeColorPrimary: Colors.blueAccent,
         inactiveColorPrimary: Colors.blueAccent.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
-        onPressed: MainScreen.popUntil(context),
         icon: const Icon(CupertinoIcons.money_dollar_circle_fill),
         title: ("Budget"),
         activeColorPrimary: Colors.blueAccent,

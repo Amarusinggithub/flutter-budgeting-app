@@ -121,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () {
                     if (userDataProvider.validateFieldsForSignIn()) {
                       userDataProvider.login();
-                      userDataProvider.toggleDidUserFinishOnboarding();
+                      userDataProvider.toggleToTrueDidUserFinishOnboarding();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
