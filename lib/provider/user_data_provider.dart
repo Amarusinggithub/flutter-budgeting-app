@@ -153,6 +153,7 @@ class UserDataProvider extends ChangeNotifier {
 
   void toggleDidUserFinishOnboarding() {
     didUserFinishOnboarding = !didUserFinishOnboarding;
+    print("didUserFinishOnboarding :$didUserFinishOnboarding");
     notifyListeners();
   }
 

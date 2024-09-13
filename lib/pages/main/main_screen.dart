@@ -71,38 +71,43 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final userDataProvider = Provider.of<UserDataProvider>(context);
-    return authService.auth.currentUser == null &&
-            userDataProvider.didUserFinishOnboarding
-        ? const GetStartedScreen()
-        : PersistentTabView(
-            context,
-            controller: _controller..jumpToTab(0),
-            screens: _buildScreens(),
-            items: _navBarsItems(),
-            handleAndroidBackButtonPress: true,
-            resizeToAvoidBottomInset: true,
-            stateManagement: true,
-            hideNavigationBarWhenKeyboardAppears: true,
-            popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
-            padding: const EdgeInsets.only(top: 8, bottom: 8),
-            backgroundColor: const Color(0xFFF1F8E9),
-            isVisible: true,
-            animationSettings: const NavBarAnimationSettings(
-              navBarItemAnimation: ItemAnimationSettings(
-                duration: Duration(milliseconds: 700),
-                curve: Curves.ease,
-              ),
-              screenTransitionAnimation: ScreenTransitionAnimationSettings(
-                animateTabTransition: true,
-                duration: Duration(milliseconds: 200),
-                screenTransitionAnimationType:
-                    ScreenTransitionAnimationType.slide,
-              ),
-            ),
-            confineToSafeArea: true,
-            navBarHeight: 75,
-            navBarStyle: NavBarStyle.style1,
-          );
+
+    // Check if the user is logged in and has finished onboarding
+    if (authService.auth.currentUser != null &&
+        userDataProvider.didUserFinishOnboarding) {
+      // If the user is logged in and has finished onboarding, show the PersistentTabView
+      return PersistentTabView(
+        context,
+        controller: _controller,
+        screens: _buildScreens(),
+        items: _navBarsItems(),
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardAppears: true,
+        popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
+        padding: const EdgeInsets.only(top: 8, bottom: 8),
+        backgroundColor: const Color(0xFFF1F8E9),
+        isVisible: true,
+        animationSettings: const NavBarAnimationSettings(
+          navBarItemAnimation: ItemAnimationSettings(
+            duration: Duration(milliseconds: 700),
+            curve: Curves.ease,
+          ),
+          screenTransitionAnimation: ScreenTransitionAnimationSettings(
+            animateTabTransition: true,
+            duration: Duration(milliseconds: 200),
+            screenTransitionAnimationType: ScreenTransitionAnimationType.slide,
+          ),
+        ),
+        confineToSafeArea: true,
+        navBarHeight: 75,
+        navBarStyle: NavBarStyle.style1,
+      );
+    } else {
+      // If the user hasn't logged in or hasn't finished onboarding, show the GetStartedScreen
+      return const GetStartedScreen();
+    }
   }
 
   List<Widget> _buildScreens() {
@@ -117,27 +122,21 @@ class _MainScreenState extends State<MainScreen> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        onPressed: MainScreen.popUntil(
-          context,
-        ),
+        onPressed: MainScreen.popUntil(context),
         icon: const Icon(CupertinoIcons.house_fill),
         title: ("Home"),
         activeColorPrimary: Colors.blueAccent,
         inactiveColorPrimary: Colors.blueAccent.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
-        onPressed: MainScreen.popUntil(
-          context,
-        ),
+        onPressed: MainScreen.popUntil(context),
         icon: const Icon(CupertinoIcons.creditcard_fill),
         title: ("Transactions"),
         activeColorPrimary: Colors.blueAccent,
         inactiveColorPrimary: Colors.blueAccent.withOpacity(0.7),
       ),
       PersistentBottomNavBarItem(
-        onPressed: MainScreen.popUntil(
-          context,
-        ),
+        onPressed: MainScreen.popUntil(context),
         icon: const Icon(CupertinoIcons.money_dollar_circle_fill),
         title: ("Budget"),
         activeColorPrimary: Colors.blueAccent,

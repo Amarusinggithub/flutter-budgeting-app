@@ -1,5 +1,3 @@
-import 'package:budgetingapp/pages/home/home_screen.dart';
-import 'package:budgetingapp/pages/main/main_screen.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:budgetingapp/provider/notification_provider.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
@@ -26,11 +24,11 @@ class LogoutContainer extends StatelessWidget {
         onTap: () {
           _showLogoutDialog(context);
         },
-        child: Row(
+        child: const Row(
           children: [
-            const Icon(Icons.exit_to_app, size: 24, color: Colors.white),
-            const SizedBox(width: 12),
-            const Text(
+            Icon(Icons.exit_to_app, size: 24, color: Colors.white),
+            SizedBox(width: 12),
+            Text(
               "Logout",
               style: TextStyle(
                   fontSize: 18,
@@ -65,22 +63,15 @@ class LogoutContainer extends StatelessWidget {
             TextButton(
               child: const Text("Cancel"),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: const Text("Yes"),
               onPressed: () async {
-                MainScreen.pushNewScreen(context, const HomeScreen(),
-                    tabIndex: 0, isNavBarItem: true);
-                // Close the logout confirmation dialog first
                 Navigator.of(context).pop();
-
+                termsProvider.selectAll(!termsProvider.areBothAgreed);
                 try {
-                  // Toggle onboarding as incomplete before resetting the models
-                  userDataProvider.toggleDidUserFinishOnboarding();
-
-                  // Perform critical updates before logout
                   await Future.wait([
                     budgetProvider.updateTheBudgetHistoryInTheDatabase(),
                     transactionProvider.updateTheTransactionsInTheDatabase(),
@@ -88,20 +79,17 @@ class LogoutContainer extends StatelessWidget {
                     userDataProvider.updateUserData(),
                   ]);
 
-                  // Perform logout
+                  userDataProvider.toggleDidUserFinishOnboarding();
+
                   await authService.logout();
 
-                  // Reset all necessary states after saving data
                   await Future.wait([
                     budgetProvider.createNewBudgetHistoryModel(),
                     transactionProvider.createTransactions(),
                     notificationProvider.createNewNotificationLimit(),
                     userDataProvider.createNewUserData()
                   ]);
-
-                  termsProvider.selectAll(!termsProvider.areBothAgreed);
                 } catch (error) {
-                  // Handle any errors during the process
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Error during logout: $error')),
                   );

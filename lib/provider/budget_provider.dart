@@ -265,9 +265,8 @@ class BudgetProvider extends ChangeNotifier {
   }
 
   bool areAllFieldsFilled() {
-    if (budgetHistoryModel?.totalBalance == null ||
-        budgetHistoryModel?.totalBalance == 0) return false;
-    if (userIncomeInput == 0) return false;
+    if (totalBalance == null || totalBalance == 0) return false;
+    if (currentBudget?.income == 0) return false;
 
     for (var category in currentBudget!.categories) {
       if (category.planToSpend == 0) {

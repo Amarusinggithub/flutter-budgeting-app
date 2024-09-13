@@ -92,23 +92,18 @@ class SetUpInitialBudgetOnboardingScreen extends StatelessWidget {
             // Save button
             Center(
               child: ElevatedButton(
-                onPressed: budgetProvider.areAllFieldsFilled()
-                    ? () {
-                        budgetProvider.updateTheBudgetHistoryInTheDatabase();
-                        notificationProvider.updateNotificationDailyLimit();
-                        Navigator.pushNamed(
-                            context, AppRoutes.finishOnboarding);
-                      }
-                    : null,
+                onPressed: () {
+                  budgetProvider.updateTheBudgetHistoryInTheDatabase();
+                  notificationProvider.updateNotificationDailyLimit();
+                  Navigator.pushNamed(context, AppRoutes.finishOnboarding);
+                },
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         vertical: 14, horizontal: 100),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    backgroundColor: budgetProvider.areAllFieldsFilled()
-                        ? Colors.blueAccent
-                        : Colors.grey, // Change color when disabled
+                    backgroundColor: Colors.blueAccent,
                     fixedSize: const Size(350, 55)),
                 child: const Text(
                   'Continue',
@@ -154,7 +149,7 @@ class SetUpInitialBudgetOnboardingScreen extends StatelessWidget {
               hintText: hint,
               filled: true,
               fillColor: Colors.white.withOpacity(0.4)),
-          onChanged: onChanged,
+          onSubmitted: onChanged,
         ),
       ],
     );
@@ -188,7 +183,7 @@ class SetUpInitialBudgetOnboardingScreen extends StatelessWidget {
             filled: true,
             fillColor: Colors.white.withOpacity(0.4),
           ),
-          onChanged: (value) {
+          onSubmitted: (value) {
             category.planToSpend = double.tryParse(value) ?? 0.0;
             budgetProvider.calculatePlanToSpend();
           },
