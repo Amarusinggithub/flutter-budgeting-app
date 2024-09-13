@@ -92,18 +92,23 @@ class SetUpInitialBudgetOnboardingScreen extends StatelessWidget {
             // Save button
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  budgetProvider.updateTheBudgetHistoryInTheDatabase();
-                  notificationProvider.updateNotificationDailyLimit();
-                  Navigator.pushNamed(context, AppRoutes.finishOnboarding);
-                },
+                onPressed: budgetProvider.areAllFieldsFilled()
+                    ? () {
+                        budgetProvider.updateTheBudgetHistoryInTheDatabase();
+                        notificationProvider.updateNotificationDailyLimit();
+                        Navigator.pushNamed(
+                            context, AppRoutes.finishOnboarding);
+                      }
+                    : null,
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         vertical: 14, horizontal: 100),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: budgetProvider.areAllFieldsFilled()
+                        ? Colors.blueAccent
+                        : Colors.grey, // Change color when disabled
                     fixedSize: const Size(350, 55)),
                 child: const Text(
                   'Continue',

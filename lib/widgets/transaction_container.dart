@@ -75,9 +75,7 @@ class TransactionContainer extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         width: 370,
         height: 90,
-        // Increased height for better layout
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        // Adjusted padding for balance
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.4),
           borderRadius: BorderRadius.circular(20),
@@ -92,7 +90,7 @@ class TransactionContainer extends StatelessWidget {
         child: Row(
           children: [
             getCategoryIcon(transaction),
-            const SizedBox(width: 16), // Adequate space between icon and text
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,7 +244,6 @@ class TransactionContainer extends StatelessWidget {
                     transactionProvider.updateTransactionTitle(value);
                   },
                   decoration: InputDecoration(
-                    labelText: 'Title',
                     labelStyle: const TextStyle(color: Colors.black87),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -266,7 +263,6 @@ class TransactionContainer extends StatelessWidget {
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: 'Amount',
                     labelStyle: const TextStyle(color: Colors.black87),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),

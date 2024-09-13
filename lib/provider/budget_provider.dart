@@ -263,4 +263,18 @@ class BudgetProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  bool areAllFieldsFilled() {
+    if (budgetHistoryModel?.totalBalance == null ||
+        budgetHistoryModel?.totalBalance == 0) return false;
+    if (userIncomeInput == 0) return false;
+
+    for (var category in currentBudget!.categories) {
+      if (category.planToSpend == 0) {
+        return false;
+      }
+    }
+    notifyListeners();
+    return true;
+  }
 }

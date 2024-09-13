@@ -198,8 +198,6 @@ class TransactionContainer extends StatelessWidget {
                     transactionProvider.updateTransactionTitle(value);
                   },
                   decoration: InputDecoration(
-                    labelText: 'Title',
-                    labelStyle: const TextStyle(color: Colors.black87),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
@@ -218,8 +216,6 @@ class TransactionContainer extends StatelessWidget {
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: 'Amount',
-                    labelStyle: const TextStyle(color: Colors.black87),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,

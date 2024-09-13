@@ -77,7 +77,6 @@ class HelpSupportPage extends StatelessWidget {
                 _buildHelpTopic(context, 'Tracking expenses'),
                 _buildHelpTopic(context, 'Managing categories'),
                 _buildHelpTopic(context, 'Setting up notifications'),
-                _buildHelpTopic(context, 'How to reset your password'),
                 const Spacer(),
 
                 // Contact Support Button

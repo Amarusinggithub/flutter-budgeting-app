@@ -72,11 +72,11 @@ class _MainScreenState extends State<MainScreen> {
     final authService = Provider.of<AuthService>(context);
     final userDataProvider = Provider.of<UserDataProvider>(context);
     return authService.auth.currentUser == null &&
-            userDataProvider.didUserFinishOnboarding == false
+            userDataProvider.didUserFinishOnboarding
         ? const GetStartedScreen()
         : PersistentTabView(
             context,
-            controller: _controller,
+            controller: _controller..jumpToTab(0),
             screens: _buildScreens(),
             items: _navBarsItems(),
             handleAndroidBackButtonPress: true,

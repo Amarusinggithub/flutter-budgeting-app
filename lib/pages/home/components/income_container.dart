@@ -30,18 +30,31 @@ class IncomeContainer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: const Color(0xFF388E3C), // Consistent green for the icon
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Image.asset(
-              Assets.imagesIncome,
-              fit: BoxFit.contain,
-            ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF388E3C),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Image.asset(
+                  Assets.imagesIncome,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Image.asset(
+                Assets.imagesPencil,
+                fit: BoxFit.contain,
+                height: 22,
+                width: 22,
+              ),
+            ],
           ),
           const SizedBox(height: 15), // Adjusted spacing
           Text(

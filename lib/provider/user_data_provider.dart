@@ -134,7 +134,7 @@ class UserDataProvider extends ChangeNotifier {
       await notificationProvider.updateNotificationDailyLimit();
       await updateUserData();
       if (Validators.validateEmail(email) &&
-          Validators.validatePassword(email)) {}
+          Validators.validatePassword(password)) {}
     } else {
       throw Exception("All fields must be filled, and passwords must match.");
     }
@@ -148,7 +148,7 @@ class UserDataProvider extends ChangeNotifier {
     await notificationProvider.initialize();
 
     if (Validators.validateEmail(email) &&
-        Validators.validatePassword(email)) {}
+        Validators.validatePassword(password)) {}
   }
 
   void toggleDidUserFinishOnboarding() {

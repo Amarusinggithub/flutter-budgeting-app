@@ -55,8 +55,8 @@ class GetStartedScreen extends StatelessWidget {
               ),
               Image.asset(
                 Assets.imagesClipManSavingBitcoinInPiggyBank,
-                width: 280,
-                height: 280,
+                width: 200,
+                height: 200,
                 fit: BoxFit.contain,
               ),
               const SizedBox(
@@ -84,9 +84,7 @@ class GetStartedScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 50,
-              ),
+              Spacer(),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.termsAndConditions);
