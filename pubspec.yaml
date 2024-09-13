@@ -38,14 +38,14 @@ dependencies:
 
   provider: ^6.1.2
   http: ^1.2.2
-  firebase_auth: ^5.2.0
-  firebase_analytics: ^11.3.0
-  firebase_crashlytics: ^4.1.0
-  firebase_core: ^3.4.0
-  syncfusion_flutter_charts: ^26.2.13
+  firebase_auth: ^5.2.1
+  firebase_analytics: ^11.3.1
+  firebase_crashlytics: ^4.1.1
+  firebase_core: ^3.4.1
+  syncfusion_flutter_charts: ^26.2.14
   google_fonts: ^6.2.1
   fl_chart: ^0.69.0
-  cloud_firestore: ^5.4.0
+  cloud_firestore: ^5.4.1
   photo_view: ^0.15.0
   carousel_slider: ^5.0.0
   font_awesome_flutter: ^10.7.0
@@ -57,7 +57,7 @@ dependencies:
   percent_indicator: ^4.2.3
   flutter_local_notifications: ^17.2.2
   awesome_notifications: ^0.9.3+1
-  syncfusion_flutter_sliders: ^26.2.13
+  syncfusion_flutter_sliders: ^26.2.14
   url_launcher: ^6.3.0
 
 

@@ -68,7 +68,6 @@ class HomeScreen extends StatelessWidget {
                               "Welcome!",
                               style: TextStyle(
                                 color: Colors.white,
-                                // Changed text color to white for contrast
                                 fontSize: 17,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -78,7 +77,6 @@ class HomeScreen extends StatelessWidget {
                                   username!),
                               style: const TextStyle(
                                   color: Colors.white,
-                                  // Changed text color to white for contrast
                                   fontSize: 26,
                                   fontWeight: FontWeight.bold),
                             )
@@ -88,8 +86,11 @@ class HomeScreen extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             MainScreen.pushNewScreen(
-                                context, const ProfileScreen(),
-                                isNavBarItem: true, tabIndex: 3);
+                              context,
+                              const ProfileScreen(),
+                              isNavBarItem: true,
+                              tabIndex: 3,
+                            );
                           },
                           child: const CircleAvatar(
                             radius: 28,
@@ -103,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    CreditCard(),
+                    const CreditCard(),
                     const SizedBox(
                       height: 20,
                     ),

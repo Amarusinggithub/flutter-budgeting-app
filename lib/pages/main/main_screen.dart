@@ -2,6 +2,7 @@ import 'package:budgetingapp/pages/onboarding/get_started_screen.dart';
 import 'package:budgetingapp/pages/transaction/transaction_screen.dart';
 import 'package:budgetingapp/provider/user_data_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
@@ -21,15 +22,15 @@ class MainScreen extends StatefulWidget {
   static void pushNewScreen(BuildContext context, Widget screen,
       {bool isNavBarItem = false, int? tabIndex}) {
     if (isNavBarItem && tabIndex != null) {
-      (context as Element).visitAncestorElements((element) {
-        if (element.widget is MainScreen) {
-          (element as StatefulElement).state.setState(() {
-            (element.state as _MainScreenState)._controller.jumpToTab(tabIndex);
-          });
-          return false;
+      final mainScreenState =
+          context.findAncestorStateOfType<_MainScreenState>();
+      if (mainScreenState != null) {
+        mainScreenState._controller.jumpToTab(tabIndex);
+      } else {
+        if (kDebugMode) {
+          print('MainScreenState not found in the widget tree');
         }
-        return true;
-      });
+      }
     } else {
       PersistentNavBarNavigator.pushNewScreen(
         context,
@@ -38,13 +39,6 @@ class MainScreen extends StatefulWidget {
         pageTransitionAnimation: PageTransitionAnimation.cupertino,
       );
     }
-  }
-
-  static void popUntilFirstScreenOnSelectedTabScreen(BuildContext context) {
-    PersistentNavBarNavigator.popUntilFirstScreenOnSelectedTabScreen(
-      context,
-      routeName: AppRoutes.home,
-    );
   }
 
   static dynamic popUntil(BuildContext context) {
@@ -72,13 +66,11 @@ class _MainScreenState extends State<MainScreen> {
     final authService = Provider.of<AuthService>(context);
     final userDataProvider = Provider.of<UserDataProvider>(context);
 
-    // Check if the user is logged in and has finished onboarding
     if (authService.auth.currentUser != null &&
         userDataProvider.didUserFinishOnboarding) {
-      // If the user is logged in and has finished onboarding, show the PersistentTabView
       return PersistentTabView(
         context,
-        controller: _controller,
+        controller: _controller..jumpToTab(0),
         screens: _buildScreens(),
         items: _navBarsItems(),
         handleAndroidBackButtonPress: true,
@@ -105,7 +97,6 @@ class _MainScreenState extends State<MainScreen> {
         navBarStyle: NavBarStyle.style1,
       );
     } else {
-      // If the user hasn't logged in or hasn't finished onboarding, show the GetStartedScreen
       return const GetStartedScreen();
     }
   }
