@@ -175,9 +175,9 @@ class RegisterScreen extends StatelessWidget {
                 const SizedBox(height: 30),
 
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (userDataProvider.validateFieldsForSignUp()) {
-                      userDataProvider.register();
+                      await userDataProvider.register();
                       Navigator.pushNamed(context, AppRoutes.setUpBudget);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

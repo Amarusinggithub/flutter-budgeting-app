@@ -7,20 +7,23 @@ class AuthService extends ChangeNotifier {
 
   AuthService({
     required this.auth,
-  });
+  }) {
+    auth.authStateChanges().listen((User? user) {
+      notifyListeners();
+    });
+  }
 
   Future<void> login(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
       if (kDebugMode) {
-        print('User document created successfully in Firestore with UID');
+        print('User signed in successfully');
       }
     } catch (e) {
       if (kDebugMode) {
         print("Error signing in user : $e");
       }
     }
-    notifyListeners();
   }
 
   Future<void> signUp(String email, String password) async {
@@ -40,11 +43,9 @@ class AuthService extends ChangeNotifier {
         print("Error Signing up and creating Firestore document: $e");
       }
     }
-    notifyListeners();
   }
 
   Future<void> logout() async {
     await auth.signOut();
-    notifyListeners();
   }
 }

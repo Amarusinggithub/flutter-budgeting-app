@@ -91,7 +91,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     ),
                     GestureDetector(
                         onTap: () {
-                          MainScreen.pushNewScreen(
+                          MainContent.pushNewScreen(
                               context, const BudgetScreen(),
                               isNavBarItem: true, tabIndex: 2);
                         },

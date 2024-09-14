@@ -117,7 +117,7 @@ class HelpSupportPage extends StatelessWidget {
       trailing:
           const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
       onTap: () {
-        MainScreen.pushNewScreen(context, HelpDetailPage(topic: topic));
+        MainContent.pushNewScreen(context, HelpDetailPage(topic: topic));
       },
     );
   }

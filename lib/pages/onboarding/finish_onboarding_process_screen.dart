@@ -64,8 +64,8 @@ class FinishOnboardingProcessScreen extends StatelessWidget {
 
             // "Done" button
             ElevatedButton(
-              onPressed: () {
-                userDataProvider.toggleToTrueDidUserFinishOnboarding();
+              onPressed: () async {
+                await userDataProvider.toggleToTrueDidUserFinishOnboarding();
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),

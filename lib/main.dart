@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:budgetingapp/pages/main/auth_wrapper.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
 import 'package:budgetingapp/provider/notification_provider.dart';
 import 'package:budgetingapp/provider/terms_and_condition_provider.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<AuthService>(
         builder: (context, authService, child) {
           return MaterialApp(
+            home: AuthWrapper(),
             routes: AppRoutes.getRoutes(),
             debugShowCheckedModeBanner: false,
           );
@@ -64,11 +66,11 @@ class MyApp extends StatelessWidget {
 
   List<ChangeNotifierProvider> _serviceProviders() {
     return [
-      ChangeNotifierProvider<UserDataService>(
-        create: (context) => UserDataService(auth: FirebaseAuth.instance),
-      ),
       ChangeNotifierProvider<AuthService>(
         create: (context) => AuthService(auth: FirebaseAuth.instance),
+      ),
+      ChangeNotifierProvider<UserDataService>(
+        create: (context) => UserDataService(auth: FirebaseAuth.instance),
       ),
       ChangeNotifierProvider<NotificationService>(
         create: (context) => NotificationService(auth: FirebaseAuth.instance),

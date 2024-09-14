@@ -20,7 +20,7 @@ class HelpAndSupport extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              MainScreen.pushNewScreen(context, const HelpSupportPage());
+              MainContent.pushNewScreen(context, const HelpSupportPage());
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,7 +48,7 @@ class HelpAndSupport extends StatelessWidget {
           const SizedBox(height: 20),
           GestureDetector(
             onTap: () {
-              MainScreen.pushNewScreen(context, const PrivacyPolicyPage());
+              MainContent.pushNewScreen(context, const PrivacyPolicyPage());
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

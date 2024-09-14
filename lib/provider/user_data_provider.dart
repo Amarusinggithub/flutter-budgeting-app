@@ -19,6 +19,8 @@ class UserDataProvider extends ChangeNotifier {
   TransactionProvider transactionProvider;
   NotificationProvider notificationProvider;
 
+  bool isInitialized = false;
+
   final Uri emailUri = Uri(
     scheme: 'mailto',
     path: 'email@gmail.com',
@@ -60,7 +62,7 @@ class UserDataProvider extends ChangeNotifier {
   Future<void> initialize() async {
     await _loadOnboardingStatus();
     await fetchUserData();
-
+    isInitialized = true;
     notifyListeners();
   }
 
@@ -144,14 +146,18 @@ class UserDataProvider extends ChangeNotifier {
   }
 
   Future<void> login() async {
-    await authService.login(email, password);
-    await fetchUserData();
-    await budgetProvider.initializeBudgetData();
-    await transactionProvider.getTransactions();
-    await notificationProvider.initialize();
+    if (validateFieldsForSignIn()) {
+      await authService.login(email, password);
+      await fetchUserData();
+      await budgetProvider.initializeBudgetData();
+      await transactionProvider.getTransactions();
+      await notificationProvider.initialize();
 
-    if (Validators.validateEmail(email) &&
-        Validators.validatePassword(password)) {}
+      if (Validators.validateEmail(email) &&
+          Validators.validatePassword(password)) {}
+    } else {
+      throw Exception("All fields must be filled.");
+    }
   }
 
   Future<void> _loadOnboardingStatus() async {
@@ -159,7 +165,7 @@ class UserDataProvider extends ChangeNotifier {
     didUserFinishOnboarding = prefs.getBool('didUserFinishOnboarding') ?? false;
   }
 
-  void toggleToTrueDidUserFinishOnboarding() async {
+  Future<void> toggleToTrueDidUserFinishOnboarding() async {
     didUserFinishOnboarding = true;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('didUserFinishOnboarding', didUserFinishOnboarding);

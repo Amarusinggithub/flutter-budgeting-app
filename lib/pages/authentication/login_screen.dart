@@ -118,10 +118,11 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 30),
 
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (userDataProvider.validateFieldsForSignIn()) {
-                      userDataProvider.login();
-                      userDataProvider.toggleToTrueDidUserFinishOnboarding();
+                      await userDataProvider.login();
+                      await userDataProvider
+                          .toggleToTrueDidUserFinishOnboarding();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

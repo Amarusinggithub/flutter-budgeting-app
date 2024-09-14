@@ -85,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            MainScreen.pushNewScreen(
+                            MainContent.pushNewScreen(
                               context,
                               const ProfileScreen(),
                               isNavBarItem: true,
@@ -135,7 +135,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            MainScreen.pushNewScreen(
+                            MainContent.pushNewScreen(
                                 context, const TransactionScreen(),
                                 isNavBarItem: true, tabIndex: 1);
                           },
