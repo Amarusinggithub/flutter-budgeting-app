@@ -147,9 +147,6 @@ class TransactionContainer extends StatelessWidget {
     TextEditingController amountController =
         TextEditingController(text: transaction.amount.toString());
 
-    String originalCategory = transaction.category;
-    double originalAmount = transaction.amount;
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -198,6 +195,7 @@ class TransactionContainer extends StatelessWidget {
                     transactionProvider.updateTransactionTitle(value);
                   },
                   decoration: InputDecoration(
+                    labelStyle: const TextStyle(color: Colors.black87),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
@@ -216,6 +214,7 @@ class TransactionContainer extends StatelessWidget {
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
+                    labelStyle: const TextStyle(color: Colors.black87),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
@@ -239,6 +238,7 @@ class TransactionContainer extends StatelessWidget {
                       fixedSize: const Size(360, 55),
                     ),
                     onPressed: () async {
+                      // Get the new category and amount selected/entered by the user
                       String newCategory = budgetProvider
                           .currentBudget!
                           .categories[transactionProvider.selectedCategory!]
@@ -247,24 +247,7 @@ class TransactionContainer extends StatelessWidget {
                           transactionProvider.transactionAmount ??
                               transaction.amount;
 
-                      if (newCategory != originalCategory) {
-                        await budgetProvider.decreaseCategorySpent(
-                            originalCategory, originalAmount);
-                        await budgetProvider.increaseCategorySpent(
-                            newCategory, newAmount);
-                      } else {
-                        if (newAmount != originalAmount) {
-                          double amountDifference = newAmount - originalAmount;
-                          if (amountDifference > 0) {
-                            await budgetProvider.increaseCategorySpent(
-                                newCategory, amountDifference);
-                          } else {
-                            await budgetProvider.decreaseCategorySpent(
-                                newCategory, amountDifference.abs());
-                          }
-                        }
-                      }
-
+                      // Create the updated transaction object with new data
                       TransactionModel updatedTransaction = TransactionModel(
                         title: transactionProvider.transactionTitle ??
                             transaction.title,
@@ -272,9 +255,14 @@ class TransactionContainer extends StatelessWidget {
                         date: transaction.date,
                         category: newCategory,
                       );
-                      await transactionProvider
-                          .editTransaction(updatedTransaction);
 
+                      // Use the editTransaction method from the provider
+                      await transactionProvider.editTransaction(
+                        updatedTransaction, // New transaction details
+                        transaction, // Original transaction
+                      );
+
+                      // Clear inputs and close the bottom sheet
                       transactionProvider.clearTransactionInputs();
                       Navigator.of(context).pop();
                     },

@@ -73,16 +73,6 @@ class TransactionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> editTransaction(TransactionModel transaction) async {
-    final index = transactions.indexWhere((t) => t.date == transaction.date);
-    if (index != -1) {
-      transactions[index] = transaction;
-      organizeTransactionsByDate();
-      await updateTheTransactionsInTheDatabase();
-      notifyListeners();
-    }
-  }
-
   List<TransactionModel>? getTransactionByDate(int index) {
     if (index < 0 || index >= transactionsByDate.length) {
       return null;
@@ -221,9 +211,10 @@ class TransactionProvider extends ChangeNotifier {
   Future<void> addTransaction(TransactionModel transaction) async {
     transactions.add(transaction);
     organizeTransactionsByDate();
+
+    await budgetProvider.updateCategorySpentWithTransactionAmount(transaction);
     await budgetProvider
         .checkIfOverSpendTheBudgetForTransactionCategory(transaction.category);
-    await budgetProvider.updateCategorySpentWithTransactionAmount(transaction);
     await updateTheTransactionsInTheDatabase();
   }
 
@@ -287,16 +278,27 @@ class TransactionProvider extends ChangeNotifier {
         .updateCategorySpentWithTransactionAmount(updatedTransaction);
   }
 
-  Future<void> edit_Transaction(TransactionModel updatedTransaction,
+  Future<void> editTransaction(TransactionModel updatedTransaction,
       TransactionModel originalTransaction) async {
     final index =
         transactions.indexWhere((t) => t.date == originalTransaction.date);
     if (index != -1) {
+      // Adjust the category spending before updating the transaction
       await adjustCategorySpending(originalTransaction, updatedTransaction);
 
+      // Update the transaction in the list
       transactions[index] = updatedTransaction;
+
+      // Organize the transactions by date
       organizeTransactionsByDate();
+
+      // Recalculate the total expense for the month
+      budgetProvider.calculateTotalExpenseForTheMonth();
+
+      // Update the transactions in the database
       await updateTheTransactionsInTheDatabase();
+
+      // Notify listeners about the changes
       notifyListeners();
     }
   }
