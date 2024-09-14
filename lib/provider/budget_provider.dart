@@ -3,6 +3,7 @@ import 'package:budgetingapp/models/budget_history_model.dart';
 import 'package:budgetingapp/models/budget_model.dart';
 import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:budgetingapp/services/budget_service.dart';
+import 'package:budgetingapp/services/notification_service.dart';
 import 'package:flutter/foundation.dart';
 
 class BudgetProvider extends ChangeNotifier {
@@ -13,10 +14,12 @@ class BudgetProvider extends ChangeNotifier {
   BudgetHistoryModel? budgetHistoryModel;
 
   final BudgetService budgetService;
+  final NotificationService notificationService;
 
   bool didSavingsAddAlready = false;
 
-  BudgetProvider({required this.budgetService}) {
+  BudgetProvider(
+      {required this.budgetService, required this.notificationService}) {
     initializeBudgetData();
   }
 
@@ -57,7 +60,7 @@ class BudgetProvider extends ChangeNotifier {
       currentBudget = findBudgetForCurrentMonth();
 
       if (HelperFunctions.isEndOfMonthAndDay() && !didSavingsAddAlready) {
-        calculateSavings();
+        addSavingsToAvailableBalance();
       }
     } else {
       await createNewBudget();
@@ -114,7 +117,7 @@ class BudgetProvider extends ChangeNotifier {
   Future<void> updateTheBudgetHistoryInTheDatabase() async {
     if (currentBudget != null && budgetHistoryModel != null) {
       if (HelperFunctions.isEndOfMonthAndDay() && !didSavingsAddAlready) {
-        calculateSavings();
+        addSavingsToAvailableBalance();
       }
 
       budgetHistoryModel!.budgets.last = currentBudget!;
@@ -153,7 +156,16 @@ class BudgetProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void calculateSavings() {
+  double calculateSavings() {
+    if (currentBudget != null) {
+      final result = currentBudget!.income - currentBudget!.expense;
+      return result;
+    }
+
+    return 0.0;
+  }
+
+  void addSavingsToAvailableBalance() {
     if (currentBudget != null) {
       currentBudget!.savings = currentBudget!.income - currentBudget!.expense;
       totalBalance = (totalBalance ?? 0) + currentBudget!.savings;
@@ -240,7 +252,6 @@ class BudgetProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Adjusts to increase the spent amount for a category
   Future<void> increaseCategorySpent(String categoryName, double amount) async {
     final category = currentBudget?.categories
         .firstWhere((category) => category.name == categoryName);
@@ -252,7 +263,6 @@ class BudgetProvider extends ChangeNotifier {
     }
   }
 
-  // Adjusts to decrease the spent amount for a category
   Future<void> decreaseCategorySpent(String categoryName, double amount) async {
     final category = currentBudget?.categories
         .firstWhere((category) => category.name == categoryName);
@@ -275,5 +285,21 @@ class BudgetProvider extends ChangeNotifier {
     }
     notifyListeners();
     return true;
+  }
+
+  Future<void> checkIfOverSpendTheBudgetForTransactionCategory(
+      String category) async {
+    if (currentBudget == null || currentBudget!.categories.isEmpty) {
+      return;
+    }
+
+    for (var categoryModel in currentBudget!.categories) {
+      if (categoryModel.name == category &&
+          categoryModel.totalSpent > categoryModel.planToSpend) {
+        await notificationService
+            .sendOverBudgetNotification(categoryModel.name);
+        break;
+      }
+    }
   }
 }

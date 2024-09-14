@@ -95,6 +95,7 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider<BudgetProvider>(
         create: (context) => BudgetProvider(
           budgetService: context.read<BudgetService>(),
+          notificationService: context.read<NotificationService>(),
         ),
       ),
       ChangeNotifierProvider<TransactionProvider>(

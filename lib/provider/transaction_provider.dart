@@ -118,66 +118,28 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-  /*List<DailyTransactionModel> _groupByDay() {
-    final now = DateTime.now();
-    final currentYear = now.year;
-    final currentMonth = now.month;
-
-    // Create a map that will hold the grouped transactions
-    final Map<DateTime, List<TransactionModel>> grouped = {};
-
-    // Populate the map with all days of the current week that days that have passed month, even if no transactions exist
-    for (int day = 1; day <= HelperFunctions.daysPassedInCurrentWeek(); day++) {
-      final date = DateTime(currentYear, currentMonth, day);
-      grouped[date] = []; // Initialize with an empty list
-    }
-
-    // Group existing transactions by day
-    for (var transaction in transactions) {
-      final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
-
-      if (date.year == currentYear && date.month == currentMonth) {
-        final dayKey = DateTime(date.year, date.month, date.day);
-        grouped[dayKey]?.add(transaction);
-      }
-    }
-
-    // Convert the map entries to the list of DailyTransactionModel
-    return grouped.entries
-        .map((entry) =>
-            DailyTransactionModel(date: entry.key, transactions: entry.value))
-        .toList();
-  }
-*/
   List<DailyTransactionModel> _groupByDay() {
     final now = DateTime.now();
     final currentYear = now.year;
     final currentMonth = now.month;
 
-    // Get the current week of the month
     final currentWeek = HelperFunctions.getCurrentWeekOfMonth();
 
-    // Get the first day of the current week
     final firstDayOfWeek = DateTime(currentYear, currentMonth, 1)
         .add(Duration(days: (currentWeek - 1) * 7));
 
-    // Get the last day of the current week
     final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
 
-    // Create a map that will hold the grouped transactions for the current week
     final Map<DateTime, List<TransactionModel>> grouped = {};
 
-    // Initialize the map with empty lists for each day of the current week
     for (int i = 0; i <= HelperFunctions.daysPassedInCurrentWeek(); i++) {
       final date = firstDayOfWeek.add(Duration(days: i));
       grouped[date] = [];
     }
 
-    // Group existing transactions by day, but only for the current week
     for (var transaction in transactions) {
       final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
 
-      // Only include transactions that fall within the current week
       if (date.isAfter(firstDayOfWeek.subtract(const Duration(days: 1))) &&
           date.isBefore(lastDayOfWeek.add(const Duration(days: 1)))) {
         final dayKey = DateTime(date.year, date.month, date.day);
@@ -185,7 +147,6 @@ class TransactionProvider extends ChangeNotifier {
       }
     }
 
-    // Convert the map entries to the list of DailyTransactionModel
     return grouped.entries
         .map((entry) =>
             DailyTransactionModel(date: entry.key, transactions: entry.value))
@@ -196,28 +157,22 @@ class TransactionProvider extends ChangeNotifier {
     final now = DateTime.now();
     final currentYear = now.year;
 
-    // Create a map that will hold the grouped transactions
     final Map<DateTime, List<TransactionModel>> grouped = {};
 
-    // Populate the map with all months of the current year, even if no transactions exist
     for (int month = 1; month <= now.month; month++) {
-      final date = DateTime(currentYear, month); // Up to the current month
-      grouped[date] = []; // Initialize with an empty list
+      final date = DateTime(currentYear, month);
+      grouped[date] = [];
     }
 
-    // Group existing transactions by month within the current year
     for (var transaction in transactions) {
       final date = DateTime.fromMillisecondsSinceEpoch(transaction.date);
 
-      // Only include transactions from the current year
       if (date.year == currentYear) {
         final monthKey = DateTime(date.year, date.month);
-        grouped[monthKey]
-            ?.add(transaction); // Add transaction to the appropriate month
+        grouped[monthKey]?.add(transaction);
       }
     }
 
-    // Convert the map entries into a list of MonthlyTransactionModel
     return grouped.entries
         .map((entry) => MonthlyTransactionModel(
               month: entry.key,
@@ -266,6 +221,8 @@ class TransactionProvider extends ChangeNotifier {
   Future<void> addTransaction(TransactionModel transaction) async {
     transactions.add(transaction);
     organizeTransactionsByDate();
+    await budgetProvider
+        .checkIfOverSpendTheBudgetForTransactionCategory(transaction.category);
     await budgetProvider.updateCategorySpentWithTransactionAmount(transaction);
     await updateTheTransactionsInTheDatabase();
   }
@@ -305,20 +262,15 @@ class TransactionProvider extends ChangeNotifier {
     }
   }
 
-  // Adjust category spending when editing a transaction
   Future<void> adjustCategorySpending(TransactionModel originalTransaction,
       TransactionModel updatedTransaction) async {
-    // Check if category or amount has changed
     if (originalTransaction.category != updatedTransaction.category) {
-      // Decrease the spent amount from the original category
       await budgetProvider.decreaseCategorySpent(
           originalTransaction.category, originalTransaction.amount);
 
-      // Increase the spent amount for the new category
       await budgetProvider.increaseCategorySpent(
           updatedTransaction.category, updatedTransaction.amount);
     } else if (originalTransaction.amount != updatedTransaction.amount) {
-      // If only the amount changed within the same category, adjust the spent amount
       double difference =
           updatedTransaction.amount - originalTransaction.amount;
 
@@ -331,22 +283,17 @@ class TransactionProvider extends ChangeNotifier {
       }
     }
 
-    // Update the current budget accordingly
     await budgetProvider
         .updateCategorySpentWithTransactionAmount(updatedTransaction);
   }
 
-  // Edit an existing transaction
   Future<void> edit_Transaction(TransactionModel updatedTransaction,
       TransactionModel originalTransaction) async {
-    // Find the index of the original transaction
     final index =
         transactions.indexWhere((t) => t.date == originalTransaction.date);
     if (index != -1) {
-      // Adjust category spending before updating
       await adjustCategorySpending(originalTransaction, updatedTransaction);
 
-      // Update the transaction
       transactions[index] = updatedTransaction;
       organizeTransactionsByDate();
       await updateTheTransactionsInTheDatabase();

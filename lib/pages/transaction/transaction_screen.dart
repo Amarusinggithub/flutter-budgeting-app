@@ -2,6 +2,7 @@ import 'package:budgetingapp/models/transaction_model.dart';
 import 'package:budgetingapp/pages/budget/budget_screen.dart';
 import 'package:budgetingapp/pages/main/main_screen.dart';
 import 'package:budgetingapp/pages/transaction/components/linechart_container.dart';
+import 'package:budgetingapp/pages/transaction/components/savings_container.dart';
 import 'package:budgetingapp/pages/transaction/components/transactions_by_date_container.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const LineChartContainer(),
+                    Stack(children: [
+                      const LineChartContainer(),
+                      Positioned(top: 10, left: 10, child: SavingsContainer())
+                    ]),
                     const SizedBox(
                       height: 20,
                     ),

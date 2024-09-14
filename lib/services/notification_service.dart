@@ -114,4 +114,21 @@ class NotificationService extends ChangeNotifier {
       return null;
     }
   }
+
+  Future<void> sendOverBudgetNotification(String categoryName) async {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 20,
+        channelKey: 'Budgeting_app',
+        title: 'Over Budget Alert!',
+        body:
+            'You have overspent in the $categoryName category. Please review your budget.',
+        notificationLayout: NotificationLayout.Default,
+      ),
+    );
+    if (kDebugMode) {
+      print("Notification sent: Overspent in $categoryName");
+    }
+    notifyListeners();
+  }
 }
