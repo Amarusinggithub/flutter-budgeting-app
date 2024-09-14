@@ -1,8 +1,7 @@
-import 'package:budgetingapp/pages/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../provider/user_data_provider.dart';
+import '../../../provider/help_support_provider.dart';
 import 'help_detail_page.dart';
 
 class HelpSupportPage extends StatelessWidget {
@@ -10,6 +9,9 @@ class HelpSupportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Access the HelpAndSupportProvider
+    final helpProvider = Provider.of<HelpAndSupportProvider>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -45,6 +47,9 @@ class HelpSupportPage extends StatelessWidget {
 
                 // Search Bar
                 TextField(
+                  onChanged: (value) {
+                    helpProvider.updateSearchQuery(value);
+                  },
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(vertical: 16),
                     border: OutlineInputBorder(
@@ -73,11 +78,16 @@ class HelpSupportPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
 
-                _buildHelpTopic(context, 'How to create a budget'),
-                _buildHelpTopic(context, 'Tracking expenses'),
-                _buildHelpTopic(context, 'Managing categories'),
-                _buildHelpTopic(context, 'Setting up notifications'),
-                const Spacer(),
+                // Help Topics List
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: helpProvider.filteredHelpTopics.length,
+                    itemBuilder: (context, index) {
+                      final topic = helpProvider.filteredHelpTopics[index];
+                      return _buildHelpTopic(context, topic);
+                    },
+                  ),
+                ),
 
                 // Contact Support Button
                 Center(
@@ -85,6 +95,8 @@ class HelpSupportPage extends StatelessWidget {
                     onPressed: () {
                       _showContactSupportBottomSheet(context);
                     },
+                    icon:
+                        const Icon(Icons.contact_support, color: Colors.white),
                     label: const Text('Contact Support',
                         style: TextStyle(fontSize: 20, color: Colors.white)),
                     style: ElevatedButton.styleFrom(
@@ -117,15 +129,19 @@ class HelpSupportPage extends StatelessWidget {
       trailing:
           const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
       onTap: () {
-        MainContent.pushNewScreen(context, HelpDetailPage(topic: topic));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HelpDetailPage(topic: topic),
+          ),
+        );
       },
     );
   }
 
   void _showContactSupportBottomSheet(BuildContext context) {
-    final userDataProvider =
-        Provider.of<UserDataProvider>(context, listen: false);
-
+    final helpProvider =
+        Provider.of<HelpAndSupportProvider>(context, listen: false);
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -173,7 +189,7 @@ class HelpSupportPage extends StatelessWidget {
                 // Email Support Button
                 ElevatedButton.icon(
                   onPressed: () {
-                    userDataProvider.emailSupport();
+                    helpProvider.emailSupport();
                   },
                   icon: const Icon(Icons.email, color: Colors.white),
                   label: const Text(
@@ -199,7 +215,7 @@ class HelpSupportPage extends StatelessWidget {
                 // Call Support Button
                 ElevatedButton.icon(
                   onPressed: () {
-                    userDataProvider.callSupport();
+                    helpProvider.callSupport();
                   },
                   icon: const Icon(Icons.phone, color: Colors.white),
                   label: const Text(
@@ -225,7 +241,7 @@ class HelpSupportPage extends StatelessWidget {
                 // SMS Support Button
                 ElevatedButton.icon(
                   onPressed: () {
-                    userDataProvider.smsSupport();
+                    helpProvider.smsSupport();
                   },
                   icon: const Icon(Icons.sms, color: Colors.white),
                   label: const Text(

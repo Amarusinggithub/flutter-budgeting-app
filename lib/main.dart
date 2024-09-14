@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budgetingapp/pages/main/auth_wrapper.dart';
 import 'package:budgetingapp/provider/budget_provider.dart';
+import 'package:budgetingapp/provider/help_support_provider.dart';
 import 'package:budgetingapp/provider/notification_provider.dart';
 import 'package:budgetingapp/provider/terms_and_condition_provider.dart';
 import 'package:budgetingapp/provider/transaction_provider.dart';
@@ -116,6 +117,9 @@ class MyApp extends StatelessWidget {
           transactionProvider: context.read<TransactionProvider>(),
           notificationProvider: context.read<NotificationProvider>(),
         ),
+      ),
+      ChangeNotifierProvider<HelpAndSupportProvider>(
+        create: (context) => HelpAndSupportProvider(),
       ),
     ];
   }
