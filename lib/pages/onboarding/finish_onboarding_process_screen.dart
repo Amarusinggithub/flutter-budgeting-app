@@ -38,7 +38,6 @@ class FinishOnboardingProcessScreen extends StatelessWidget {
             ),
             const SizedBox(height: 40),
 
-            // Congratulations message
             const Text(
               "Congratulations!",
               style: TextStyle(

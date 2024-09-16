@@ -22,26 +22,23 @@ class HelpAndSupport extends StatelessWidget {
             onTap: () {
               MainContent.pushNewScreen(context, const HelpSupportPage());
             },
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.help_outline,
-                        size: 24, color: Colors.white),
-                    // Updated icon
-                    const SizedBox(width: 12),
-                    const Text(
+                    Icon(Icons.help_outline, size: 24, color: Colors.white),
+                    SizedBox(width: 12),
+                    Text(
                       "Help and Support",
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white), // Typography improvements
+                          color: Colors.white),
                     ),
                   ],
                 ),
-                const Icon(Icons.arrow_forward_ios,
-                    size: 18, color: Colors.white),
+                Icon(Icons.arrow_forward_ios, size: 18, color: Colors.white),
               ],
             ),
           ),
@@ -50,16 +47,14 @@ class HelpAndSupport extends StatelessWidget {
             onTap: () {
               MainContent.pushNewScreen(context, const PrivacyPolicyPage());
             },
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.policy_outlined,
-                        size: 24, color: Colors.white),
-                    // Updated icon
-                    const SizedBox(width: 12),
-                    const Text(
+                    Icon(Icons.policy_outlined, size: 24, color: Colors.white),
+                    SizedBox(width: 12),
+                    Text(
                       "Privacy Policy",
                       style: TextStyle(
                           fontSize: 18,
@@ -68,8 +63,7 @@ class HelpAndSupport extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Icon(Icons.arrow_forward_ios,
-                    size: 18, color: Colors.white),
+                Icon(Icons.arrow_forward_ios, size: 18, color: Colors.white),
               ],
             ),
           ),

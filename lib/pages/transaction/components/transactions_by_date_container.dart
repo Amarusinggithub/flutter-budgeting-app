@@ -18,7 +18,7 @@ class TransactionsByDateContainer extends StatelessWidget {
 
     if (transactionsByDate == null || transactionsByDate.isEmpty) {
       return Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: const Text(
           "No transactions available for this day",
           style: TextStyle(fontSize: 16, color: Colors.grey),

@@ -25,14 +25,14 @@ class SavingsContainer extends StatelessWidget {
             'Savings',
             style: TextStyle(
               color: Color(0xFFFFFFFF),
-              fontSize: 16,
+              fontSize: 13,
               fontFamily: 'Readex Pro',
               fontWeight: FontWeight.w600,
               height: 1.5,
               letterSpacing: 0.5,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
@@ -41,7 +41,7 @@ class SavingsContainer extends StatelessWidget {
             ), // Handle null case
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 13,
               fontFamily: 'Readex Pro',
               fontWeight: FontWeight.bold,
               height: 1.2,

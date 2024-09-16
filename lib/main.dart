@@ -23,7 +23,7 @@ import 'core/routes/routes.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AwesomeNotifications().initialize(
-    null, // app icon resource
+    null,
     [
       NotificationChannel(
         channelKey: 'Budgeting_app',
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<AuthService>(
         builder: (context, authService, child) {
           return MaterialApp(
-            home: AuthWrapper(),
+            home: const AuthWrapper(),
             routes: AppRoutes.getRoutes(),
             debugShowCheckedModeBanner: false,
           );

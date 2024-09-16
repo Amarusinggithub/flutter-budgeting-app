@@ -66,7 +66,6 @@ class ProfileScreen extends StatelessWidget {
                             username!),
                         style: const TextStyle(
                           fontSize: 24,
-                          // Updated typography for better readability
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -91,11 +90,11 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     NotificationAndThemesContainer(),
                     SizedBox(
-                      height: 20, // Improved spacing between elements
+                      height: 20,
                     ),
                     HelpAndSupport(),
                     SizedBox(
-                      height: 20, // More space before logout button
+                      height: 20,
                     ),
                     LogoutContainer(),
                   ],

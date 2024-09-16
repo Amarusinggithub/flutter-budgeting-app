@@ -86,8 +86,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Stack(children: [
-                      const LineChartContainer(),
+                    const Stack(children: [
+                      LineChartContainer(),
                       Positioned(top: 10, left: 10, child: SavingsContainer())
                     ]),
                     const SizedBox(

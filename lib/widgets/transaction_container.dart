@@ -193,9 +193,6 @@ class TransactionContainer extends StatelessWidget {
     TextEditingController amountController =
         TextEditingController(text: transaction.amount.toString());
 
-    String originalCategory = transaction.category;
-    double originalAmount = transaction.amount;
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -287,7 +284,6 @@ class TransactionContainer extends StatelessWidget {
                       fixedSize: const Size(360, 55),
                     ),
                     onPressed: () async {
-                      // Get the new category and amount selected/entered by the user
                       String newCategory = budgetProvider
                           .currentBudget!
                           .categories[transactionProvider.selectedCategory!]
@@ -296,7 +292,6 @@ class TransactionContainer extends StatelessWidget {
                           transactionProvider.transactionAmount ??
                               transaction.amount;
 
-                      // Create the updated transaction object with new data
                       TransactionModel updatedTransaction = TransactionModel(
                         title: transactionProvider.transactionTitle ??
                             transaction.title,
@@ -305,13 +300,11 @@ class TransactionContainer extends StatelessWidget {
                         category: newCategory,
                       );
 
-                      // Use the editTransaction method from the provider
                       await transactionProvider.editTransaction(
-                        updatedTransaction, // New transaction details
-                        transaction, // Original transaction
+                        updatedTransaction,
+                        transaction,
                       );
 
-                      // Clear inputs and close the bottom sheet
                       transactionProvider.clearTransactionInputs();
                       Navigator.of(context).pop();
                     },

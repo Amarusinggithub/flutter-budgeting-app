@@ -79,7 +79,7 @@ class LogoutContainer extends StatelessWidget {
                     userDataProvider.updateUserData(),
                   ]);
 
-                  userDataProvider.resetDidUserFinishOnboardingToFalse();
+                  await userDataProvider.resetDidUserFinishOnboardingToFalse();
 
                   await authService.logout();
 

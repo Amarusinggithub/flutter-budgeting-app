@@ -283,22 +283,16 @@ class TransactionProvider extends ChangeNotifier {
     final index =
         transactions.indexWhere((t) => t.date == originalTransaction.date);
     if (index != -1) {
-      // Adjust the category spending before updating the transaction
       await adjustCategorySpending(originalTransaction, updatedTransaction);
 
-      // Update the transaction in the list
       transactions[index] = updatedTransaction;
 
-      // Organize the transactions by date
       organizeTransactionsByDate();
 
-      // Recalculate the total expense for the month
       budgetProvider.calculateTotalExpenseForTheMonth();
 
-      // Update the transactions in the database
       await updateTheTransactionsInTheDatabase();
 
-      // Notify listeners about the changes
       notifyListeners();
     }
   }

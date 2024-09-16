@@ -63,7 +63,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black, // White text for better contrast
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -97,7 +97,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
                   Checkbox(
                     checkColor: Colors.white,
                     activeColor: Colors.blueAccent,
-                    shape: CircleBorder(),
+                    shape: const CircleBorder(),
                     value: termsProvider.agreeTerms,
                     onChanged: (value) {
                       termsProvider.toggleAgreeTerms(value!);

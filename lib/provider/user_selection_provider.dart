@@ -11,7 +11,7 @@ class UserSelectionProvider extends ChangeNotifier {
     } else {
       _selectedOptions.add(index);
     }
-    notifyListeners(); // Notify listeners when the selection changes
+    notifyListeners();
   }
 
   bool isSelected(int index) {

@@ -16,7 +16,6 @@ class LoginScreen extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // Background gradient
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(

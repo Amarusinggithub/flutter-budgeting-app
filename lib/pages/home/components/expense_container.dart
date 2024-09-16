@@ -15,11 +15,8 @@ class ExpenseContainer extends StatelessWidget {
     final budgetProvider = Provider.of<BudgetProvider>(context);
     return Container(
       height: 150,
-      // Slightly increased height for more space
       width: 170,
-      // Increased width for better layout
       padding: const EdgeInsets.all(12),
-      // Uniform padding for consistency
       decoration: BoxDecoration(
         color: Colors.redAccent.withOpacity(0.9), // Updated to a richer red
         borderRadius: BorderRadius.circular(15),
@@ -39,7 +36,7 @@ class ExpenseContainer extends StatelessWidget {
             height: 50,
             width: 50,
             decoration: BoxDecoration(
-              color: const Color(0xFFD32F2F), // Consistent red for the icon
+              color: const Color(0xFFD32F2F),
               borderRadius: BorderRadius.circular(15),
             ),
             child: Image.asset(
@@ -47,7 +44,7 @@ class ExpenseContainer extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          const SizedBox(height: 15), // Adjusted spacing
+          const SizedBox(height: 15),
           Text(
             "Expense",
             style: TextStyle(
@@ -63,7 +60,7 @@ class ExpenseContainer extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 22, // Increased font size for emphasis
+              fontSize: 22,
             ),
           ),
         ],

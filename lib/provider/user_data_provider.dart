@@ -50,10 +50,20 @@ class UserDataProvider extends ChangeNotifier {
   }
 
   Future<void> initialize() async {
+    if (kDebugMode) {
+      print('UserDataProvider: Initializing...');
+    }
     await _loadOnboardingStatus();
+    if (kDebugMode) {
+      print(
+          'UserDataProvider: Onboarding status loaded: $didUserFinishOnboarding');
+    }
     await fetchUserData();
     isInitialized = true;
     notifyListeners();
+    if (kDebugMode) {
+      print('UserDataProvider: Initialization complete.');
+    }
   }
 
   Future<void> fetchUserData() async {
@@ -169,6 +179,9 @@ class UserDataProvider extends ChangeNotifier {
     didUserFinishOnboarding = false;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('didUserFinishOnboarding', didUserFinishOnboarding);
+    if (kDebugMode) {
+      print('didUserFinishOnboarding: $didUserFinishOnboarding');
+    }
     notifyListeners();
   }
 }

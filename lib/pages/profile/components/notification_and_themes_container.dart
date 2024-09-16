@@ -28,7 +28,7 @@ class NotificationAndThemesContainer extends StatelessWidget {
                 const Row(
                   children: [
                     Icon(Icons.notifications_outlined,
-                        size: 24, color: Colors.white), // Updated icon
+                        size: 24, color: Colors.white),
                     SizedBox(width: 12),
                     Text(
                       "Notifications",
@@ -60,7 +60,7 @@ class NotificationAndThemesContainer extends StatelessWidget {
                 Row(
                   children: [
                     Icon(Icons.brightness_6_outlined,
-                        size: 24, color: Colors.white), // Updated icon
+                        size: 24, color: Colors.white),
                     SizedBox(width: 12),
                     Text(
                       "Theme",
@@ -128,7 +128,7 @@ void _showBottomSheet(BuildContext context) {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white, // To ensure visibility on gradient
+                    color: Colors.white,
                   ),
                 ),
               ),

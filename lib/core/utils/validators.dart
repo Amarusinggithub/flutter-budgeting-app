@@ -6,7 +6,6 @@ class Validators {
   }
 
   static bool validatePassword(String password) {
-    // Reset error message
     String errorMessage = '';
 
     // Password length greater than 6

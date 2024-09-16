@@ -84,7 +84,7 @@ class GetStartedScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.termsAndConditions);

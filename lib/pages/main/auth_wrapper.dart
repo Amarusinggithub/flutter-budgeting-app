@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,18 +12,28 @@ class AuthWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-    final userDataProvider = Provider.of<UserDataProvider>(context);
-
-    if (!userDataProvider.isInitialized) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    } else if (authService.auth.currentUser != null &&
-        userDataProvider.didUserFinishOnboarding) {
-      return const MainScreen();
-    } else {
-      return const GetStartedScreen();
-    }
+    return Consumer2<AuthService, UserDataProvider>(
+      builder: (context, authService, userDataProvider, child) {
+        if (!userDataProvider.isInitialized) {
+          if (kDebugMode) {
+            print("UserDataProvider not initialized");
+          }
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (authService.auth.currentUser != null &&
+            userDataProvider.didUserFinishOnboarding) {
+          if (kDebugMode) {
+            print("Auth and onboarding complete");
+          }
+          return const MainScreen();
+        } else {
+          if (kDebugMode) {
+            print("Auth or onboarding not complete");
+          }
+          return const GetStartedScreen();
+        }
+      },
+    );
   }
 }

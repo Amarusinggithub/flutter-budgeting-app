@@ -20,7 +20,6 @@ class DataSliderContainer extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        // Ensures full width is used
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buildSliderOption(context, 'Daily', 0, transactionProvider),
@@ -54,9 +53,8 @@ class DataSliderContainer extends StatelessWidget {
               style: TextStyle(
                 color:
                     transactionProvider.selectedIndexForTransactionTime == index
-                        ? Color(0xFFF3F3F3) // Light text color for selected
-                        : Color(0xFF323232),
-                // Dark text color for unselected
+                        ? const Color(0xFFF3F3F3)
+                        : const Color(0xFF323232),
                 fontSize: 16,
                 fontFamily: 'Readex Pro',
                 fontWeight: FontWeight.w400,

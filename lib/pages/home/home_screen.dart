@@ -225,7 +225,7 @@ class HomeScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white, // Ensure visibility against gradient
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -261,7 +261,7 @@ class HomeScreen extends StatelessWidget {
                     onPressed: () {
                       budgetProvider.addNewIncome();
                       budgetProvider.updateTheBudgetHistoryInTheDatabase();
-                      Navigator.of(context).pop(); // Close the bottom sheet
+                      Navigator.of(context).pop();
                     },
                     child: const Text(
                       'Add Income',
